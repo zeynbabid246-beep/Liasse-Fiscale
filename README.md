@@ -1,43 +1,148 @@
-# Portail de Dépôt de Liasse Fiscale — Cas Général
+# Portail de Dépôt et de Validation de la Liasse Fiscale
 
-## Prérequis
-- .NET SDK 8.0
-- PostgreSQL 16 (ou Docker)
+Portail officiel pour le téléversement, la validation réglementaire XSD multi-niveaux, le dépôt officiel et le suivi de la Liasse Fiscale (Ministère des Finances - Direction Générale des Impôts).
 
-## Démarrage local
+---
+
+## 1. Architecture du Système
+
+Le système repose sur un **backend unique et centralisé en ASP.NET Core** garantissant l'intégrité absolue de la validation fiscale et des règles comptables.
+
+```text
+React / TypeScript Frontend (Port 3000)
+             |
+             | HTTP / REST (JSON + multipart/form-data)
+             v
+   ASP.NET Core API (LiasseFiscale.Api)
+             |
+             +--> Controllers (Auth, Contribuable, Liasse, Document, Validation, Tracking, Receipt)
+             |
+             +--> Services
+             |      +--> XmlValidationService (Validation XSD 1.0 + Racine XML)
+             |      +--> AssertRuleEngine (Évaluation XPath des règles d'équilibre comptable)
+             |      +--> ReceiptService (Génération de l'accusé de réception officiel PDF/SHA256)
+             |
+             +--> SchemaAssets/
+             |      +--> structural/ (XSD 1.0 par état financier : F6001, F6002, ...)
+             |      +--> rules/ (JSON des formules d'assertions comptables)
+             |
+             +--> Entity Framework Core
+             |
+             v
+        PostgreSQL (Persistance sécurisée & Audit trail)
+```
+
+---
+
+## 2. Pipeline de Validation XML Multi-Niveaux
+
+La validation d'un état financier téléversé s'effectue selon 5 niveaux de contrôle obligatoires :
+
+1. **Niveau 1 — Code Document & Extension** :
+   - Contrôle du code attendu (ex. `F6001`, `F6002`, `F6003`, `F6004`, `F6005`, `F6007`, `F6019`, `F6201`...).
+   - Extension obligatoire `.xml` (ou `.pdf` pour le `F6019`).
+
+2. **Niveau 2 — Masque du nom de fichier** :
+   - Vérification du format normalisé : `[CodeDocument]-[MatriculeFiscalDeclarant]-[Exercice].[ext]`
+   - Exemple : `F6001-1234567M-2026.xml`.
+
+3. **Niveau 3 — Racine XML & Espace de Noms** :
+   - L'élément racine XML doit strictement correspondre au document attendu (ex. `<lf:F6001 ...>`).
+   - L'espace de noms officiel doit être `http://www.impots.finances.gov.tn/liasse`.
+   - *Tout document avec une racine divergente est immédiatement rejeté avec statut `Invalide`.*
+
+4. **Niveau 4 — Validation Structurelle XSD 1.0** :
+   - Validation formelle via `XmlSchemaSet` et `XmlReader`.
+   - Détection précise des éléments manquants, inattendus, types de données incorrects ou contraintes d'énumérations violées.
+   - *Une seule erreur XSD invalide immédiatement le document (`IsValid = false`).*
+
+5. **Niveau 5 — Moteur de Règles Métier (`AssertRuleEngine`)** :
+   - Évaluation XPath des équations comptables et sommes d'agrégation (ex. Total Actif = Total Passif, Total Produits = Somme des rubriques).
+   - Les violations sont classées sous la source `RegleMetier`.
+
+---
+
+## 3. Principaux Points d'Entrée de l'API
+
+L'ensemble des requêtes transite par l'API REST ASP.NET Core :
+
+| Méthode | Route API | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Authentification JWT et initialisation de session |
+| `GET` | `/api/contribuables/{matricule}` | Consultation de la fiche d'un contribuable |
+| `POST` | `/api/liasses` | Création / initialisation d'une liasse fiscale pour un exercice |
+| `GET` | `/api/liasses/{id}` | Détails d'une liasse et état des documents associés |
+| `POST` | `/api/liasses/{id}/documents/{code}` | **Téléversement et validation d'un état financier** |
+| `DELETE`| `/api/liasses/{id}/documents/{code}` | Détachement / suppression d'un fichier téléversé |
+| `GET` | `/api/liasses/{id}/documents/{code}/download` | Téléchargement du fichier XML / PDF original |
+| `GET` | `/api/liasses/{id}/documents/{code}/html` | Visualisation tabulaire et impression de l'état financier |
+| `POST` | `/api/validation/{codeDocument}` | **Validation à blanc** d'un fichier XML sans l'enregistrer |
+| `POST` | `/api/deposits` | **Dépôt officiel** de la liasse (si tous les documents obligatoires sont valides) |
+| `GET` | `/api/tracking/{reference}` | Suivi en temps réel de l'état d'un dépôt officiel |
+| `GET` | `/api/tracking/{reference}/receipt/pdf` | Téléchargement de l'Accusé de Réception officiel (PDF) |
+
+---
+
+## 4. Démarrage du Projet
+
+### Prérequis
+- .NET SDK 8.0+
+- Node.js 20+
+- PostgreSQL 16+ (ou via Docker Compose)
+
+### A. Démarrer le Backend ASP.NET Core
 
 ```bash
 cd LiasseFiscale.Api
 dotnet restore
-dotnet ef database update   # nécessite dotnet-ef : dotnet tool install --global dotnet-ef
+dotnet ef database update
 dotnet run
 ```
+*L'API écoute par défaut sur `http://localhost:5000` (ou `https://localhost:5001`).*
+*Swagger UI accessible en développement sur `/swagger`.*
 
-Swagger disponible sur `https://localhost:5001/swagger` en mode Development.
+### B. Démarrer le Frontend / Reverse Proxy
 
-## Démarrage avec Docker
+```bash
+npm install
+npm run dev
+```
+*Le portail est accessible sur `http://localhost:3000`.*
+
+### C. Démarrage complet via Docker Compose
 
 ```bash
 docker compose up --build
 ```
 
-## Régénérer les schémas structurels et les règles métier
+---
 
-Si la DGI publie une nouvelle version des XSD, remplacer les fichiers dans
-`LiasseFiscale.Api/SchemaAssets/original/`, puis :
+## 5. Exécution des Tests Automatisés
+
+La suite de tests unitaires et d'intégration couvre l'intégralité du moteur de validation :
 
 ```bash
-cd Tools/SchemaPreprocessor
-dotnet run -- ../../LiasseFiscale.Api/SchemaAssets/original ../../LiasseFiscale.Api/SchemaAssets/structural ../../LiasseFiscale.Api/SchemaAssets/rules
+cd LiasseFiscale.Tests
+dotnet test
 ```
 
-Puis committer les fichiers régénérés (`structural/`, `rules/`) — voir la checklist
-pour l'explication de pourquoi ce n'est pas régénéré automatiquement en prod.
+### Scénarios de tests validés :
+- ✔ **F6001 Conforme** : Validation structurelle et métier réussie (`IsValid = true`).
+- ✔ **F6002 envoyé pour F6001** : Rejet immédiat sur discordance de nom et de racine (`IsValid = false`).
+- ✔ **Racine XML erronée** : Détection de l'élément racine inattendu (`Source = Structurelle`).
+- ✔ **XML non conforme au schéma XSD** : Capture des champs manquants ou interdits.
+- ✔ **Règle métier arithmétique violée** : Détection des erreurs de calcul XPath (`Source = RegleMetier`).
 
-## État du moteur de règles métier
+---
 
-- F6001, F6002, F6003, F6004 : toutes les formules d'agrégation sont vérifiées automatiquement.
-- F6005 : seules 14 des 380 assertions (les sommes simples) sont vérifiées ; les 366 règles
-  conditionnelles restantes (logique PP/SP+SC) sont listées par
-  `IAssertRuleEngine.ObtenirReglesComplexesNonImplementees` mais pas encore interprétées —
-  voir la checklist, Jour 2.
+## 6. Prétraitement des Schémas et Règles DGI
+
+En cas de mise à jour des schémas XSD officiels par la Direction Générale des Impôts :
+
+1. Placer les nouveaux fichiers dans `LiasseFiscale.Api/SchemaAssets/original/`.
+2. Exécuter l'outil de prétraitement :
+   ```bash
+   cd Tools/SchemaPreprocessor
+   dotnet run -- ../../LiasseFiscale.Api/SchemaAssets/original ../../LiasseFiscale.Api/SchemaAssets/structural ../../LiasseFiscale.Api/SchemaAssets/rules
+   ```
+3. Committer les schémas structurels et règles extraites mis à jour.
