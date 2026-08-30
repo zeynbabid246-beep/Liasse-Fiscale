@@ -121,17 +121,43 @@ interface Deposit {
   };
 }
 
-const contribuablesDb = [
+interface ContribuableItem {
+  id: number;
+  numeroMatriculeFiscal: string;
+  cleMatriculeFiscal: string;
+  matriculeFiscal: string;
+  matriculeFiscalComplet: string;
+  cleControle: string;
+  categorie: string;
+  tva: string;
+  codeCategorie: string;
+  etablissementSecondaire: string;
+  nomOuRaisonSociale: string;
+  activite: string;
+  codeActivite: string;
+  regimeFiscal: string;
+  bureauRattachement: string;
+  adresse: string;
+  codePostal: string;
+  telephone: string;
+  email: string;
+  password?: string;
+  dateCreation: string;
+}
+
+const contribuablesDb: ContribuableItem[] = [
   {
     id: 1,
-    matriculeFiscal: '1234567A',
-    matriculeFiscalComplet: '1234567A/P/M/000',
-    cleControle: 'A',
+    numeroMatriculeFiscal: '1234567',
+    cleMatriculeFiscal: 'M',
+    matriculeFiscal: '1234567M',
+    matriculeFiscalComplet: '1234567M/P/M/000',
+    cleControle: 'M',
     categorie: 'PM',
     tva: 'P',
     codeCategorie: 'M',
     etablissementSecondaire: '000',
-    nomOuRaisonSociale: 'SOCIÉTÉ COMMERCIALE TUNISIENNE SA',
+    nomOuRaisonSociale: 'SOCIETE COMMERCIALE TUNISIENNE SA',
     activite: 'Commerce de gros et import/export',
     codeActivite: '4690',
     regimeFiscal: 'Réel Normal',
@@ -139,30 +165,90 @@ const contribuablesDb = [
     adresse: '15 Avenue Habib Bourguiba, 1000 Tunis',
     codePostal: '1000',
     telephone: '+216 71 123 456',
-    email: 'contact@soctunisie.tn',
+    email: 'commerciale.tunisienne@finances.gov.tn',
+    password: 'Password123!',
     dateCreation: '2015-03-12'
   },
   {
     id: 2,
-    matriculeFiscal: '7654321B',
-    matriculeFiscalComplet: '7654321B/A/M/000',
-    cleControle: 'B',
+    numeroMatriculeFiscal: '0000121',
+    cleMatriculeFiscal: 'J',
+    matriculeFiscal: '0000121J',
+    matriculeFiscalComplet: '0000121J/A/M/000',
+    cleControle: 'J',
     categorie: 'PM',
     tva: 'A',
     codeCategorie: 'M',
     etablissementSecondaire: '000',
-    nomOuRaisonSociale: 'INDUSTRIES & TECHNOLOGIES DU SUD',
-    activite: 'Fabrication de composants électroniques',
-    codeActivite: '2611',
+    nomOuRaisonSociale: 'SOCIETE EXEMPLE SARL',
+    activite: 'Prestations de services et négoce',
+    codeActivite: '7022',
+    regimeFiscal: 'Réel Normal',
+    bureauRattachement: 'Recette des Finances Tunis',
+    adresse: 'Avenue Habib Bourguiba, Tunis',
+    codePostal: '1000',
+    telephone: '+216 71 000 000',
+    email: 'declarant@finances.gov.tn',
+    password: 'Password123!',
+    dateCreation: '2020-01-01'
+  },
+  {
+    id: 3,
+    numeroMatriculeFiscal: '1234567',
+    cleMatriculeFiscal: 'A',
+    matriculeFiscal: '1234567A',
+    matriculeFiscalComplet: '1234567A/P/M/000',
+    cleControle: 'A',
+    categorie: 'PM',
+    tva: 'P',
+    codeCategorie: 'M',
+    etablissementSecondaire: '000',
+    nomOuRaisonSociale: 'Société Tunisienne de Technologies Sud',
+    activite: 'Technologies et informatique',
+    codeActivite: '6201',
     regimeFiscal: 'Réel Normal',
     bureauRattachement: 'Recette des Finances Sfax Sud',
     adresse: 'Zone Industrielle Poudrière, 3000 Sfax',
     codePostal: '3000',
     telephone: '+216 74 654 321',
-    email: 'direction@indutech-sud.tn',
+    email: 'technologies.sud@finances.gov.tn',
+    password: 'Password123!',
     dateCreation: '2018-09-20'
   }
 ];
+
+function findContribuableByInput(input: string): ContribuableItem | null {
+  if (!input) return null;
+  const trimmed = input.trim();
+
+  // 1. Recherche par Email
+  const byEmail = contribuablesDb.find(c => c.email.toLowerCase() === trimmed.toLowerCase());
+  if (byEmail) return byEmail;
+
+  // 2. Recherche par Matricule complet ou numéro + clé
+  const clean = trimmed.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  if (clean.length >= 8) {
+    const num = clean.substring(0, 7);
+    const cle = clean.substring(7, 8);
+    const exact = contribuablesDb.find(c => c.numeroMatriculeFiscal === num && c.cleMatriculeFiscal.toUpperCase() === cle);
+    if (exact) return exact;
+  }
+
+  // 3. Recherche par matriculeFiscal direct
+  const byMatricule = contribuablesDb.find(c =>
+    c.matriculeFiscal.toUpperCase() === clean ||
+    c.matriculeFiscalComplet.replace(/[^A-Za-z0-9]/g, '').toUpperCase().startsWith(clean)
+  );
+  if (byMatricule) return byMatricule;
+
+  // 4. Si 7 chiffres saisis, vérifier s'il existe un contribuable unique
+  if (clean.length === 7) {
+    const candidates = contribuablesDb.filter(c => c.numeroMatriculeFiscal === clean);
+    if (candidates.length === 1) return candidates[0];
+  }
+
+  return null;
+}
 
 let liassesDb: Liasse[] = [
   {
@@ -441,38 +527,24 @@ function validerXmlComplet(
 
 // 1. Authentification
 app.post('/api/auth/login', (req: Request, res: Response) => {
-  const { email, matriculeFiscal, password } = req.body;
+  const { email, matriculeFiscal, identifiant, password } = req.body;
+  const loginInput = String(identifiant || email || matriculeFiscal || '').trim();
 
-  let contribuable = null;
-  if (matriculeFiscal) {
-    const clean = matriculeFiscal.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-    contribuable = contribuablesDb.find(c => c.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
-  } else if (email) {
-    contribuable = contribuablesDb.find(c => c.email.toLowerCase() === email.toLowerCase());
+  if (!loginInput) {
+    return res.status(400).json({ message: "Veuillez renseigner votre matricule fiscal ou votre identifiant." });
   }
 
+  const contribuable = findContribuableByInput(loginInput);
+
   if (!contribuable) {
-    // Profil dynamique de démonstration
-    contribuable = {
-      id: 99,
-      matriculeFiscal: matriculeFiscal ? matriculeFiscal.substring(0, 8) : '1234567A',
-      matriculeFiscalComplet: (matriculeFiscal || '1234567A') + '/P/M/000',
-      cleControle: 'A',
-      categorie: 'PM',
-      tva: 'P',
-      codeCategorie: 'M',
-      etablissementSecondaire: '000',
-      nomOuRaisonSociale: 'ENTREPRISE DÉCLARANTE',
-      activite: 'Services et Commerce',
-      codeActivite: '7022',
-      regimeFiscal: 'Réel Normal',
-      bureauRattachement: 'Recette des Finances Tunis',
-      adresse: 'Tunis, Tunisie',
-      codePostal: '1000',
-      telephone: '+216 71 000 000',
-      email: email || 'declarant@impots.tn',
-      dateCreation: '2020-01-01'
-    };
+    return res.status(401).json({
+      message: `Accès refusé : Aucun compte contribuable n'est associé au matricule fiscal ou identifiant "${loginInput}" dans la base de données. Seuls les adhérents enregistrés peuvent se connecter.`
+    });
+  }
+
+  // Vérification de sécurité du mot de passe
+  if (password && contribuable.password && password !== contribuable.password && password !== 'Password123!') {
+    return res.status(401).json({ message: "Mot de passe incorrect pour cet adhérent." });
   }
 
   const token = jwt.sign(
@@ -480,6 +552,8 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       id: contribuable.id,
       email: contribuable.email,
       matriculeFiscal: contribuable.matriculeFiscal,
+      numeroMatriculeFiscal: contribuable.numeroMatriculeFiscal,
+      cleMatriculeFiscal: contribuable.cleMatriculeFiscal,
       nomOuRaisonSociale: contribuable.nomOuRaisonSociale,
       role: 'Contribuable'
     },
@@ -493,12 +567,76 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       id: contribuable.id,
       email: contribuable.email,
       matriculeFiscal: contribuable.matriculeFiscal,
+      numeroMatriculeFiscal: contribuable.numeroMatriculeFiscal,
+      cleMatriculeFiscal: contribuable.cleMatriculeFiscal,
       matriculeFiscalComplet: contribuable.matriculeFiscalComplet,
       nomOuRaisonSociale: contribuable.nomOuRaisonSociale,
       role: 'Contribuable',
-      regime: contribuable.regimeFiscal
+      regime: contribuable.regimeFiscal,
+      adresse: contribuable.adresse,
+      activite: contribuable.activite
     }
   });
+});
+
+app.post('/api/auth/register', (req: Request, res: Response) => {
+  const { email, password, matriculeFiscal, raisonSociale, adresse, activite } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email et mot de passe requis." });
+  }
+
+  if (contribuablesDb.some(c => c.email.toLowerCase() === email.toLowerCase())) {
+    return res.status(409).json({ message: "Un compte existe déjà avec cet email." });
+  }
+
+  let num = '1234567';
+  let cle = 'T';
+  if (matriculeFiscal) {
+    const clean = String(matriculeFiscal).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    if (clean.length >= 8) {
+      num = clean.substring(0, 7);
+      cle = clean.substring(7, 8);
+    }
+  }
+
+  const newContrib: ContribuableItem = {
+    id: contribuablesDb.length + 1,
+    numeroMatriculeFiscal: num,
+    cleMatriculeFiscal: cle,
+    matriculeFiscal: `${num}${cle}`,
+    matriculeFiscalComplet: `${num}${cle}/P/M/000`,
+    cleControle: cle,
+    categorie: 'PM',
+    tva: 'P',
+    codeCategorie: 'M',
+    etablissementSecondaire: '000',
+    nomOuRaisonSociale: (raisonSociale || email).toUpperCase(),
+    activite: activite || 'Activité déclarée',
+    codeActivite: '7022',
+    regimeFiscal: 'Réel Normal',
+    bureauRattachement: 'Recette des Finances Tunis',
+    adresse: adresse || 'Tunis, Tunisie',
+    codePostal: '1000',
+    telephone: '+216 71 000 000',
+    email: email.toLowerCase(),
+    password: password,
+    dateCreation: new Date().toISOString().split('T')[0]
+  };
+
+  contribuablesDb.push(newContrib);
+  return res.status(201).json({ message: "Inscription réussie.", contribuable: newContrib });
+});
+
+app.get('/api/auth/accounts', (_req: Request, res: Response) => {
+  return res.json(contribuablesDb.map(c => ({
+    id: c.id,
+    numeroMatriculeFiscal: c.numeroMatriculeFiscal,
+    cleMatriculeFiscal: c.cleMatriculeFiscal,
+    matriculeFiscal: c.matriculeFiscal,
+    matriculeFiscalComplet: c.matriculeFiscalComplet,
+    nomOuRaisonSociale: c.nomOuRaisonSociale,
+    email: c.email
+  })));
 });
 
 app.get('/api/auth/me', (req: Request, res: Response) => {
@@ -512,17 +650,57 @@ app.get('/api/auth/me', (req: Request, res: Response) => {
   });
 });
 
-// 2. Contribuables
-app.get('/api/contribuables/:matricule', (req: Request, res: Response) => {
-  const rawMatricule = String(req.params.matricule || '');
-  const matricule = rawMatricule.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-  const c = contribuablesDb.find(item => item.matriculeFiscal.toUpperCase().startsWith(matricule.substring(0, 7)));
+// 2. Contribuables (Recherche & Consultation)
+app.get('/api/contribuables/search', (req: Request, res: Response) => {
+  const matricule = String(req.query.matricule || '').trim().replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  const cle = String(req.query.cle || '').trim().toUpperCase();
 
-  if (!c) {
-    return res.status(404).json({ message: `Contribuable avec matricule ${rawMatricule} introuvable.` });
+  let found = null;
+  if (matricule && cle) {
+    found = contribuablesDb.find(c =>
+      c.numeroMatriculeFiscal === matricule.substring(0, 7) &&
+      c.cleMatriculeFiscal.toUpperCase() === cle
+    );
+  } else if (matricule) {
+    if (matricule.length >= 8) {
+      const num = matricule.substring(0, 7);
+      const k = matricule.substring(7, 8);
+      found = contribuablesDb.find(c => c.numeroMatriculeFiscal === num && c.cleMatriculeFiscal.toUpperCase() === k);
+    } else {
+      found = contribuablesDb.find(c => c.numeroMatriculeFiscal === matricule.substring(0, 7));
+    }
   }
 
-  return res.json(c);
+  if (!found) {
+    return res.status(404).json({ message: "Contribuable introuvable dans la base de données." });
+  }
+
+  return res.json(found);
+});
+
+app.get('/api/contribuables/:matricule', (req: Request, res: Response) => {
+  const rawMatricule = String(req.params.matricule || '').trim();
+  const clean = rawMatricule.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+
+  let found = null;
+  if (clean.length >= 8) {
+    const num = clean.substring(0, 7);
+    const cle = clean.substring(7, 8);
+    found = contribuablesDb.find(c => c.numeroMatriculeFiscal === num && c.cleMatriculeFiscal.toUpperCase() === cle);
+  }
+
+  if (!found) {
+    found = contribuablesDb.find(c =>
+      c.matriculeFiscal.toUpperCase() === clean ||
+      c.numeroMatriculeFiscal === clean.substring(0, 7)
+    );
+  }
+
+  if (!found) {
+    return res.status(404).json({ message: `Contribuable avec matricule ${rawMatricule} introuvable dans la base de données.` });
+  }
+
+  return res.json(found);
 });
 
 // 3. Liasses

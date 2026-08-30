@@ -658,13 +658,32 @@
         <div id="login-alert" class="alert-box alert-error"></div>
         <p class="login-section-title">Identification de l'adhérent</p>
         <div class="field">
-          <label class="required">Identifiant</label>
-          <input type="text" id="login-email" value="declarant@finances.gov.tn" placeholder="ex: declarant@finances.gov.tn">
+          <label class="required">Matricule fiscal ou Identifiant</label>
+          <input type="text" id="login-email" value="0000121J" placeholder="ex: 0000121J ou 1234567M ou email">
         </div>
         <div class="field">
           <label class="required">Mot de passe</label>
           <input type="password" id="login-password" value="Password123!" onkeydown="if(event.key==='Enter') handleLogin()">
         </div>
+        
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;color:#6b7280;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Comptes enregistrés en base :</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <button type="button" onclick="setLoginCredentials('0000121J', 'Password123!')" style="text-align:left;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:4px;padding:6px 8px;font-size:11.5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-weight:700;color:#d9531e;">0000121 J</span>
+              <span style="color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;">SOCIETE EXEMPLE SARL</span>
+            </button>
+            <button type="button" onclick="setLoginCredentials('1234567M', 'Password123!')" style="text-align:left;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:4px;padding:6px 8px;font-size:11.5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-weight:700;color:#d9531e;">1234567 M</span>
+              <span style="color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;">SOC. COMMERCIALE TUNISIENNE</span>
+            </button>
+            <button type="button" onclick="setLoginCredentials('1234567A', 'Password123!')" style="text-align:left;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:4px;padding:6px 8px;font-size:11.5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-weight:700;color:#d9531e;">1234567 A</span>
+              <span style="color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;">Soc. Tunisienne Tech. Sud</span>
+            </button>
+          </div>
+        </div>
+
         <button class="btn btn-orange btn-block" id="btn-submit-login" onclick="handleLogin()">Se connecter</button>
       </div>
       <div class="login-footer">2017 © <span class="brand">Centre Informatique du Ministère des Finances</span></div>
@@ -1086,33 +1105,51 @@
     return res;
   }
 
+  function setLoginCredentials(identifiant, password) {
+    const inputEmail = document.getElementById('login-email');
+    const inputPwd = document.getElementById('login-password');
+    if (inputEmail) inputEmail.value = identifiant;
+    if (inputPwd) inputPwd.value = password;
+  }
+
   // --- AUTH ---
   async function handleLogin() {
-    const email = document.getElementById('login-email').value.trim();
+    const identifiant = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
-    if (!email || !password) {
-      showAlert('login-alert', 'Veuillez saisir votre identifiant et votre mot de passe.');
+    if (!identifiant || !password) {
+      showAlert('login-alert', 'Veuillez saisir votre matricule fiscal ou identifiant et votre mot de passe.');
       return;
     }
 
     try {
       const res = await apiCall('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ identifiant, password })
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        showAlert('login-alert', data.message || 'Identifiant ou mot de passe incorrect.');
+        showAlert('login-alert', data.message || 'Matricule fiscal ou mot de passe non reconnu dans la base.');
         return;
       }
 
       const data = await res.json();
       authToken = data.token;
       localStorage.setItem('liasse_token', authToken);
+
+      if (data.user) {
+        currentContribuable = data.user;
+        if (data.user.numeroMatriculeFiscal) {
+          const mInput = document.getElementById('search-matricule');
+          const cInput = document.getElementById('search-cle');
+          if (mInput) mInput.value = data.user.numeroMatriculeFiscal;
+          if (cInput) cInput.value = data.user.cleMatriculeFiscal;
+        }
+      }
+
       goToApp();
-      showPasswordPrompt(email, password);
+      showPasswordPrompt(identifiant, password);
     } catch (err) {
       showAlert('login-alert', err.message || 'Erreur réseau.');
     }
