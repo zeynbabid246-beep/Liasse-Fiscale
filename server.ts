@@ -391,7 +391,7 @@ let depositsDb: Deposit[] = [
     exercice: 2025,
     nature: 'Initiale',
     typeDepot: 'Dépôt définitif',
-    dateDepot: '2025-04-15T10:24:00Z',
+    dateDepot: '2025-04-20T10:24:18Z',
     statut: 'Validée',
     hashGlobal: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
     observation: 'Dépôt annuel de liasse fiscale validé et certifié.',
@@ -405,7 +405,7 @@ let depositsDb: Deposit[] = [
     ],
     receipt: {
       numeroAccuse: 'ACC-2025-784123',
-      dateEmission: '2025-04-15T10:24:00Z',
+      dateEmission: '2025-04-20T10:24:18Z',
       qrCode: 'https://impots.finances.gov.tn/verify/DEP-2025-784123',
       empreinteNumerique: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
     }
@@ -419,7 +419,7 @@ let depositsDb: Deposit[] = [
     exercice: 2024,
     nature: 'Initiale',
     typeDepot: 'Dépôt définitif',
-    dateDepot: '2024-04-18T14:15:00Z',
+    dateDepot: '2024-04-22T10:30:45Z',
     statut: 'Validée',
     hashGlobal: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4',
     observation: 'Exercice clos au 31/12/2024 - Validé DGI.',
@@ -432,7 +432,7 @@ let depositsDb: Deposit[] = [
     ],
     receipt: {
       numeroAccuse: 'ACC-2024-512890',
-      dateEmission: '2024-04-18T14:15:00Z',
+      dateEmission: '2024-04-22T10:30:45Z',
       qrCode: 'https://impots.finances.gov.tn/verify/DEP-2024-512890',
       empreinteNumerique: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4'
     }
@@ -918,12 +918,12 @@ app.get('/api/liasses/etats-requis', (req: Request, res: Response) => {
   return res.json(etats);
 });
 
-// 4. Liasses en cours de saisie
+// 4. Liasses en cours de saisie / en attente de validation
 app.get('/api/liasses/en-cours', (req: Request, res: Response) => {
   const contribuableId = parseInt(String(req.query.contribuableId || 0), 10);
   const matricule = String(req.query.matricule || '').trim().toUpperCase();
 
-  let liasses = liassesDb.filter(l => l.statut === 'EnSaisie');
+  let liasses = liassesDb.filter(l => l.statut === 'EnSaisie' || l.statut === 'Deposee');
 
   if (contribuableId > 0) {
     liasses = liasses.filter(l => l.contribuableId === contribuableId);

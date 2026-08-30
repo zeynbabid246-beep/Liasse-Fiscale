@@ -102,12 +102,22 @@
     font-size:13px;
     cursor:pointer;
     font-weight:600;
+    transition:background-color 0.15s ease, opacity 0.15s ease;
+  }
+  .btn:disabled, .btn[disabled], .btn-disabled{
+    opacity:0.45 !important;
+    cursor:not-allowed !important;
+    pointer-events:none !important;
+    background:#9ca3af !important;
+    border-color:#9ca3af !important;
+    color:#ffffff !important;
+    box-shadow:none !important;
   }
   .btn-orange{
     background:var(--orange);
     color:#fff;
   }
-  .btn-orange:hover{background:var(--orange-dark);}
+  .btn-orange:hover:not(:disabled){background:var(--orange-dark);}
   .btn-block{width:100%;}
   .login-footer{
     text-align:center;
@@ -1081,12 +1091,6 @@
     if (m) m.style.display = 'none';
   }
 
-  function goToValidationTab() {
-    closeModal('modal-verifier');
-    const tabValider = document.querySelector('.tab[data-tab="valider"]');
-    if (tabValider) tabValider.click();
-  }
-
   async function apiCall(endpoint, options = {}) {
     const headers = options.headers || {};
     if (authToken && !headers['Authorization']) {
@@ -1480,6 +1484,42 @@
         noteActivite = 'Catégorie Assurances sélectionnée pour le déclarant.';
       }
 
+      const hasNonConforme = currentLiasseDocuments.some(d => 
+        d.statut === 'Invalide' ||
+        (d.nomFichier && d.statut !== 'Valide' && d.statut !== 'Soumis') ||
+        (documentErrorsMap[d.codeDocument] && documentErrorsMap[d.codeDocument].length > 0)
+      ) || (data.documentsInvalides && data.documentsInvalides.length > 0);
+
+      const hasMissingMandatory = currentLiasseDocuments.some(d => 
+        d.estObligatoire && (d.statut === 'NonSoumis' || !d.nomFichier || d.statut === 'Invalide')
+      );
+
+      const canValidate = Boolean(data.peutDeposer && !hasNonConforme && !hasMissingMandatory);
+
+      let statusNotificationHtml = '';
+      if (hasNonConforme) {
+        statusNotificationHtml = `
+          <div style="margin-top:14px;padding:10px 14px;background:#fdf2f2;border:1px solid #f8b4b4;border-radius:4px;color:#c53030;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;">
+            <span>❌</span>
+            <span>Présence de document(s) non conforme(s). Le bouton « Valider le dépôt en cours » est désactivé tant que les anomalies ne sont pas corrigées.</span>
+          </div>
+        `;
+      } else if (hasMissingMandatory) {
+        statusNotificationHtml = `
+          <div style="margin-top:14px;padding:10px 14px;background:#fff8e6;border:1px solid #fbd38d;border-radius:4px;color:#b7791f;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;">
+            <span>⚠️</span>
+            <span>Certains états financiers obligatoires sont encore manquants. Veuillez les téléverser pour activer la validation du dépôt.</span>
+          </div>
+        `;
+      } else {
+        statusNotificationHtml = `
+          <div style="margin-top:14px;padding:10px 14px;background:#edfbf1;border:1px solid #bbf0cb;border-radius:4px;color:#1e8a4c;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;">
+            <span>✔</span>
+            <span>Tous les états financiers sont conformes et prêts pour validation.</span>
+          </div>
+        `;
+      }
+
       const body = document.getElementById('modal-verifier-body');
       body.innerHTML = `
         <div style="margin-bottom:16px;background:#fdfaf8;border:1px solid #f1ded4;padding:12px 16px;border-radius:4px;font-size:12.5px;">
@@ -1516,7 +1556,22 @@
             </tbody>
           </table>
         </div>
+        ${statusNotificationHtml}
       `;
+
+      const btnModalValider = document.getElementById('btn-modal-valider');
+      if (btnModalValider) {
+        btnModalValider.disabled = !canValidate;
+        if (!canValidate) {
+          btnModalValider.title = hasNonConforme
+            ? "Action bloquée : corrigez les documents non conformes avant de valider le dépôt."
+            : "Action bloquée : veuillez téléverser l'ensemble des états obligatoires.";
+          btnModalValider.classList.add('btn-disabled');
+        } else {
+          btnModalValider.title = "Accéder à la validation du dépôt";
+          btnModalValider.classList.remove('btn-disabled');
+        }
+      }
 
       openModal('modal-verifier');
       checkUploaderReadiness();
@@ -1528,6 +1583,10 @@
   }
 
   function goToValidationTab() {
+    const btnModalValider = document.getElementById('btn-modal-valider');
+    if (btnModalValider && (btnModalValider.disabled || btnModalValider.classList.contains('btn-disabled'))) {
+      return;
+    }
     closeModal('modal-verifier');
     const tabValider = document.querySelector('.tab[data-tab="valider"]');
     if (tabValider) tabValider.click();
@@ -1642,6 +1701,23 @@
   // pas par le contribuable — il n'existe donc plus de fonction "confirmerDepotFinal" ici.
   // Seul "tenterFinaliserDepot" (déclenché par le bouton "Uploader Liasse") dépose la liasse.
 
+  function formatTunisianDateTime(dateStr) {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const seconds = String(d.getSeconds()).padStart(2, '0');
+      return `${day}/${month}/${year} à ${hours}:${minutes}:${seconds}`;
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
   // --- SUIVI DES DEPOTS ---
   async function loadDepositHistory() {
     const tbody = document.getElementById('tracking-table-body');
@@ -1659,7 +1735,7 @@
 
       tbody.innerHTML = deposits.map((d, index) => {
         const badgeClass = d.statut === 'Validée' ? 'badge-validee' : (d.statut === 'Supprimée' ? 'badge-supprimee' : 'badge-encours');
-        const formattedDate = new Date(d.dateDepot).toLocaleString('fr-FR');
+        const formattedDate = formatTunisianDateTime(d.dateDepot);
         const isSelected = index === 0;
         return `
           <tr onclick="loadDepositDetails('${d.reference}')" style="cursor:pointer; ${isSelected ? 'background:#fbfaf7;' : ''}">
@@ -1695,7 +1771,7 @@
       document.getElementById('detail-exercice').innerText = d.exercice;
       document.getElementById('detail-nature').innerText = d.nature;
       document.getElementById('detail-type').innerText = d.typeDepot;
-      document.getElementById('detail-date').innerText = new Date(d.dateDepot).toLocaleString('fr-FR');
+      document.getElementById('detail-date').innerText = formatTunisianDateTime(d.dateDepot);
 
       const tbody = document.getElementById('detail-files-table-body');
       tbody.innerHTML = (d.documents || []).map(doc => `
