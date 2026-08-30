@@ -1,19 +1,46 @@
 # Portail de Dépôt et de Validation de la Liasse Fiscale
 
-Portail officiel pour le téléversement, la validation réglementaire XSD multi-niveaux, le dépôt officiel et le suivi de la Liasse Fiscale (Ministère des Finances - Direction Générale des Impôts).
+Portail officiel pour le téléversement, la validation réglementaire XSD multi-niveaux, le dépôt officiel, l'horodatage certifié et le suivi de la Liasse Fiscale (Ministère des Finances - Direction Générale des Impôts).
 
 ---
 
-## 1. Architecture du Système
+## 1. Technologies Utilisées
 
-Le système repose sur un **backend unique et centralisé en ASP.NET Core** garantissant l'intégrité absolue de la validation fiscale et des règles comptables.
+Ce projet s'appuie sur un écosystème moderne, résilient et performant :
+
+### Backend & Moteur Fiscale
+- **.NET 10 (ASP.NET Core Web API / C#)** : Architecture REST modulaire haute performance, injection de dépendances, middleware d'authentification et gestion de flux asynchrones.
+- **Entity Framework Core 10 (EF Core)** : ORM pour la modélisation des entités fiscales, le suivi des états et les migrations automatiques.
+- **System.Xml & XPath Engine** : Validation multi-couches stricte contre les schémas XSD 1.0 DGI et évaluation des formules comptables dynamiques (`AssertRuleEngine`).
+- **Swagger / OpenAPI** : Documentation interactive et typée des endpoints REST.
+- **JWT (JSON Web Tokens)** : Sécurisation des sessions déclarants et gestion de l'autorisation à granularité fine.
+
+### Base de Données & Persistance
+- **PostgreSQL 17 / 16** : Système de gestion de base de données relationnelle assurant l'intégrité transactionnelle (ACID), le stockage des liasses, l'audit trail et l'historique complet des télé-déclarations.
+- **JSONB / Schemas Postgres** : Stockage flexible des métadonnées XML, logs d'anomalies de validation et configurations d'états financiers.
+
+### Frontend & Interface Utilisateur
+- **TypeScript & ECMAScript 2024** : Logique applicative typée et réactive côté client.
+- **HTML5 & CSS3 / Tailwind Engine** : Interface conforme aux chartes graphiques administratives de la DGI (ergonomie soignée, responsive et accessible).
+- **Mappage XML vers HTML / XSLT Visualizer** : Restitution instantanée des bilans, comptes de résultat et tableaux fiscaux au format tabulaire officiel.
+- **Accusés de Réception & Empreintes SHA-256** : Génération et horodatage des reçus de dépôt avec QR Code de vérification.
+
+### DevOps, Tests & Qualité
+- **Docker & Docker Compose** : Conteneurisation complète (API, Frontend, Base PostgreSQL).
+- **xUnit / NSubstitute / FluentAssertions** : Suite automatisée de tests unitaires et d'intégration validant le moteur XML et les règles métier.
+
+---
+
+## 2. Architecture du Système
+
+Le système repose sur un **backend centralisé en .NET 10** garantissant l'intégrité absolue de la validation fiscale et des règles comptables.
 
 ```text
-React / TypeScript Frontend (Port 3000)
+Frontend TypeScript / Web Client (Port 3000)
              |
              | HTTP / REST (JSON + multipart/form-data)
              v
-   ASP.NET Core API (LiasseFiscale.Api)
+   .NET 10 Web API (LiasseFiscale.Api)
              |
              +--> Controllers (Auth, Contribuable, Liasse, Document, Validation, Tracking, Receipt)
              |
@@ -26,15 +53,15 @@ React / TypeScript Frontend (Port 3000)
              |      +--> structural/ (XSD 1.0 par état financier : F6001, F6002, ...)
              |      +--> rules/ (JSON des formules d'assertions comptables)
              |
-             +--> Entity Framework Core
+             +--> Entity Framework Core 10
              |
              v
-        PostgreSQL (Persistance sécurisée & Audit trail)
+        PostgreSQL (Persistance sécurisée, Liasses, Dépôts & Audit trail)
 ```
 
 ---
 
-## 2. Pipeline de Validation XML Multi-Niveaux
+## 3. Pipeline de Validation XML Multi-Niveaux
 
 La validation d'un état financier téléversé s'effectue selon 5 niveaux de contrôle obligatoires :
 
@@ -62,9 +89,9 @@ La validation d'un état financier téléversé s'effectue selon 5 niveaux de co
 
 ---
 
-## 3. Principaux Points d'Entrée de l'API
+## 4. Principaux Points d'Entrée de l'API
 
-L'ensemble des requêtes transite par l'API REST ASP.NET Core :
+L'ensemble des requêtes transite par l'API REST .NET 10 :
 
 | Méthode | Route API | Description |
 | :--- | :--- | :--- |
@@ -79,19 +106,18 @@ L'ensemble des requêtes transite par l'API REST ASP.NET Core :
 | `POST` | `/api/validation/{codeDocument}` | **Validation à blanc** d'un fichier XML sans l'enregistrer |
 | `POST` | `/api/deposits` | **Dépôt officiel** de la liasse (si tous les documents obligatoires sont valides) |
 | `GET` | `/api/tracking/{reference}` | Suivi en temps réel de l'état d'un dépôt officiel |
-| `GET` | `/api/tracking/{reference}/receipt/pdf` | Téléchargement de l'Accusé de Réception officiel (PDF) |
+| `GET` | `/api/tracking/{reference}/receipt/pdf` | Téléchargement de l'Accusé de Réception officiel (PDF / Empreinte SHA256) |
 
 ---
 
-## 4. Démarrage du Projet
+## 5. Démarrage du Projet
 
 ### Prérequis
-- .NET SDK 8.0+
-- Node.js 20+
-- PostgreSQL 16+ (ou via Docker Compose)
+- **.NET SDK 10.0**
+- **Node.js 20+**
+- **PostgreSQL 16 / 17** (ou instance Docker)
 
-### A. Démarrer le Backend ASP.NET Core
-
+### A. Démarrer le Backend .NET 10
 ```bash
 cd LiasseFiscale.Api
 dotnet restore
@@ -99,10 +125,9 @@ dotnet ef database update
 dotnet run
 ```
 *L'API écoute par défaut sur `http://localhost:5000` (ou `https://localhost:5001`).*
-*Swagger UI accessible en développement sur `/swagger`.*
+*Swagger UI accessible en mode développement sur `/swagger`.*
 
-### B. Démarrer le Frontend / Reverse Proxy
-
+### B. Démarrer le Frontend / Application Web
 ```bash
 npm install
 npm run dev
@@ -110,14 +135,13 @@ npm run dev
 *Le portail est accessible sur `http://localhost:3000`.*
 
 ### C. Démarrage complet via Docker Compose
-
 ```bash
 docker compose up --build
 ```
 
 ---
 
-## 5. Exécution des Tests Automatisés
+## 6. Exécution des Tests Automatisés
 
 La suite de tests unitaires et d'intégration couvre l'intégralité du moteur de validation :
 
@@ -135,7 +159,7 @@ dotnet test
 
 ---
 
-## 6. Prétraitement des Schémas et Règles DGI
+## 7. Prétraitement des Schémas et Règles DGI
 
 En cas de mise à jour des schémas XSD officiels par la Direction Générale des Impôts :
 
