@@ -150,6 +150,8 @@ public class TrackingController : ControllerBase
             xmlContent = await System.IO.File.ReadAllTextAsync(doc.CheminStockage);
         }
 
+        string displayContent = string.IsNullOrEmpty(xmlContent) ? "Aucun contenu disponible." : System.Net.WebUtility.HtmlEncode(xmlContent);
+
         var html = $@"<!DOCTYPE html>
 <html lang=""fr"">
 <head>
@@ -189,7 +191,7 @@ public class TrackingController : ControllerBase
       <div><div class=""meta-label"">Date de Dépôt</div><div class=""meta-val"">{deposit.DateDepot:dd/MM/yyyy HH:mm} UTC</div></div>
     </div>
     <h4 style=""font-size:13px; text-transform:uppercase; color:#2b3a55; margin-bottom:8px;"">Contenu Archivé de l'État Financier :</h4>
-    <pre class=""xml-raw"">{(string.IsNullOrEmpty(xmlContent) ? ""Aucun contenu disponible."" : System.Net.WebUtility.HtmlEncode(xmlContent))}</pre>
+    <pre class=""xml-raw"">{displayContent}</pre>
   </div>
 </body>
 </html>";

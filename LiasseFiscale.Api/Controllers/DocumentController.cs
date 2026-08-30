@@ -307,6 +307,9 @@ public class DocumentController : ControllerBase
             xmlContent = await System.IO.File.ReadAllTextAsync(doc.CheminStockage);
         }
 
+        string displayFileName = doc.NomFichier ?? "Non téléversé";
+        string displayContent = string.IsNullOrEmpty(xmlContent) ? "Aucun contenu disponible." : System.Net.WebUtility.HtmlEncode(xmlContent);
+
         var html = $@"<!DOCTYPE html>
 <html lang=""fr"">
 <head>
@@ -344,10 +347,10 @@ public class DocumentController : ControllerBase
       <div><div class=""meta-label"">Contribuable / Raison Sociale</div><div class=""meta-val"">{liasse.Contribuable.NomOuRaisonSociale}</div></div>
       <div><div class=""meta-label"">Matricule Fiscal</div><div class=""meta-val"">{liasse.Contribuable.MatriculeFiscalComplet}</div></div>
       <div><div class=""meta-label"">Exercice Comptable</div><div class=""meta-val"">{liasse.Exercice} ({liasse.DateDebut:dd/MM/yyyy} au {liasse.DateCloture:dd/MM/yyyy})</div></div>
-      <div><div class=""meta-label"">Nom de Fichier</div><div class=""meta-val"">{doc.NomFichier ?? ""Non téléversé""}</div></div>
+      <div><div class=""meta-label"">Nom de Fichier</div><div class=""meta-val"">{displayFileName}</div></div>
     </div>
     <h4 style=""font-size:13px; text-transform:uppercase; color:#2b3a55; margin-bottom:8px;"">Contenu du Fichier :</h4>
-    <pre class=""xml-raw"">{(string.IsNullOrEmpty(xmlContent) ? ""Aucun contenu disponible."" : System.Net.WebUtility.HtmlEncode(xmlContent))}</pre>
+    <pre class=""xml-raw"">{displayContent}</pre>
   </div>
 </body>
 </html>";
