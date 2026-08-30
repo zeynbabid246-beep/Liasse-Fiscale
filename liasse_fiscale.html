@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liasse Fiscale</title>
+<style>
+  :root{
+    --navy:#2b3a55;
+    --navy-dark:#22304a;
+    --orange:#d9531e;
+    --orange-dark:#c2461a;
+    --orange-light:#e8734a;
+    --grey-bar:#8c8c8c;
+    --border:#d7d7d7;
+    --bg:#eef0f2;
+    --text:#333333;
+    --label:#555555;
+    --link:#2b6cb0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    font-size:13px;
+  }
+
+  /* ---------- LOGIN SCREEN ---------- */
+  #login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+  }
+  .login-card{
+    width:360px;
+    background:#fff;
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  }
+  .login-header{
+    background:var(--orange);
+    color:#fff;
+    padding:18px 20px;
+    font-size:20px;
+    font-weight:600;
+  }
+  .login-body{
+    padding:20px 24px 26px;
+  }
+  .login-section-title{
+    font-size:13px;
+    font-weight:bold;
+    color:var(--text);
+    margin:0 0 16px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .login-section-title:before{
+    content:"▲";
+    font-size:9px;
+    color:#999;
+  }
+  .field{
+    margin-bottom:16px;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    color:var(--label);
+    margin-bottom:6px;
+  }
+  .required:before{
+    content:"* ";
+    color:var(--orange);
+  }
+  .field input[type="text"],
+  .field input[type="password"]{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:2px;
+    font-size:13px;
+    background:#fbfbfb;
+    color:var(--text);
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--orange-light);
+    background:#fff;
+  }
+  .btn{
+    display:inline-block;
+    border:none;
+    border-radius:3px;
+    padding:9px 22px;
+    font-size:13px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .btn-orange{
+    background:var(--orange);
+    color:#fff;
+  }
+  .btn-orange:hover{background:var(--orange-dark);}
+  .btn-block{width:100%;}
+  .login-footer{
+    text-align:center;
+    padding:10px;
+    font-size:11px;
+    color:#999;
+    border-top:1px solid var(--border);
+  }
+  .login-footer .brand{color:var(--orange);font-weight:600;}
+
+  /* ---------- APP SCREEN ---------- */
+  #app-screen{display:none;}
+  #app-screen.active{display:block;}
+  #login-screen.hidden{display:none;}
+
+  .topbar{
+    background:var(--navy);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 24px;
+  }
+  .topbar-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-mark{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--navy);
+    font-weight:bold;
+    font-size:13px;
+  }
+  .brand-text .line1{font-size:11px;letter-spacing:.5px;opacity:.85;}
+  .brand-text .line2{font-size:16px;font-weight:700;letter-spacing:.5px;}
+  .btn-deconnexion{
+    background:var(--orange);
+    color:#fff;
+    border:none;
+    padding:7px 16px;
+    border-radius:3px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .btn-deconnexion:hover{background:var(--orange-dark);}
+
+  .content-wrap{
+    max-width:980px;
+    margin:24px auto;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:3px;
+    min-height:520px;
+    display:flex;
+    flex-direction:column;
+  }
+  .content-body{
+    padding:22px 26px;
+    flex:1;
+  }
+
+  .panel-title{
+    font-size:13px;
+    font-weight:bold;
+    color:var(--text);
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding-bottom:8px;
+    border-bottom:1px solid #eee;
+  }
+  .panel-title:before{
+    content:"▲";
+    font-size:9px;
+    color:#999;
+  }
+
+  .search-row{
+    display:flex;
+    align-items:flex-end;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+  }
+  .search-row .field{margin-bottom:0;min-width:170px;}
+  select{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:2px;
+    font-size:13px;
+    background:#fbfbfb;
+    color:var(--text);
+  }
+  .btn-search{
+    background:#fff;
+    border:1px solid var(--border);
+    color:var(--orange);
+    padding:8px 16px;
+    border-radius:2px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .btn-search:hover{background:#faf3f0;}
+
+  .empty-note{
+    color:#aaa;
+    font-size:12.5px;
+    padding:10px 0;
+  }
+
+  .app-footer{
+    background:var(--orange);
+    color:#fff;
+    text-align:center;
+    font-size:11px;
+    padding:9px;
+    border-radius:0 0 3px 3px;
+  }
+
+  /* Contribuable card + tabs page */
+  .contrib-box{
+    border:1px solid var(--border);
+    border-radius:3px;
+    padding:16px 20px;
+    margin-bottom:18px;
+  }
+  .contrib-row{display:flex;gap:40px;flex-wrap:wrap;margin-bottom:14px;}
+  .contrib-item .k{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.3px;}
+  .contrib-item .v{font-size:13.5px;font-weight:600;color:var(--text);margin-top:2px;}
+  .btn-outline{
+    background:#fff;
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:6px 16px;
+    border-radius:2px;
+    font-size:12.5px;
+    cursor:pointer;
+    font-weight: 500;
+  }
+  .btn-outline:hover{background:#f5f5f5;}
+
+  .tabs{
+    display:flex;
+    border-bottom:2px solid var(--border);
+    margin-bottom:20px;
+    gap:4px;
+  }
+  .tab{
+    padding:10px 18px;
+    font-size:13px;
+    color:var(--label);
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    margin-bottom:-2px;
+  }
+  .tab.active{
+    color:var(--orange);
+    border-bottom-color:var(--orange);
+    font-weight:600;
+  }
+  .tab:hover:not(.active){color:var(--text);}
+
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;}
+
+  .section-title-lg{
+    font-size:15px;
+    font-weight:700;
+    color:var(--text);
+    margin:0 0 18px;
+  }
+
+  .form-grid{
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .form-grid .field{min-width:200px;flex:1;}
+  .radio-line{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;}
+  .radio-line input{accent-color:var(--orange);}
+
+  .toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .toolbar .btn-outline.disabled{
+    color:#bbb;
+    cursor:not-allowed;
+  }
+  .toolbar .btn-accent{
+    background:#2b3a55;
+    color:#fff;
+    border:1px solid #2b3a55;
+    padding:6px 14px;
+    border-radius:3px;
+    font-size:12px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .toolbar .btn-accent:hover{background:#1f2a3e;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  thead th{
+    background:#f4f5f7;
+    text-align:left;
+    padding:9px 12px;
+    color:var(--label);
+    font-weight:700;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid #eee;
+    color:var(--text);
+    white-space:nowrap;
+  }
+  tbody tr:hover{background:#fafafa;}
+  tbody tr.dragover{background:#fff3ea !important;outline:2px dashed #d9531e;}
+  .btn-parcourir{
+    background:#f0f0f0;
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:2px;
+    font-size:11.5px;
+    cursor:pointer;
+    margin-right:6px;
+  }
+  .btn-inline-upload{
+    background:#e5f5ec;
+    border:1px solid #c3e6cb;
+    color:#1e8a4c;
+    padding:3px 8px;
+    border-radius:2px;
+    font-size:11px;
+    cursor:pointer;
+    font-weight:600;
+    margin-left:4px;
+  }
+  .btn-inline-upload:hover{background:#d4edda;}
+  .btn-inline-view{
+    background:#eef2f7;
+    border:1px solid #d0d7de;
+    color:#2b3a55;
+    padding:3px 8px;
+    border-radius:2px;
+    font-size:11px;
+    cursor:pointer;
+    margin-left:4px;
+  }
+  .btn-inline-delete{
+    background:#fdeceb;
+    border:1px solid #f5c6cb;
+    color:#c0392b;
+    padding:3px 8px;
+    border-radius:2px;
+    font-size:11px;
+    cursor:pointer;
+    margin-left:4px;
+  }
+  .file-hint{color:#aaa;font-size:11.5px;}
+  .badge{
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:600;
+  }
+  .badge-validee{background:#e5f5ec;color:#1e8a4c;}
+  .badge-supprimee{background:#fdeceb;color:#c0392b;}
+  .badge-encours{background:#fff3cd;color:#856404;}
+  .badge-loading{background:#e8f4fd;color:#0d6efd;}
+  .link-btn{
+    color:var(--link);
+    text-decoration:none;
+    font-size:12px;
+    margin-right:14px;
+    cursor:pointer;
+  }
+  .link-btn.download{color:#c0392b;}
+  .link-consult{
+    display:inline-flex;align-items:center;gap:4px;
+    color:#c0392b;font-size:12px;cursor:pointer;
+  }
+  .accuse-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fdeceb;color:#c0392b;
+    padding:4px 10px;border-radius:2px;font-size:11.5px;
+    cursor:pointer;
+  }
+  .table-wrap{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:24px;}
+  .subblock-title{font-size:13px;font-weight:700;margin:22px 0 10px;}
+  .details-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px 40px;
+    margin-bottom:20px;
+    font-size:13px;
+  }
+  .details-grid .k{color:#999;}
+  .details-grid .v{font-weight:600;}
+
+  .alert-box{
+    padding:10px 14px;
+    border-radius:3px;
+    margin-bottom:14px;
+    font-size:12.5px;
+    display:none;
+  }
+  .alert-error{background:#fdeceb;color:#c0392b;border:1px solid #f5c6cb;}
+  .alert-success{background:#e5f5ec;color:#1e8a4c;border:1px solid #c3e6cb;}
+  .alert-info{background:#e8f4fd;color:#0c5460;border:1px solid #bee5eb;}
+
+  /* Modal Dialogs */
+  .modal-overlay{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+  }
+  .modal-box{
+    background:#fff;
+    border-radius:4px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.2);
+    width:90%;
+    max-width:680px;
+    max-height:85vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .modal-header{
+    background:var(--primary);
+    color:#fff;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:14px;
+    font-weight:700;
+  }
+  .modal-close{
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-size:18px;
+    cursor:pointer;
+  }
+  .modal-body{
+    padding:20px;
+    overflow-y:auto;
+    font-size:13px;
+  }
+  .modal-footer{
+    padding:12px 20px;
+    background:#f8f9fa;
+    border-top:1px solid #e9ecef;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+  }
+
+  @media (max-width:640px){
+    .content-body{padding:16px;}
+    .contrib-row, .form-grid{gap:16px;}
+    table{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ SCREEN 1 : LOGIN ============ -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-header">Liasse Fiscale</div>
+      <div class="login-body">
+        <div id="login-alert" class="alert-box alert-error"></div>
+        <p class="login-section-title">Identification de l'adhérent</p>
+        <div class="field">
+          <label class="required">Identifiant</label>
+          <input type="text" id="login-email" value="declarant@finances.gov.tn" placeholder="ex: declarant@finances.gov.tn">
+        </div>
+        <div class="field">
+          <label class="required">Mot de passe</label>
+          <input type="password" id="login-password" value="Password123!">
+        </div>
+        <button class="btn btn-orange btn-block" id="btn-submit-login" onclick="handleLogin()">Se connecter</button>
+      </div>
+      <div class="login-footer">2017 © <span class="brand">Centre Informatique du Ministère des Finances</span></div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 2 : APP ============ -->
+  <div id="app-screen">
+    <div class="topbar">
+      <div class="topbar-brand">
+        <div class="brand-mark">MF</div>
+        <div class="brand-text">
+          <div class="line1">MINISTÈRE DES FINANCES</div>
+          <div class="line2">LIASSE FISCALE</div>
+        </div>
+      </div>
+      <button class="btn-deconnexion" onclick="handleLogout()">Déconnexion</button>
+    </div>
+
+    <div class="content-wrap">
+      <div class="content-body">
+        <div id="app-alert" class="alert-box"></div>
+
+        <!-- Identification du contribuable (before search) -->
+        <div id="search-view">
+          <p class="panel-title">Identification du contribuable</p>
+
+          <div class="field" style="max-width:260px;margin-bottom:20px;">
+            <label>Type Identifiant :</label>
+            <select id="search-id-type">
+              <option value="MF">Matricule fiscal</option>
+            </select>
+          </div>
+
+          <p class="panel-title">Recherche</p>
+          <div class="search-row">
+            <div class="field">
+              <label class="required">Matricule fiscal</label>
+              <input type="text" id="search-matricule" value="0000121" placeholder="7 chiffres">
+            </div>
+            <div class="field" style="max-width:100px;">
+              <label class="required">Clé</label>
+              <input type="text" id="search-cle" value="J" maxlength="1" placeholder="1 lettre">
+            </div>
+            <button class="btn-search" onclick="handleSearchContribuable()">🔍 Rechercher</button>
+          </div>
+
+          <p class="panel-title">Contribuable</p>
+          <div id="empty-contrib" class="empty-note">Aucune donnée à afficher</div>
+        </div>
+
+        <!-- Contribuable + tabs (after search) -->
+        <div id="deposit-view" style="display:none;">
+          <div class="contrib-box">
+            <p class="panel-title" style="border:none;margin-bottom:12px;">Contribuable</p>
+            <div class="contrib-row">
+              <div class="contrib-item">
+                <div class="k">Matricule fiscal</div>
+                <div class="v" id="card-matricule">0000121 J</div>
+              </div>
+              <div class="contrib-item">
+                <div class="k">Nom et prénom ou raison sociale</div>
+                <div class="v" id="card-nom">SOCIÉTÉ EXEMPLE SARL</div>
+              </div>
+              <div class="contrib-item">
+                <div class="k">Adresse</div>
+                <div class="v" id="card-adresse">Avenue Habib Bourguiba, Tunis</div>
+              </div>
+            </div>
+            <button class="btn-outline" onclick="showSearch()">Retour</button>
+          </div>
+
+          <div class="tabs">
+            <div class="tab active" data-tab="depot">Dépôt</div>
+            <div class="tab" data-tab="valider">Valider le dépôt en cours</div>
+            <div class="tab" data-tab="suivi">Suivi des dépôts</div>
+          </div>
+
+          <!-- Tab: Dépôt -->
+          <div class="tabpanel active" id="tab-depot">
+            <p class="section-title-lg">Dépôt de la Liasse Fiscale</p>
+
+            <p class="panel-title">Type de la liasse</p>
+            <div class="field" style="max-width:340px;margin-bottom:20px;">
+              <label>Liasse Fiscale</label>
+              <select id="select-categorie" onchange="loadEtatsRequis()">
+                <option value="Banques" selected>Banques</option>
+                <option value="CasGeneral">Cas général</option>
+                <option value="AssurancesReassurances">Assurances et réassurances</option>
+                <option value="Opcvm">OPCVM</option>
+                <option value="MicroCredits">Micro-crédits</option>
+                <option value="CasGeneralAvecFluxTresorerieModeleAutorise">Cas général avec état des flux de trésorerie</option>
+              </select>
+            </div>
+
+            <p class="panel-title">Relative à</p>
+            <div class="form-grid">
+              <div class="field">
+                <label>Année</label>
+                <select id="select-exercice" onchange="initOrFetchLiasse()"><option value="2026">2026</option><option value="2025">2025</option></select>
+              </div>
+              <div class="field">
+                <label>Nature</label>
+                <select id="select-nature" onchange="initOrFetchLiasse()">
+                  <option value="Initiale">Initiale</option>
+                  <option value="Rectificative">Rectificative</option>
+                  <option value="CessationActivite">Cessation d'activité</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Type</label>
+                <div class="radio-line"><input type="radio" name="dtype" value="Definitif" checked onchange="initOrFetchLiasse()"> Dépôt définitif</div>
+                <div class="radio-line"><input type="radio" name="dtype" value="Provisoire" onchange="initOrFetchLiasse()"> Dépôt provisoire</div>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <button class="btn-accent" id="btn-upload-all" onclick="uploadAllSelectedFiles()">📤 Uploader Liasse</button>
+              <button class="btn-outline" onclick="populateDemoFiles()">⚡ Remplir & Uploader démo (XML/PDF)</button>
+              <button class="btn-outline" onclick="verifierLiasse()">🔍 Vérifier Liasse</button>
+              <button class="btn-outline" onclick="detacherSelection()">📎 Détacher tout</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Code</th>
+                    <th>Obligatoire / Optionnel</th>
+                    <th>Format</th>
+                    <th>Statut</th>
+                    <th>Fichier à transférer</th>
+                  </tr>
+                </thead>
+                <tbody id="documents-table-body">
+                  <!-- Dynamically populated from backend -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab: Valider le dépôt en cours -->
+          <div class="tabpanel" id="tab-valider">
+            <p class="section-title-lg">Valider le dépôt en cours</p>
+            <div id="valider-content">
+              <div class="empty-note">Aucune donnée à afficher</div>
+            </div>
+          </div>
+
+          <!-- Tab: Suivi des dépôts -->
+          <div class="tabpanel" id="tab-suivi">
+            <p class="section-title-lg">Suivi des dépôts</p>
+
+            <p class="panel-title">Liste des dépôts</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Situation de la liasse déposée</th>
+                    <th>Exercice</th>
+                    <th>Nature Dépôt</th>
+                    <th>Provisoire/définitif</th>
+                    <th>Date Dépôt</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tracking-table-body">
+                  <!-- Dynamically populated from backend -->
+                </tbody>
+              </table>
+            </div>
+
+            <div id="deposit-details-panel" style="display:none;">
+              <p class="subblock-title">Détails du dépôt</p>
+              <div class="details-grid">
+                <div><span class="k">Situation de la liasse déposée&nbsp;</span><span class="v" id="detail-statut">-</span></div>
+                <div><span class="k">Nombre de fichiers déposés&nbsp;</span><span class="v" id="detail-nb-fichiers">-</span></div>
+                <div><span class="k">Exercice&nbsp;</span><span class="v" id="detail-exercice">-</span></div>
+                <div><span class="k">Nature Dépôt&nbsp;</span><span class="v" id="detail-nature">-</span></div>
+                <div><span class="k">Type Dépôt&nbsp;</span><span class="v" id="detail-type">-</span></div>
+                <div><span class="k">Date Dépôt&nbsp;</span><span class="v" id="detail-date">-</span></div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nom document</th>
+                      <th>Nom de fichier</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="detail-files-table-body">
+                    <!-- Files populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="app-footer">2017 © Centre Informatique du Ministère des Finances</div>
+    </div>
+  </div>
+
+  <!-- MODAL: VERIFIER LIASSE -->
+  <div class="modal-overlay" id="modal-verifier">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Vérification de la conformité de la Liasse Fiscale</span>
+        <button class="modal-close" onclick="closeModal('modal-verifier')">✕</button>
+      </div>
+      <div class="modal-body" id="modal-verifier-body">
+        <!-- populated dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-verifier')">Fermer</button>
+        <button class="btn btn-orange" id="btn-modal-valider" onclick="goToValidationTab()">Valider le dépôt en cours</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: APERCU FICHIER -->
+  <div class="modal-overlay" id="modal-preview">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span id="preview-title">Aperçu du document</span>
+        <button class="modal-close" onclick="closeModal('modal-preview')">✕</button>
+      </div>
+      <div class="modal-body">
+        <pre id="preview-content" style="background:#f8f9fa;padding:12px;border:1px solid #ddd;border-radius:3px;font-family:monospace;font-size:11.5px;max-height:400px;overflow:auto;white-space:pre-wrap;"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-preview')">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const API_BASE = '/api';
+  let authToken = localStorage.getItem('liasse_token') || null;
+  let currentContribuable = null;
+  let currentLiasseId = null;
+  let currentLiasseDocuments = [];
+  let selectedFilesMap = {}; // codeDocument -> File
+
+  function showAlert(elementId, message, isError = true) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.className = 'alert-box ' + (isError ? 'alert-error' : 'alert-success');
+    el.textContent = message;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 6000);
+  }
+
+  function openModal(id) {
+    const m = document.getElementById(id);
+    if (m) m.style.display = 'flex';
+  }
+
+  function closeModal(id) {
+    const m = document.getElementById(id);
+    if (m) m.style.display = 'none';
+  }
+
+  function goToValidationTab() {
+    closeModal('modal-verifier');
+    const tabValider = document.querySelector('.tab[data-tab="valider"]');
+    if (tabValider) tabValider.click();
+  }
+
+  async function apiCall(endpoint, options = {}) {
+    const headers = options.headers || {};
+    if (authToken && !headers['Authorization']) {
+      headers['Authorization'] = 'Bearer ' + authToken;
+    }
+    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
+    options.headers = headers;
+
+    const res = await fetch(API_BASE + endpoint, options);
+    if (res.status === 401) {
+      handleLogout();
+      throw new Error('Session expirée. Veuillez vous reconnecter.');
+    }
+    return res;
+  }
+
+  // --- AUTH ---
+  async function handleLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!email || !password) {
+      showAlert('login-alert', 'Veuillez saisir votre identifiant et votre mot de passe.');
+      return;
+    }
+
+    try {
+      const res = await apiCall('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        showAlert('login-alert', data.message || 'Identifiant ou mot de passe incorrect.');
+        return;
+      }
+
+      const data = await res.json();
+      authToken = data.token;
+      localStorage.setItem('liasse_token', authToken);
+      goToApp();
+    } catch (err) {
+      showAlert('login-alert', err.message || 'Erreur réseau.');
+    }
+  }
+
+  function handleLogout() {
+    authToken = null;
+    localStorage.removeItem('liasse_token');
+    currentContribuable = null;
+    currentLiasseId = null;
+    selectedFilesMap = {};
+    goToLogin();
+  }
+
+  function goToApp(){
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app-screen').classList.add('active');
+  }
+
+  function goToLogin(){
+    document.getElementById('app-screen').classList.remove('active');
+    document.getElementById('login-screen').classList.remove('hidden');
+    showSearch();
+  }
+
+  function showSearch(){
+    document.getElementById('deposit-view').style.display='none';
+    document.getElementById('search-view').style.display='block';
+  }
+
+  // --- TAXPAYER SEARCH ---
+  async function handleSearchContribuable() {
+    const matricule = document.getElementById('search-matricule').value.trim();
+    const cle = document.getElementById('search-cle').value.trim();
+
+    if (!matricule || !cle) {
+      showAlert('app-alert', 'Veuillez saisir le matricule fiscal et la clé.');
+      return;
+    }
+
+    try {
+      const res = await apiCall(`/contribuables/search?matricule=${encodeURIComponent(matricule)}&cle=${encodeURIComponent(cle)}`);
+      if (!res.ok) {
+        document.getElementById('empty-contrib').innerText = 'Aucun contribuable trouvé avec ces coordonnées.';
+        return;
+      }
+
+      currentContribuable = await res.json();
+      document.getElementById('card-matricule').innerText = `${currentContribuable.numeroMatriculeFiscal} ${currentContribuable.cleMatriculeFiscal}`;
+      document.getElementById('card-nom').innerText = currentContribuable.nomOuRaisonSociale;
+      document.getElementById('card-adresse').innerText = currentContribuable.adresse || 'Tunis, Tunisie';
+
+      document.getElementById('search-view').style.display = 'none';
+      document.getElementById('deposit-view').style.display = 'block';
+
+      await loadEtatsRequis();
+      await loadDepositHistory();
+      await loadPendingDeposits();
+    } catch (err) {
+      showAlert('app-alert', err.message);
+    }
+  }
+
+  // --- DEPOT TAB ---
+  async function loadEtatsRequis() {
+    const categorie = document.getElementById('select-categorie').value;
+    try {
+      const res = await apiCall(`/liasses/etats-requis?categorie=${categorie}`);
+      if (!res.ok) throw new Error('Impossible de charger les états requis.');
+      currentLiasseDocuments = await res.json();
+      selectedFilesMap = {};
+      await initOrFetchLiasse();
+      await refreshLiasseDocumentsState();
+    } catch (err) {
+      showAlert('app-alert', err.message);
+    }
+  }
+
+  async function initOrFetchLiasse() {
+    if (!currentContribuable) {
+      currentContribuable = { id: 1, numeroMatriculeFiscal: '0000121', cleMatriculeFiscal: 'J', nomOuRaisonSociale: 'SOCIÉTÉ EXEMPLE SARL' };
+    }
+    const exercice = parseInt(document.getElementById('select-exercice').value);
+    const nature = document.getElementById('select-nature').value;
+    const categorie = document.getElementById('select-categorie').value;
+    const typeDepot = document.querySelector('input[name="dtype"]:checked').value;
+
+    const payload = {
+      contribuableId: currentContribuable.id,
+      exercice,
+      categorie,
+      nature,
+      typeDepot
+    };
+
+    try {
+      const res = await apiCall('/liasses', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      currentLiasseId = data.id || data.liasseId;
+    } catch (e) {
+      console.warn('Liasse init:', e);
+    }
+  }
+
+  async function refreshLiasseDocumentsState() {
+    if (!currentLiasseId) await initOrFetchLiasse();
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}`);
+      if (res.ok) {
+        const liasse = await res.json();
+        if (liasse && liasse.documents) {
+          currentLiasseDocuments = liasse.documents;
+        }
+      }
+    } catch (e) {
+      console.warn('Refresh state:', e);
+    }
+    renderDocumentRows();
+  }
+
+  function renderDocumentRows() {
+    const tbody = document.getElementById('documents-table-body');
+    tbody.innerHTML = '';
+
+    currentLiasseDocuments.forEach(doc => {
+      const tr = document.createElement('tr');
+      tr.id = `doc-row-${doc.codeDocument}`;
+      
+      // Setup drag and drop
+      tr.ondragover = (e) => { e.preventDefault(); tr.classList.add('dragover'); };
+      tr.ondragleave = () => { tr.classList.remove('dragover'); };
+      tr.ondrop = (e) => {
+        e.preventDefault();
+        tr.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFileForDocument(doc.codeDocument, e.dataTransfer.files[0]);
+        }
+      };
+
+      const isUploaded = doc.nomFichier && doc.statut === 'Valide';
+      const isPendingLocal = selectedFilesMap[doc.codeDocument] !== undefined;
+      const statusBadge = isUploaded 
+        ? `<span class="badge badge-validee">✔ Valide</span>`
+        : (doc.statut === 'Invalide' ? `<span class="badge badge-supprimee">✖ Invalide</span>` : `<span class="badge badge-encours">Non soumis</span>`);
+
+      const currentFileName = isUploaded ? doc.nomFichier : (isPendingLocal ? selectedFilesMap[doc.codeDocument].name : '');
+      const formatExt = doc.format.toLowerCase() === 'pdf' ? '.pdf' : '.xml';
+
+      tr.innerHTML = `
+        <td>${doc.libelle}</td>
+        <td><strong>${doc.codeDocument}</strong></td>
+        <td>${doc.estObligatoire ? '<span style="color:#c0392b;font-weight:600;">Obligatoire</span>' : '<span style="color:#666;">Optionnel</span>'}</td>
+        <td>${doc.format.toUpperCase()}</td>
+        <td id="status-cell-${doc.codeDocument}">${statusBadge}</td>
+        <td>
+          <input type="file" id="file-${doc.codeDocument}" accept="${formatExt}" style="display:none;" onchange="onFileInputChanged('${doc.codeDocument}')">
+          <button class="btn-parcourir" onclick="document.getElementById('file-${doc.codeDocument}').click()">Parcourir…</button>
+          <span class="file-hint" id="hint-${doc.codeDocument}" style="${currentFileName ? 'color:#2b3a55;font-weight:600;' : ''}">${currentFileName || 'Aucun fichier sélectionné (ou glisser-déposer).'}</span>
+          <span id="actions-${doc.codeDocument}">
+            ${isPendingLocal ? `<button class="btn-inline-upload" onclick="uploadSingleDocument('${doc.codeDocument}')">⚡ Uploader</button>` : ''}
+            ${isUploaded ? `<button class="btn-inline-view" onclick="previewDocument('${doc.codeDocument}')">👁 Aperçu</button><button class="btn-inline-delete" onclick="detacherDocument('${doc.codeDocument}')">✕ Détacher</button>` : ''}
+          </span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function onFileInputChanged(codeDocument) {
+    const input = document.getElementById(`file-${codeDocument}`);
+    if (input.files && input.files[0]) {
+      handleFileForDocument(codeDocument, input.files[0]);
+    }
+  }
+
+  function handleFileForDocument(codeDocument, file) {
+    selectedFilesMap[codeDocument] = file;
+    const hint = document.getElementById(`hint-${codeDocument}`);
+    if (hint) {
+      hint.innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      hint.style.color = '#2b3a55';
+      hint.style.fontWeight = '600';
+    }
+    const actions = document.getElementById(`actions-${codeDocument}`);
+    if (actions) {
+      actions.innerHTML = `
+        <button class="btn-inline-upload" onclick="uploadSingleDocument('${codeDocument}')">⚡ Uploader</button>
+        <button class="btn-inline-delete" onclick="clearSelectedFile('${codeDocument}')">✕</button>
+      `;
+    }
+  }
+
+  function clearSelectedFile(codeDocument) {
+    delete selectedFilesMap[codeDocument];
+    const input = document.getElementById(`file-${codeDocument}`);
+    if (input) input.value = '';
+    const hint = document.getElementById(`hint-${codeDocument}`);
+    if (hint) {
+      hint.innerText = 'Aucun fichier sélectionné.';
+      hint.style.fontWeight = 'normal';
+      hint.style.color = '#aaa';
+    }
+    const actions = document.getElementById(`actions-${codeDocument}`);
+    if (actions) actions.innerHTML = '';
+  }
+
+  async function uploadSingleDocument(codeDocument) {
+    if (!currentLiasseId) await initOrFetchLiasse();
+    const file = selectedFilesMap[codeDocument];
+    if (!file) {
+      showAlert('app-alert', 'Veuillez sélectionner un fichier pour ce document.');
+      return;
+    }
+
+    const hint = document.getElementById(`hint-${codeDocument}`);
+    const statusCell = document.getElementById(`status-cell-${codeDocument}`);
+    if (hint) hint.innerHTML = `<span style="color:#0d6efd;">⏳ Téléversement en cours...</span>`;
+    if (statusCell) statusCell.innerHTML = `<span class="badge badge-loading">Envoi...</span>`;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/documents/${codeDocument}`, {
+        method: 'POST',
+        body: formData
+      });
+      const result = await res.json();
+
+      if (res.ok && result.statut === 'Valide') {
+        showAlert('app-alert', `Document ${codeDocument} (${file.name}) téléversé avec succès !`, false);
+        delete selectedFilesMap[codeDocument];
+        await refreshLiasseDocumentsState();
+        await loadPendingDeposits();
+      } else {
+        const err = (result.erreurs && result.erreurs.length) ? result.erreurs[0].message : 'Format ou contenu invalide';
+        showAlert('app-alert', `Erreur pour ${codeDocument} : ${err}`);
+        if (hint) hint.innerText = file.name;
+        if (statusCell) statusCell.innerHTML = `<span class="badge badge-supprimee">Invalide</span>`;
+      }
+    } catch (e) {
+      showAlert('app-alert', `Erreur réseau : ${e.message}`);
+    }
+  }
+
+  async function uploadAllSelectedFiles() {
+    if (!currentLiasseId) await initOrFetchLiasse();
+    const keys = Object.keys(selectedFilesMap);
+
+    // If no local files selected, offer instant automatic demo compliant files
+    if (keys.length === 0) {
+      const alreadyUploaded = currentLiasseDocuments.filter(d => d.statut === 'Valide').length;
+      if (alreadyUploaded === currentLiasseDocuments.length) {
+        showAlert('app-alert', 'Tous les documents de la liasse sont déjà téléversés et validés.', false);
+        return;
+      }
+      // Populate demo files
+      await populateDemoFiles();
+      return;
+    }
+
+    const btn = document.getElementById('btn-upload-all');
+    if (btn) { btn.disabled = true; btn.innerText = 'Téléversement en cours...'; }
+
+    let count = 0;
+    for (const code of keys) {
+      const file = selectedFilesMap[code];
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        const res = await apiCall(`/liasses/${currentLiasseId}/documents/${code}`, {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          count++;
+          delete selectedFilesMap[code];
+        }
+      } catch (err) {
+        console.error('Upload err', err);
+      }
+    }
+
+    if (btn) { btn.disabled = false; btn.innerText = '📤 Uploader Liasse'; }
+
+    await refreshLiasseDocumentsState();
+    await loadPendingDeposits();
+    showAlert('app-alert', `${count} document(s) téléversé(s) avec succès !`, false);
+  }
+
+  // Populate sample valid files in 1 click
+  async function populateDemoFiles() {
+    if (!currentLiasseId) await initOrFetchLiasse();
+    showAlert('app-alert', 'Génération et téléversement des fichiers démo XML/PDF en cours...', false);
+
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/populate-demo`, { method: 'POST' });
+      if (res.ok) {
+        showAlert('app-alert', 'Fichiers exemples (XML & PDF) conformes générés et téléversés avec succès !', false);
+        selectedFilesMap = {};
+        await refreshLiasseDocumentsState();
+        await loadPendingDeposits();
+      } else {
+        const d = await res.json();
+        showAlert('app-alert', d.message || 'Erreur lors de la génération.');
+      }
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  async function verifierLiasse() {
+    if (!currentLiasseId) await initOrFetchLiasse();
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/verifier`, { method: 'POST' });
+      const data = await res.json();
+      
+      const modalBody = document.getElementById('modal-verifier-body');
+      const validerBtn = document.getElementById('btn-modal-valider');
+
+      let html = `
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:24px;">${data.peutDeposer ? '✅' : '⚠️'}</span>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:${data.peutDeposer ? '#1e8a4c' : '#c0392b'};">
+                ${data.peutDeposer ? 'Liasse Conforme et Prête pour le Dépôt' : 'Liasse Incomplète ou Non Conforme'}
+              </div>
+              <div style="color:#666;font-size:12px;">
+                ${data.obligatoiresValides} / ${data.totalObligatoires} états obligatoires validés (${data.optionnelsDeposes} optionnel(s) déposé(s))
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="panel-title">État des documents obligatoires</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Libellé document</th>
+                <th>Format</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(data.documents || []).map(doc => `
+                <tr>
+                  <td><strong>${doc.codeDocument}</strong></td>
+                  <td>${doc.libelle}</td>
+                  <td>${doc.format.toUpperCase()}</td>
+                  <td>
+                    ${doc.statut === 'Valide' 
+                      ? `<span class="badge badge-validee">✔ Valide (${doc.nomFichier || ''})</span>` 
+                      : (doc.estObligatoire ? `<span class="badge badge-supprimee">Manquant</span>` : `<span class="badge badge-encours">Optionnel</span>`)}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      if (data.peutDeposer) {
+        html += `<div class="alert-box alert-success" style="display:block;">Tous les documents obligatoires sont conformes. Vous pouvez finaliser votre déclaration dans l'onglet "Valider le dépôt en cours".</div>`;
+        if (validerBtn) validerBtn.style.display = 'inline-block';
+      } else {
+        html += `<div class="alert-box alert-error" style="display:block;">Veuillez téléverser tous les états obligatoires manquants ou cliquer sur "⚡ Remplir & Uploader démo" pour préremplir l'ensemble de la liasse.</div>`;
+        if (validerBtn) validerBtn.style.display = 'none';
+      }
+
+      modalBody.innerHTML = html;
+      openModal('modal-verifier');
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  async function previewDocument(codeDocument) {
+    if (!currentLiasseId) return;
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/documents/${codeDocument}/content`);
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById('preview-title').innerText = `${data.codeDocument} - ${data.libelle} (${data.nomFichier})`;
+        document.getElementById('preview-content').innerText = data.content || '(Aucun contenu disponible)';
+        openModal('modal-preview');
+      } else {
+        showAlert('app-alert', 'Impossible de charger le contenu du document.');
+      }
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  async function detacherDocument(codeDocument) {
+    if (!currentLiasseId) return;
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/documents/${codeDocument}`, { method: 'DELETE' });
+      if (res.ok) {
+        showAlert('app-alert', `Document ${codeDocument} détaché.`, false);
+        delete selectedFilesMap[codeDocument];
+        await refreshLiasseDocumentsState();
+        await loadPendingDeposits();
+      }
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  async function detacherSelection() {
+    if (!currentLiasseId) return;
+    for (const doc of currentLiasseDocuments) {
+      if (doc.nomFichier) {
+        await apiCall(`/liasses/${currentLiasseId}/documents/${doc.codeDocument}`, { method: 'DELETE' });
+      }
+      const input = document.getElementById(`file-${doc.codeDocument}`);
+      if (input) input.value = '';
+    }
+    selectedFilesMap = {};
+    await refreshLiasseDocumentsState();
+    await loadPendingDeposits();
+    showAlert('app-alert', 'Tous les fichiers ont été détachés.', false);
+  }
+
+  // --- VALIDER LE DEPOT EN COURS ---
+  async function loadPendingDeposits() {
+    if (!currentContribuable) return;
+    const container = document.getElementById('valider-content');
+    try {
+      const res = await apiCall(`/liasses/en-cours?contribuableId=${currentContribuable.id}`);
+      if (!res.ok) {
+        container.innerHTML = '<div class="empty-note">Aucune donnée à afficher</div>';
+        return;
+      }
+      const list = await res.json();
+      if (!list || list.length === 0) {
+        container.innerHTML = '<div class="empty-note">Aucun dépôt en cours pour ce contribuable.</div>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Exercice</th>
+                <th>Catégorie</th>
+                <th>Nature</th>
+                <th>Type</th>
+                <th>Fichiers téléversés</th>
+                <th>Conformité</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(l => `
+                <tr>
+                  <td>${l.exercice}</td>
+                  <td>${l.categorie}</td>
+                  <td>${l.nature}</td>
+                  <td>${l.typeDepot}</td>
+                  <td><strong>${l.documentsUploade} / ${l.totalDocuments}</strong></td>
+                  <td>
+                    ${l.estPretPourDepot 
+                      ? '<span class="badge badge-validee">Prêt pour dépôt</span>' 
+                      : '<span class="badge badge-encours">À compléter</span>'}
+                  </td>
+                  <td>
+                    <button class="btn ${l.estPretPourDepot ? 'btn-orange' : 'btn-outline'}" onclick="confirmerDepotFinal(${l.id})">
+                      Valider le dépôt
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    } catch (e) {
+      container.innerHTML = `<div class="empty-note">Erreur: ${e.message}</div>`;
+    }
+  }
+
+  async function confirmerDepotFinal(liasseId) {
+    try {
+      const res = await apiCall(`/liasses/${liasseId}/deposit`, {
+        method: 'POST',
+        body: JSON.stringify({ observation: 'Dépôt validé via portail' })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showAlert('app-alert', `Dépôt validé avec succès ! Référence: ${data.reference}`, false);
+        await loadPendingDeposits();
+        await loadDepositHistory();
+        // Switch automatically to Suivi des dépôts tab
+        const tabSuivi = document.querySelector('.tab[data-tab="suivi"]');
+        if (tabSuivi) tabSuivi.click();
+      } else {
+        showAlert('app-alert', data.message || 'Validation impossible.');
+      }
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  // --- SUIVI DES DEPOTS ---
+  async function loadDepositHistory() {
+    const tbody = document.getElementById('tracking-table-body');
+    try {
+      const res = await apiCall('/deposits');
+      if (!res.ok) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-note">Aucun historique disponible</td></tr>';
+        return;
+      }
+      const deposits = await res.json();
+      if (!deposits || deposits.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-note">Aucun dépôt effectué</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = deposits.map((d, index) => {
+        const badgeClass = d.statut === 'Validée' ? 'badge-validee' : (d.statut === 'Supprimée' ? 'badge-supprimee' : 'badge-encours');
+        const formattedDate = new Date(d.dateDepot).toLocaleString('fr-FR');
+        const isSelected = index === 0;
+        return `
+          <tr onclick="loadDepositDetails('${d.reference}')" style="cursor:pointer; ${isSelected ? 'background:#fbfaf7;' : ''}">
+            <td><span class="badge ${badgeClass}">${d.statut}</span></td>
+            <td>${d.exercice}</td>
+            <td>${d.nature}</td>
+            <td>${d.typeDepot}</td>
+            <td>${formattedDate}</td>
+            <td>
+              <span class="accuse-btn" onclick="event.stopPropagation(); downloadReceipt('${d.reference}')">📄 Accusé de réception</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Auto-load details for first deposit
+      if (deposits.length > 0) {
+        loadDepositDetails(deposits[0].reference);
+      }
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-note">Erreur: ${e.message}</td></tr>`;
+    }
+  }
+
+  async function loadDepositDetails(reference) {
+    try {
+      const res = await apiCall(`/deposits/${reference}`);
+      if (!res.ok) return;
+      const d = await res.json();
+      document.getElementById('deposit-details-panel').style.display = 'block';
+      document.getElementById('detail-statut').innerText = d.statut;
+      document.getElementById('detail-nb-fichiers').innerText = d.documents ? d.documents.length : 0;
+      document.getElementById('detail-exercice').innerText = d.exercice;
+      document.getElementById('detail-nature').innerText = d.nature;
+      document.getElementById('detail-type').innerText = d.typeDepot;
+      document.getElementById('detail-date').innerText = new Date(d.dateDepot).toLocaleString('fr-FR');
+
+      const tbody = document.getElementById('detail-files-table-body');
+      tbody.innerHTML = (d.documents || []).map(doc => `
+        <tr>
+          <td>${doc.libelle || doc.codeDocument}</td>
+          <td>${doc.nomFichier || '-'}</td>
+          <td>
+            <span class="link-btn download" onclick="downloadFile('${doc.nomFichier}')">▼ Télécharger</span>
+            <span class="link-consult" onclick="viewFileInline('${doc.nomFichier}')">📄 Consulter</span>
+          </td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      showAlert('app-alert', e.message);
+    }
+  }
+
+  function downloadReceipt(reference) {
+    window.open(`${API_BASE}/deposits/${reference}/receipt?token=${encodeURIComponent(authToken || '')}`, '_blank');
+  }
+
+  function downloadFile(fileName) {
+    showAlert('app-alert', `Téléchargement du fichier ${fileName}`, false);
+  }
+
+  function viewFileInline(fileName) {
+    showAlert('app-alert', `Aperçu du document : ${fileName}`, false);
+  }
+
+  // --- TABS SWITCHER ---
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+
+      if (tab.dataset.tab === 'valider') loadPendingDeposits();
+      if (tab.dataset.tab === 'suivi') loadDepositHistory();
+    });
+  });
+
+  // Auto-init if token exists
+  if (authToken) {
+    goToApp();
+    handleSearchContribuable();
+  }
+</script>
+</body>
+</html>

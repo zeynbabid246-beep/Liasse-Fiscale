@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:lf="http://www.impots.finances.gov.tn/liasse" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://www.impots.finances.gov.tn/liasse" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+	<xsd:include schemaLocation="Typescommuns.xsd"/>
+	<xsd:include schemaLocation="Entete.xsd"/>
+	<xsd:element name="F6104">
+		<xsd:annotation>
+			<xsd:documentation>Etat de flux de tresorerie (Banques)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="VersionDocument" type="xsd:string"/>
+				<xsd:element name="Entete" type="lf:T_Entete"/>
+				<xsd:element name="Details">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element name="F61040001" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice). "F61040002" - "F61040003" + "F61040004"  + "F61040005" + "F61040006" - "F61040007" + "F61040008" - "F61040009"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040002" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Produits d'exploitation bancaire encaiss�s (hors revenus du portefeuille d'investissement)  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Produits d'exploitation bancaire encaiss�s (hors revenus du portefeuille d'investissement)  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040003" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Charges d'exploitation bancaire d�caiss�es  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Charges d'exploitation bancaire d�caiss�es  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040004" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dépôts \ Retraits de Dépôts auprès d'autres établissements bancaires et financiers  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dépôts \ Retraits de Dépôts auprès d'autres établissements bancaires et financiers  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040005" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Pr�ts et avances \ Remboursement pr�ts et avances accord�s � la client�le  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Pr�ts et avances \ Remboursement pr�ts et avances accord�s � la client�le  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040006" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dépôts \ Retraits de Dépôts de la client�le Titres de placement  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dépôts \ Retraits de Dépôts de la client�le Titres de placement  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040007" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Sommes vers�es au personnel et cr�diteurs divers  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Sommes vers�es au personnel et cr�diteurs divers  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040008" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Autres flux de tr�sorerie provenant des activit�s d'exploitation  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Autres flux de tr�sorerie provenant des activit�s d'exploitation  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040009" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Imp�t sur les b�n�fices  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Imp�t sur les b�n�fices  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040010" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice). "F61040011" + "F61040012" + "F61040013"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040011" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Int�r�ts et dividendes encaiss�s sur portefeuille d'investissement  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Int�r�ts et dividendes encaiss�s sur portefeuille d'investissement  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040012" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Acquisitions \ cessions sur portefeuille d'investissement  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Acquisitions \ cessions sur portefeuille d'investissement  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040013" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Acquisitions \ cessions sur immobilisations  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Acquisitions \ cessions sur immobilisations  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040014" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s de financement (Exercice). "F61040015" + "F61040016" - "F61040017" + "F61040018" - "F61040019"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s de financement (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040015" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Emission d'actions  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Emission d'actions  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040016" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Emission d'emprunts  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Emission d'emprunts  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040017" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Remboursement d'emprunts  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Remboursement d'emprunts  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040018" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Augmentation \ diminution ressources sp�ciales  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Augmentation \ diminution ressources sp�ciales  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040019" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dividendes vers�s  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dividendes vers�s  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040020" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Incidence des variations des taux de change sur les liquidit�s et �quivalents de liquidit�s  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Incidence des variations des taux de change sur les liquidit�s et �quivalents de liquidit�s  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040021" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'exercice  (Exercice). "F61040001" + "F61040010" + "F61040014" + "F61040020"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'exercice  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040022" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Liquidit�s et �quivalents de liquidit�s en d�but d'exercice  (Exercice)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Liquidit�s et �quivalents de liquidit�s en d�but d'exercice  (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61040023" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Liquidit�s et equivalents de liquidit�s en fin d'exercice (Exercice). "F61040021" + "F61040022"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Liquidit�s et equivalents de liquidit�s en fin d'exercice (Exercice)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041001" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice - 1). "F61041002" - "F61041003" + "F61041004"  + "F61041005" + "F61041006" - "F61041007" + "F61041008" - "F61041009"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041002" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Produits d'exploitation bancaire encaiss�s (hors revenus du portefeuille d'investissement)  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Produits d'exploitation bancaire encaiss�s (hors revenus du portefeuille d'investissement)  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041003" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Charges d'exploitation bancaire d�caiss�es  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Charges d'exploitation bancaire d�caiss�es  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041004" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dépôts \ Retraits de Dépôts auprès d'autres établissements bancaires et financiers  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dépôts \ Retraits de Dépôts auprès d'autres établissements bancaires et financiers  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041005" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Pr�ts et avances \ Remboursement pr�ts et avances accord�s � la client�le  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Pr�ts et avances \ Remboursement pr�ts et avances accord�s � la client�le  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041006" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dépôts \ Retraits de Dépôts de la client�le Titres de placement  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dépôts \ Retraits de Dépôts de la client�le Titres de placement  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041007" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Sommes vers�es au personnel et cr�diteurs divers  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Sommes vers�es au personnel et cr�diteurs divers  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041008" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Autres flux de tr�sorerie provenant des activit�s d'exploitation  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Autres flux de tr�sorerie provenant des activit�s d'exploitation  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041009" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Imp�t sur les b�n�fices  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Imp�t sur les b�n�fices  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041010" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice - 1). "F61041011" + "F61041012" + "F61041013"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041011" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Int�r�ts et dividendes encaiss�s sur portefeuille d'investissement  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Int�r�ts et dividendes encaiss�s sur portefeuille d'investissement  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041012" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Acquisitions \ cessions sur portefeuille d'investissement  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Acquisitions \ cessions sur portefeuille d'investissement  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041013" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Acquisitions \ cessions sur immobilisations  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Acquisitions \ cessions sur immobilisations  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041014" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Flux de tr�sorerie net provenant des activit�s de financement (Exercice - 1). "F61041015" + "F61041016" - "F61041017" + "F61041018" - "F61041019"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Flux de tr�sorerie net provenant des activit�s de financement (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041015" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Emission d'actions  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Emission d'actions  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041016" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Emission d'emprunts  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_NombrePositif15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Emission d'emprunts  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041017" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Remboursement d'emprunts  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Remboursement d'emprunts  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041018" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Augmentation \ diminution ressources sp�ciales  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Augmentation \ diminution ressources sp�ciales  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041019" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Dividendes vers�s  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Dividendes vers�s  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041020" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Incidence des variations des taux de change sur les liquidit�s et �quivalents de liquidit�s  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Incidence des variations des taux de change sur les liquidit�s et �quivalents de liquidit�s  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041021" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'Exercice - 1  (Exercice - 1). "F61041001" + "F61041010" + "F61041014" + "F61041020"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'Exercice - 1  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041022" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Liquidit�s et �quivalents de liquidit�s en d�but d'Exercice - 1  (Exercice - 1)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Liquidit�s et �quivalents de liquidit�s en d�but d'Exercice - 1  (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F61041023" maxOccurs="1">
+								<xsd:annotation>
+									<xsd:documentation>Liquidit�s et equivalents de liquidit�s en fin d'Exercice - 1 (Exercice - 1). "F61041021" + "F61041022"</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="lf:T_Nombre15">
+											<xsd:attribute name="Libelle" type="xsd:string" default="Liquidit�s et equivalents de liquidit�s en fin d'Exercice - 1 (Exercice - 1)"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:all>
+						<xsd:assert test="lf:F61040001 = sum( ((lf:F61040002) ,(-1)*(lf:F61040003) , (lf:F61040004)  , (lf:F61040005), (lf:F61040006) , (-1)*(lf:F61040007) , (lf:F61040008) ,(-1)*(lf:F61040009)))"/>
+						<xsd:assert test="lf:F61040010 = sum( ((lf:F61040011) , (lf:F61040012) , (lf:F61040013)))"/>
+						<xsd:assert test="lf:F61040014 = sum( ((lf:F61040015) , (lf:F61040016) ,(lf:F61040017) , (lf:F61040018) ,(-1)*(lf:F61040019)))"/>
+						<xsd:assert test="lf:F61040021 = sum( ((lf:F61040001) , (lf:F61040010) , (lf:F61040014) , (lf:F61040020)))"/>
+						<xsd:assert test="lf:F61040023 = sum( ((lf:F61040021) , (lf:F61040022)))"/>
+						<xsd:assert test="lf:F61041001 = sum( ((lf:F61041002) ,(-1)*(lf:F61041003) , (lf:F61041004)  , (lf:F61041005) , (lf:F61041006) ,(-1)*(lf:F61041007) , (lf:F61041008) ,(-1)*(lf:F61041009)))"/>
+						<xsd:assert test="lf:F61041010 = sum( ((lf:F61041011) , (lf:F61041012) , (lf:F61041013)))"/>
+						<xsd:assert test="lf:F61041014 = sum( ((lf:F61041015) , (lf:F61041016) ,(lf:F61041017) , (lf:F61041018) ,(-1)*(lf:F61041019)))"/>
+						<xsd:assert test="lf:F61041021 = sum( ((lf:F61041001) , (lf:F61041010) , (lf:F61041014) , (lf:F61041020)))"/>
+						<xsd:assert test="lf:F61041023 = sum( ((lf:F61041021) , (lf:F61041022)))"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

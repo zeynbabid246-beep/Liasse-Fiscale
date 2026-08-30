@@ -1,0 +1,2174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:lf="http://www.impots.finances.gov.tn/liasse" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://www.impots.finances.gov.tn/liasse" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+  <xsd:simpleType name="T_NumMatriculeFiscal">
+    <xsd:annotation>
+      <xsd:documentation>Numero matricule fiscal</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="7" />
+      <xsd:whiteSpace value="collapse" />
+      <xsd:pattern value="[0-9]{7}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_CleMatriculeFiscal">
+    <xsd:annotation>
+      <xsd:documentation>Clé matricule fiscal</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:pattern value="[ABCDEFGHJKLMNPQRSTVWXYZ]" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_CodeCategorie">
+    <xsd:annotation>
+      <xsd:documentation>Code categorie</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:enumeration value="C" />
+      <xsd:enumeration value="M" />
+      <xsd:enumeration value="N" />
+      <xsd:enumeration value="P" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_CodeTva">
+    <xsd:annotation>
+      <xsd:documentation>Code TVA</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:enumeration value="A" />
+      <xsd:enumeration value="B" />
+      <xsd:enumeration value="D" />
+      <xsd:enumeration value="P" />
+      <xsd:enumeration value="N" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_MatriculeFiscal_13c">
+    <xsd:annotation>
+      <xsd:documentation>Matricule fiscal de structure : MAT-CLE-TVA-CAT-ETB</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:pattern value="[0-9]{7}[ABCDEFGHJKLMNPQRSTVWXYZ][ABDNP][CMNP][0]{3}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Annee">
+    <xsd:annotation>
+      <xsd:documentation>Année</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:gYear" />
+  </xsd:simpleType>
+  <xsd:simpleType name="T_TypeIdentifiantContribuable">
+    <xsd:annotation>
+      <xsd:documentation>Type identifiant contribuable</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation>Matricule fiscal</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation>CIN</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation>Carte de sejour</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation>Autre identifiant</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_ChaineTexte250">
+    <xsd:annotation>
+      <xsd:documentation>Chaine de 250 caracteres au maximum</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="250" />
+      <xsd:whiteSpace value="collapse" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Date">
+    <xsd:annotation>
+      <xsd:documentation>Date au format dd/mm/yyyy (Les années sont comprises entre 1900 et 2099)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:pattern value="((31/(0[13578]|1[02])/((19|20)\d{2}))|((0[1-9]|[12]\d|30)/(0[13456789]|1[012])/((19|20)\d{2}))|((0[1-9]|1\d|2[0-8])/02/((19|20)\d{2}))|(29/02/(19|20)((0[048]|[2468][048]|[13579][26]))))" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_ActeDeDepot">
+    <xsd:annotation>
+      <xsd:documentation>Actes de dépôts</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:minLength value="1" />
+      <xsd:maxLength value="1" />
+      <xsd:enumeration value="0" />
+      <xsd:enumeration value="1" />
+      <xsd:enumeration value="2" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NatureDepot">
+    <xsd:annotation>
+      <xsd:documentation>Nature dépôt : Definitif ou Provisoire</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:minLength value="1" />
+      <xsd:maxLength value="1" />
+      <xsd:enumeration value="D" />
+      <xsd:enumeration value="P" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_ModeleLiasse">
+    <xsd:annotation>
+      <xsd:documentation>Modele liasse fiscale</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:enumeration value="G">
+        <xsd:annotation>
+          <xsd:documentation>Cas general</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B">
+        <xsd:annotation>
+          <xsd:documentation>Banques</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="A">
+        <xsd:annotation>
+          <xsd:documentation>Assurances et réassurances</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C">
+        <xsd:annotation>
+          <xsd:documentation>Associations, micro-credits</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="O">
+        <xsd:annotation>
+          <xsd:documentation>OPCVM</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositif13">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 13 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="13" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositif15">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 15 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="15" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatif13">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 13 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="13" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatif15">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 15 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="15" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Nombre13">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="13" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Nombre15">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="15" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositifSM">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 13 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="13" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatifSM">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 13 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="13" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreSM">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="13" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositifMD">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 13 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="15" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatifMD">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 13 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="15" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreMD">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="15" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositifLG">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 13 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatifLG">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 13 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreLG">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="20" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombrePositifXL">
+    <xsd:annotation>
+      <xsd:documentation>Nombre positif obligatoire de 13 caractères au maximum, sans partie decimale (0, 1, 2, ...)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="25" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreNegatifXL">
+    <xsd:annotation>
+      <xsd:documentation>Nombre negatif obligatoire de 13 caractères au maximum, sans partie decimale (..., -2, -1, 0)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:nonPositiveInteger">
+      <xsd:totalDigits value="25" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_NombreXL">
+    <xsd:annotation>
+      <xsd:documentation>Nombre (Montant) obligatoire de 13 caractères au maximum, sans partie décimale et qui peut etre negatif</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:totalDigits value="25" />
+      <xsd:fractionDigits value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Taux52">
+    <xsd:annotation>
+      <xsd:documentation>Taux de 5 chiffres avec 2 positions décimale</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="5" />
+      <xsd:fractionDigits value="2" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_Taux63">
+    <xsd:annotation>
+      <xsd:documentation>Taux de 6 chiffres avec 3 positions décimale</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="6" />
+      <xsd:fractionDigits value="3" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_BeneficePerte">
+    <xsd:annotation>
+      <xsd:documentation>Nature resultat : Benefice (B) ou Perte (P)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:enumeration value="B" />
+      <xsd:enumeration value="P" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="T_CodeTableau">
+    <xsd:annotation>
+      <xsd:documentation>Codification des tableaux de la liasse fiscale</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="5" />
+      <xsd:enumeration value="F6001">
+        <xsd:annotation>
+          <xsd:documentation>Bilan - Actifs (Cas general)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6002">
+        <xsd:annotation>
+          <xsd:documentation>Bilan - Passifs (Cas general)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6003">
+        <xsd:annotation>
+          <xsd:documentation>Etat de resultats (Cas general)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6004">
+        <xsd:annotation>
+          <xsd:documentation>Etat de flux de tresorerie (Cas general)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6005">
+        <xsd:annotation>
+          <xsd:documentation>Tableau de determination du resultat fiscal à partir du resultat comptable</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6006">
+        <xsd:annotation>
+          <xsd:documentation>Notes, principes comptables appliqués</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6007">
+        <xsd:annotation>
+          <xsd:documentation>Faits marquants de l'exercice</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6008">
+        <xsd:annotation>
+          <xsd:documentation>Schema des soldes intermediaires de gestion</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6009">
+        <xsd:annotation>
+          <xsd:documentation>Autres feuillets - Liasse - Notes aux états financiers</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F6101" />
+      <xsd:enumeration value="F6103" />
+      <xsd:enumeration value="F6104" />
+      <xsd:enumeration value="F6105" />
+      <xsd:enumeration value="F6201" />
+      <xsd:enumeration value="F6202" />
+      <xsd:enumeration value="F6203" />
+      <xsd:enumeration value="F6204" />
+      <xsd:enumeration value="F6205" />
+      <xsd:enumeration value="F6206" />
+      <xsd:enumeration value="F6207" />
+      <xsd:enumeration value="F6301" />
+      <xsd:enumeration value="F6303" />
+      <xsd:enumeration value="F6304" />
+      <xsd:enumeration value="F6401" />
+      <xsd:enumeration value="F6403" />
+      <xsd:enumeration value="F6404" />
+      <xsd:enumeration value="G7002" />
+      <xsd:enumeration value="G7003" />
+      <xsd:enumeration value="G7004" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="T_Entete">
+    <xsd:annotation>
+      <xsd:documentation>Entête d'une déclaration</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="MatriculeFiscalDeclarant" type="lf:T_MatriculeFiscal_13c" />
+      <xsd:element name="NometPrenomouRaisonSociale" type="lf:T_ChaineTexte250" />
+      <xsd:element name="Activite" type="lf:T_ChaineTexte250" />
+      <xsd:element name="Adresse" type="lf:T_ChaineTexte250" />
+      <xsd:element name="Exercice" type="lf:T_Annee" />
+      <xsd:element name="DateDebutExercice" type="lf:T_Date" />
+      <xsd:element name="DateClotureExercice" type="lf:T_Date" />
+      <xsd:element name="ActeDeDepot" type="lf:T_ActeDeDepot" default="0" />
+      <xsd:element name="NatureDepot" type="lf:T_NatureDepot" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="F6206">
+    <xsd:annotation>
+      <xsd:documentation>Etat de resultat technique de l'assurances et/ou de la réassurance vie</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="VersionDocument" type="xsd:string" />
+        <xsd:element name="Entete" type="lf:T_Entete" />
+        <xsd:element name="Details">
+          <xsd:complexType>
+            <xsd:all>
+              <xsd:element name="F62060001" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV1 Primes (Opérations brutes). "F62060002"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV1 Primes (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060002" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV11 Primes émises et acceptées  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV11 Primes émises et acceptées  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060003" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV2 Produits de placements (Opérations brutes). "F62060004" + "F62060005" + "F62060006" + "F62060007"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV2 Produits de placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060004" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV21 Revenus des placements  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV21 Revenus des placements  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060005" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV22 .Produits des autres placements (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV22 .Produits des autres placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060006" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV23 Reprise de corrections de valeur sur placements (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV23 Reprise de corrections de valeur sur placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060007" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV24 Profits provenant de la réalisation des placements et de change  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV24 Profits provenant de la réalisation des placements et de change  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060008" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total primes et produits de placement (Sous total 2) (Opérations brutes). "F62060001" + "F62060003"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total primes et produits de placement (Sous total 2) (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060009" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV3 Plus-values non réalisées sur placements (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV3 Plus-values non réalisées sur placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060010" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV4 Autres produits techniques  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV4 Autres produits techniques  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060011" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV1 Charge de sinistres (Opérations brutes). "F62060012" + "F62060013"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV1 Charge de sinistres (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060012" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV11 Montants payés  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV11 Montants payés  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060013" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV12 Variation de la provision pour sinistres (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV12 Variation de la provision pour sinistres (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060014" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total produits sans charges sinistres (Sous total 3) (Opérations brutes). "F62060008" + "F62060009" + "F62060010" - "F62060011"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total produits sans charges sinistres (Sous total 3) (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060015" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV2 Variation des autres provisions techniques (Opérations brutes). "F62060016" + "F62060017" + "F62060018"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV2 Variation des autres provisions techniques (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060016" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV21 Provision d'assurance vie (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV21 Provision d'assurance vie (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060017" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV22 Autres provisions techniques  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV22 Autres provisions techniques  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060018" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV23 Provision sur contrats en unité de compte  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV23 Provision sur contrats en unité de compte  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060019" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 4 (Opérations brutes). "F62060014" + "F62060015"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 4 (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060020" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV3 Participation aux bénéfices et ristournes   (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV3 Participation aux bénéfices et ristournes   (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060021" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV4 Frais d'exploitation (Opérations brutes). "F62060022" + "F62060023" + "F62060024" - "F62060025"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV4 Frais d'exploitation (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060022" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV41 Frais d'acquisition  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV41 Frais d'acquisition  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060023" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV42 Variation du montant des frais d'acquisition reportés (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV42 Variation du montant des frais d'acquisition reportés (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060024" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV43 Frais d'administration  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV43 Frais d'administration  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060025" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV44 commissions reçues des réassureurs (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV44 commissions reçues des réassureurs (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060026" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 5 (Opérations brutes). "F62060019" + "F62060020" - "F62060021"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 5 (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060027" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV5 Autres charges techniques  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV5 Autres charges techniques  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060028" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV9 Charges de placements (Opérations brutes). "F62060029" + "F62060030" + "F62060031"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV9 Charges de placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060029" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060030" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV92 Correction de valeur sur placements (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV92 Correction de valeur sur placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060031" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV93 Pertes provenant de la réalisation des placements (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV93 Pertes provenant de la réalisation des placements (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060032" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 6 (Opérations brutes). -"F62060027" - "F62060028"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 6 (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060033" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV10 Moins values non réalisées sur placements  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV10 Moins values non réalisées sur placements  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060034" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHNT2 Produits de placements alloués, transférés à l'état de résultat  (Opérations brutes)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHNT2 Produits de placements alloués, transférés � l'�tat de résultat  (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060035" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Opérations brutes). -"F62060033" - "F62060034"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Opérations brutes)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62060036" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Résultat technique de l'assurance et/ou de la réassurance vie.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Résultat technique de l'assurance et/ou de la réassurance vie." />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061001" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV1 Primes (Cessions et/ou Rétrocessions). "F62061002"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV1 Primes (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061002" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV11 Primes émises et acceptées  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV11 Primes émises et acceptées  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061003" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV2 Produits de placements (Cessions et/ou Rétrocessions). "F62061004" + "F62061005" + "F62061006" + "F62061007"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV2 Produits de placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061004" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV21 Revenus des placements  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV21 Revenus des placements  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061005" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV22 .Produits des autres placements (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV22 .Produits des autres placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061006" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV23 Reprise de corrections de valeur sur placements (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV23 Reprise de corrections de valeur sur placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061007" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV24 Profits provenant de la réalisation des placements et de change  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV24 Profits provenant de la réalisation des placements et de change  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061008" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total primes et produits de placement (Sous total 2) (Cessions et/ou Rétrocessions). "F62061001" + "F62061003"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total primes et produits de placement (Sous total 2) (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061009" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV3 Plus-values non réalisées sur placements (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV3 Plus-values non réalisées sur placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061010" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV4 Autres produits techniques  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV4 Autres produits techniques  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061011" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV1 Charge de sinistres (Cessions et/ou Rétrocessions). "F62061012" + "F62061013"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV1 Charge de sinistres (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061012" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV11 Montants payés  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV11 Montants payés  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061013" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV12 Variation de la provision pour sinistres (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV12 Variation de la provision pour sinistres (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061014" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total produits sans charges sinistres (Sous total 3) (Cessions et/ou Rétrocessions). "F62061008" + "F62061009" + "F62061010" - "F62061011"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total produits sans charges sinistres (Sous total 3) (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061015" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV2 Variation des autres provisions techniques (Cessions et/ou Rétrocessions). "F62061016" + "F62061017" + "F62061018"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV2 Variation des autres provisions techniques (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061016" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV21 Provision d'assurance vie (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV21 Provision d'assurance vie (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061017" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV22 Autres provisions techniques  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV22 Autres provisions techniques  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061018" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV23 Provision sur contrats en unité de compte  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV23 Provision sur contrats en unité de compte  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061019" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 4 (Cessions et/ou Rétrocessions). "F62061014" + "F62061015"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 4 (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061020" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV3 Participation aux bénéfices et ristournes   (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV3 Participation aux bénéfices et ristournes   (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061021" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV4 Frais d'exploitation (Cessions et/ou Rétrocessions). "F62061022" + "F62061023" + "F62061024" - "F62061025"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV4 Frais d'exploitation (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061022" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV41 Frais d'acquisition  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV41 Frais d'acquisition  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061023" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV42 Variation du montant des frais d'acquisition reportés (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV42 Variation du montant des frais d'acquisition reportés (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061024" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV43 Frais d'administration  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV43 Frais d'administration  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061025" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV44 commissions reçues des réassureurs (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV44 commissions reçues des réassureurs (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061026" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 5 (Cessions et/ou Rétrocessions). "F62061019" + "F62061020" - "F62061021"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 5 (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061027" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV5 Autres charges techniques  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV5 Autres charges techniques  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061028" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV9 Charges de placements (Cessions et/ou Rétrocessions). "F62061029" + "F62061030" + "F62061031"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV9 Charges de placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061029" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061030" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV92 Correction de valeur sur placements (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV92 Correction de valeur sur placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061031" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV93 Pertes provenant de la réalisation des placements (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV93 Pertes provenant de la réalisation des placements (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061032" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 6 (Cessions et/ou Rétrocessions). -"F62061027" - "F62061028"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 6 (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061033" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV10 Moins values non réalisées sur placements  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV10 Moins values non réalisées sur placements  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061034" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHNT2 Produits de placements alloués, transférés à l'état de résultat  (Cessions et/ou Rétrocessions)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHNT2 Produits de placements alloués, transférés � l'�tat de résultat  (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061035" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Cessions et/ou Rétrocessions). -"F62061033" - "F62061034"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Cessions et/ou Rétrocessions)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62061036" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Résultat technique de l'assurance et/ou de la réassurance vie.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Résultat technique de l'assurance et/ou de la réassurance vie." />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062001" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV1 Primes (Net Exercice). "F62062002"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV1 Primes (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062002" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV11 Primes émises et acceptées  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV11 Primes émises et acceptées  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062003" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV2 Produits de placements (Net Exercice). "F62062004" + "F62062005" + "F62062006" + "F62062007"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV2 Produits de placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062004" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV21 Revenus des placements  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV21 Revenus des placements  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062005" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV22 .Produits des autres placements (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV22 .Produits des autres placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062006" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV23 Reprise de corrections de valeur sur placements (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV23 Reprise de corrections de valeur sur placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062007" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV24 Profits provenant de la réalisation des placements et de change  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV24 Profits provenant de la réalisation des placements et de change  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062008" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total primes et produits de placement (Sous total 2) (Net Exercice). "F62062001" + "F62062003"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total primes et produits de placement (Sous total 2) (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062009" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV3 Plus-values non réalisées sur placements (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV3 Plus-values non réalisées sur placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062010" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV4 Autres produits techniques  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV4 Autres produits techniques  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062011" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV1 Charge de sinistres (Net Exercice). "F62062012" + "F62062013"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV1 Charge de sinistres (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062012" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV11 Montants payés  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV11 Montants payés  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062013" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV12 Variation de la provision pour sinistres (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV12 Variation de la provision pour sinistres (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062014" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total produits sans charges sinistres (Sous total 3) (Net Exercice). "F62062008" + "F62062009" + "F62062010" - "F62062011"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total produits sans charges sinistres (Sous total 3) (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062015" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV2 Variation des autres provisions techniques (Net Exercice). "F62062016" + "F62062017" + "F62062018"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV2 Variation des autres provisions techniques (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062016" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV21 Provision d'assurance vie (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV21 Provision d'assurance vie (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062017" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV22 Autres provisions techniques  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV22 Autres provisions techniques  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062018" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV23 Provision sur contrats en unité de compte  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV23 Provision sur contrats en unité de compte  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062019" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 4 (Net Exercice). "F62062014" + "F62062015"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 4 (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062020" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV3 Participation aux bénéfices et ristournes   (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV3 Participation aux bénéfices et ristournes   (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062021" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV4 Frais d'exploitation (Net Exercice). "F62062022" + "F62062023" + "F62062024" - "F62062025"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV4 Frais d'exploitation (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062022" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV41 Frais d'acquisition  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV41 Frais d'acquisition  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062023" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV42 Variation du montant des frais d'acquisition reportés (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV42 Variation du montant des frais d'acquisition reportés (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062024" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV43 Frais d'administration  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV43 Frais d'administration  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062025" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV44 commissions reçues des réassureurs (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV44 commissions reçues des réassureurs (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062026" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 5 (Net Exercice). "F62062019" + "F62062020" - "F62062021"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 5 (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062027" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV5 Autres charges techniques  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV5 Autres charges techniques  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062028" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV9 Charges de placements (Net Exercice). "F62062029" + "F62062030" + "F62062031"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV9 Charges de placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062029" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062030" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV92 Correction de valeur sur placements (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV92 Correction de valeur sur placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062031" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV93 Pertes provenant de la réalisation des placements (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV93 Pertes provenant de la réalisation des placements (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062032" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 6 (Net Exercice). -"F62062027" - "F62062028"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 6 (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062033" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV10 Moins values non réalisées sur placements  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV10 Moins values non réalisées sur placements  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062034" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHNT2 Produits de placements alloués, transférés à l'état de résultat  (Net Exercice)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHNT2 Produits de placements alloués, transférés � l'�tat de résultat  (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062035" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice). -"F62062033" - "F62062034"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62062036" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Résultat technique de l'assurance et/ou de la réassurance vie.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Résultat technique de l'assurance et/ou de la réassurance vie." />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063001" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV1 Primes (Net Exercice - 1). "F62063002"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV1 Primes (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063002" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV11 Primes émises et acceptées  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV11 Primes émises et acceptées  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063003" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV2 Produits de placements (Net Exercice - 1). "F62063004" + "F62063005" + "F62063006" + "F62063007"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV2 Produits de placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063004" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV21 Revenus des placements  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV21 Revenus des placements  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063005" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV22 .Produits des autres placements (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV22 .Produits des autres placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063006" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV23 Reprise de corrections de valeur sur placements (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV23 Reprise de corrections de valeur sur placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063007" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV24 Profits provenant de la réalisation des placements et de change  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV24 Profits provenant de la réalisation des placements et de change  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063008" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total primes et produits de placement (Sous total 2) (Net Exercice - 1). "F62063001" + "F62063003"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total primes et produits de placement (Sous total 2) (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063009" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV3 Plus-values non réalisées sur placements (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV3 Plus-values non réalisées sur placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063010" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>PRV4 Autres produits techniques  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_NombrePositif15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="PRV4 Autres produits techniques  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063011" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV1 Charge de sinistres (Net Exercice - 1). "F62063012" + "F62063013"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV1 Charge de sinistres (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063012" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV11 Montants payés  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV11 Montants payés  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063013" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV12 Variation de la provision pour sinistres (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV12 Variation de la provision pour sinistres (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063014" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Total produits sans charges sinistres (Sous total 3) (Net Exercice - 1). "F62063008" + "F62063009" + "F62063010" - "F62063011"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Total produits sans charges sinistres (Sous total 3) (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063015" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV2 Variation des autres provisions techniques (Net Exercice - 1). "F62063016" + "F62063017" + "F62063018"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV2 Variation des autres provisions techniques (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063016" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV21 Provision d'assurance vie (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV21 Provision d'assurance vie (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063017" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV22 Autres provisions techniques  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV22 Autres provisions techniques  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063018" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV23 Provision sur contrats en unité de compte  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV23 Provision sur contrats en unité de compte  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063019" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 4 (Net Exercice - 1). "F62063014" + "F62063015"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 4 (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063020" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV3 Participation aux bénéfices et ristournes   (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV3 Participation aux bénéfices et ristournes   (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063021" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV4 Frais d'exploitation (Net Exercice - 1). "F62063022" + "F62063023" + "F62063024" - "F62063025"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV4 Frais d'exploitation (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063022" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV41 Frais d'acquisition  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV41 Frais d'acquisition  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063023" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV42 Variation du montant des frais d'acquisition reportés (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV42 Variation du montant des frais d'acquisition reportés (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063024" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV43 Frais d'administration  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV43 Frais d'administration  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063025" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV44 commissions reçues des réassureurs (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV44 commissions reçues des réassureurs (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063026" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 5 (Net Exercice - 1). "F62063019" + "F62063020" - "F62063021"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 5 (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063027" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV5 Autres charges techniques  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV5 Autres charges techniques  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063028" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV9 Charges de placements (Net Exercice - 1). "F62063029" + "F62063030" + "F62063031"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV9 Charges de placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063029" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV91 Charges de gestion des placements, y compris les charges d'intérêt  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063030" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV92 Correction de valeur sur placements (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV92 Correction de valeur sur placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063031" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV93 Pertes provenant de la réalisation des placements (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV93 Pertes provenant de la réalisation des placements (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063032" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Sous total 6 (Net Exercice - 1). -"F62063027" - "F62063028"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Sous total 6 (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063033" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHV10 Moins values non réalisées sur placements  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHV10 Moins values non réalisées sur placements  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063034" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>CHNT2 Produits de placements alloués, transférés à l'état de résultat  (Net Exercice - 1)</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="CHNT2 Produits de placements alloués, transférés � l'�tat de résultat  (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063035" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice - 1). -"F62063033" - "F62063034"</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice - 1)" />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="F62063036" maxOccurs="1">
+                <xsd:annotation>
+                  <xsd:documentation>Résultat technique de l'assurance et/ou de la réassurance vie.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                  <xsd:simpleContent>
+                    <xsd:extension base="lf:T_Nombre15">
+                      <xsd:attribute name="Libelle" type="xsd:string" default="Résultat technique de l'assurance et/ou de la réassurance vie." />
+                    </xsd:extension>
+                  </xsd:simpleContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:all>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

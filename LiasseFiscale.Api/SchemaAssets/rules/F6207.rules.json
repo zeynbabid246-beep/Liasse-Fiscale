@@ -1,0 +1,29 @@
+{
+  "document": "F6207",
+  "totalAssertions": 2,
+  "simpleSumRules": [
+    {
+      "target": "F62070002",
+      "operation": "sum",
+      "operands": [
+        "F62070003",
+        "F62070004",
+        "F62070005",
+        "F62070006"
+      ],
+      "rawTest": "lf:F62070002 = sum( ((lf:F62070003) , (lf:F62070004) , (lf:F62070005) , (lf:F62070006)))"
+    },
+    {
+      "target": "F62071002",
+      "operation": "sum",
+      "operands": [
+        "F62071003",
+        "F62071004",
+        "F62071005",
+        "F62071006"
+      ],
+      "rawTest": "lf:F62071002 = sum( ((lf:F62071003) , (lf:F62071004) , (lf:F62071005) , (lf:F62071006)))"
+    }
+  ],
+  "complexRules": []
+}

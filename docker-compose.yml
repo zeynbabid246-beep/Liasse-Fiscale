@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: liassefiscale
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: zainebdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=liassefiscale;Username=postgres;Password=zainebdb"
+      Jwt__Key: "CHANGE_ME_ATTENTION_CLE_LONGUE_ET_SECRETE_EN_PROD"
+      Jwt__Issuer: "LiasseFiscale.Api"
+      Jwt__Audience: "LiasseFiscale.Client"
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:

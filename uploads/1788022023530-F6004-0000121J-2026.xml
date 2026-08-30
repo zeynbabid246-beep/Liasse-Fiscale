@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lf:F6004 xmlns:lf="http://www.impots.finances.gov.tn/liasse" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.impots.finances.gov.tn/liasse F6004.xsd">
+  <lf:Entete>
+    <lf:MatriculeFiscalDeclarant>0000121J</lf:MatriculeFiscalDeclarant>
+    <lf:NometPrenomouRaisonSociale>SOCIÉTÉ EXEMPLE SARL</lf:NometPrenomouRaisonSociale>
+    <lf:Activite>Commerce de gros et services</lf:Activite>
+    <lf:Adresse>Avenue Habib Bourguiba, Tunis</lf:Adresse>
+    <lf:Exercice>2026</lf:Exercice>
+    <lf:DateDebutExercice>01/01/2026</lf:DateDebutExercice>
+    <lf:DateClotureExercice>31/12/2026</lf:DateClotureExercice>
+    <lf:ActeDeDepot>0</lf:ActeDeDepot>
+    <lf:NatureDepot>D</lf:NatureDepot>
+  </lf:Entete>
+  <lf:F60040001>450000</lf:F60040001>
+  <lf:F60040002>4800000</lf:F60040002>
+  <lf:F60040012>2750000</lf:F60040012>
+  <lf:F60040023>1100000</lf:F60040023>
+  <lf:F60040032>65000</lf:F60040032>
+  <lf:F60040045>435000</lf:F60040045>
+  <lf:F60040058>-220000</lf:F60040058>
+  <lf:F60040089>-150000</lf:F60040089>
+  <lf:F60040115>80000</lf:F60040115>
+  <lf:F60040116>100000</lf:F60040116>
+  <lf:F60040117>180000</lf:F60040117>
+</lf:F6004>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lf:F6006 xmlns:lf="http://www.impots.finances.gov.tn/liasse" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.impots.finances.gov.tn/liasse F6006.xsd">
+  <lf:Entete>
+    <lf:MatriculeFiscalDeclarant>0000121J</lf:MatriculeFiscalDeclarant>
+    <lf:NometPrenomouRaisonSociale>SOCIÉTÉ EXEMPLE SARL</lf:NometPrenomouRaisonSociale>
+    <lf:Activite>Commerce de gros et services</lf:Activite>
+    <lf:Adresse>Avenue Habib Bourguiba, Tunis</lf:Adresse>
+    <lf:Exercice>2026</lf:Exercice>
+    <lf:DateDebutExercice>01/01/2026</lf:DateDebutExercice>
+    <lf:DateClotureExercice>31/12/2026</lf:DateClotureExercice>
+    <lf:ActeDeDepot>0</lf:ActeDeDepot>
+    <lf:NatureDepot>D</lf:NatureDepot>
+  </lf:Entete>
+  <lf:F60060001>Notes et principes comptables établis conformément au Système Comptable des Entreprises Tunisien.</lf:F60060001>
+  <lf:F60060002>Continuité de l'exploitation, indépendance des exercices et permanence des méthodes respectées.</lf:F60060002>
+</lf:F6006>

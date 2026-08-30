@@ -1,0 +1,63 @@
+{
+  "document": "F6105",
+  "totalAssertions": 6,
+  "simpleSumRules": [
+    {
+      "target": "F61050001",
+      "operation": "sum",
+      "operands": [
+        "F61050002",
+        "F61050003",
+        "F61050004"
+      ],
+      "rawTest": "lf:F61050001 = sum( ((lf:F61050002) , (lf:F61050003) , (lf:F61050004)) )"
+    },
+    {
+      "target": "F61050005",
+      "operation": "sum",
+      "operands": [
+        "F61050006",
+        "F61050007"
+      ],
+      "rawTest": "lf:F61050005 = sum( ((lf:F61050006) , (lf:F61050007)) )"
+    },
+    {
+      "target": "F61050008",
+      "operation": "sum",
+      "operands": [
+        "F61050009",
+        "F61050010"
+      ],
+      "rawTest": "lf:F61050008 = sum( ((lf:F61050009) , (lf:F61050010)) )"
+    },
+    {
+      "target": "F61051001",
+      "operation": "sum",
+      "operands": [
+        "F61051002",
+        "F61051003",
+        "F61051004"
+      ],
+      "rawTest": "lf:F61051001 = sum( ((lf:F61051002) , (lf:F61051003) , (lf:F61051004)) )"
+    },
+    {
+      "target": "F61051005",
+      "operation": "sum",
+      "operands": [
+        "F61051006",
+        "F61051007"
+      ],
+      "rawTest": "lf:F61051005 = sum( ((lf:F61051006) , (lf:F61051007)) )"
+    },
+    {
+      "target": "F61051008",
+      "operation": "sum",
+      "operands": [
+        "F61051009",
+        "F61051010"
+      ],
+      "rawTest": "lf:F61051008 = sum( ((lf:F61051009) , (lf:F61051010)) )"
+    }
+  ],
+  "complexRules": []
+}
