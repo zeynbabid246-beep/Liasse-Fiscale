@@ -1355,6 +1355,18 @@
   /// obligatoire manque ou n'est pas soumis, le backend renvoie 400 avec la liste précise —
   /// on l'affiche telle quelle sous forme de message "Dépôt invalide", sans rien inventer.
   async function tenterFinaliserDepot() {
+    const invalides = currentLiasseDocuments.filter(d => 
+      d.statut === 'Invalide' ||
+      (d.nomFichier && d.statut !== 'Valide' && d.statut !== 'Soumis') ||
+      (documentErrorsMap[d.codeDocument] && documentErrorsMap[d.codeDocument].length > 0)
+    );
+
+    if (invalides.length > 0) {
+      const liste = invalides.map(d => `${d.codeDocument} (${d.libelle})`).join(', ');
+      showAlert('app-alert', `❌ Dépôt bloqué : Le document ${liste} est non conforme. Vous ne pouvez pas uploader ni déposer une liasse contenant des erreurs. Veuillez corriger ou détacher les fichiers non conformes.`, true);
+      return;
+    }
+
     const manquants = currentLiasseDocuments.filter(d => d.estObligatoire && d.statut !== 'Soumis' && d.statut !== 'Valide');
 
     if (manquants.length > 0) {
@@ -1378,7 +1390,6 @@
         if (tabSuivi) tabSuivi.click();
       } else {
         // Le backend a lui-même détecté l'incomplétude (double vérification serveur) :
-        // message affiché tel quel, pas de texte générique qui masquerait le détail.
         showAlert('app-alert', `❌ ${data.message || 'Dépôt invalide.'}`, true);
       }
     } catch (e) {

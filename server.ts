@@ -923,7 +923,7 @@ app.get('/api/liasses/en-cours', (req: Request, res: Response) => {
   const contribuableId = parseInt(String(req.query.contribuableId || 0), 10);
   const matricule = String(req.query.matricule || '').trim().toUpperCase();
 
-  let liasses = liassesDb.filter(l => l.statut === 'EnSaisie' || l.statut === 'Deposee');
+  let liasses = liassesDb.filter(l => l.statut === 'Deposee');
 
   if (contribuableId > 0) {
     liasses = liasses.filter(l => l.contribuableId === contribuableId);
@@ -931,6 +931,14 @@ app.get('/api/liasses/en-cours', (req: Request, res: Response) => {
     const clean = matricule.replace(/[^A-Za-z0-9]/g, '');
     liasses = liasses.filter(l => l.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
   }
+
+  // Filtrer pour ne conserver que les liasses dont tous les documents obligatoires sont valides/soumis
+  // et ne comportent aucune anomalie / statut 'Invalide'
+  liasses = liasses.filter(l => {
+    const hasInvalid = l.documents.some(d => d.statut === 'Invalide' || (d.erreurs && d.erreurs.length > 0));
+    const allMandatoryValid = l.documents.filter(d => d.estObligatoire).every(d => (d.statut === 'Valide' || d.statut === 'Soumis') && d.nomFichier);
+    return !hasInvalid && allMandatoryValid;
+  });
 
   const result = liasses.map(l => ({
     id: l.id,
@@ -1451,6 +1459,13 @@ app.post('/api/liasses/:id/deposit', (req: Request, res: Response) => {
     return res.status(404).json({ message: "Liasse introuvable." });
   }
 
+  const invalides = liasse.documents.filter(d => d.statut === 'Invalide' || (d.erreurs && d.erreurs.length > 0));
+  if (invalides.length > 0) {
+    return res.status(400).json({
+      message: `Dépôt impossible : ${invalides.length} document(s) non conforme(s) avec erreurs (${invalides.map(d => d.codeDocument).join(', ')}). Veuillez corriger les anomalies avant de finaliser le dépôt.`
+    });
+  }
+
   const manquants = liasse.documents.filter(d => d.estObligatoire && d.statut !== 'Valide' && d.statut !== 'Soumis');
   if (manquants.length > 0) {
     return res.status(400).json({
@@ -1476,6 +1491,20 @@ app.post('/api/deposits', (req: Request, res: Response) => {
   const liasse = liassesDb.find(l => l.id === id);
   if (!liasse) {
     return res.status(404).json({ message: "Liasse introuvable." });
+  }
+
+  const invalides = liasse.documents.filter(d => d.statut === 'Invalide' || (d.erreurs && d.erreurs.length > 0));
+  if (invalides.length > 0) {
+    return res.status(400).json({
+      message: `Dépôt impossible : présence de document(s) non conforme(s) (${invalides.map(d => d.codeDocument).join(', ')}).`
+    });
+  }
+
+  const manquants = liasse.documents.filter(d => d.estObligatoire && d.statut !== 'Valide' && d.statut !== 'Soumis');
+  if (manquants.length > 0) {
+    return res.status(400).json({
+      message: `Dépôt impossible : documents obligatoires manquants.`
+    });
   }
 
   const deposit = executerDepot(liasse, observation, signatureElectronique);
