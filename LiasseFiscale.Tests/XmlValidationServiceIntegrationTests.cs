@@ -171,6 +171,87 @@ public class XmlValidationServiceIntegrationTests
         Assert.True(resultat.EstValide, string.Join("; ", resultat.Erreurs.Select(e => $"[{e.Source}] {e.Champ}: {e.Message}")));
         Assert.Empty(resultat.Erreurs);
     }
+
+    [Fact]
+    public void ValiderDocumentComplet_MauvaisFichier_RetourneErreur()
+    {
+        // Envoi d'un contenu F6002 pour valider un document F6001
+        var samplePath = Path.Combine(Directory.GetCurrentDirectory(), "Samples", "F6002-1234567A-2024.xml");
+        if (!File.Exists(samplePath))
+        {
+            samplePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Samples", "F6002-1234567A-2024.xml");
+        }
+
+        using var stream = File.OpenRead(samplePath);
+        var resultat = _validationService.ValiderDocumentComplet("F6001", stream);
+
+        Assert.False(resultat.EstValide);
+        Assert.NotEmpty(resultat.Erreurs);
+        Assert.Contains(resultat.Erreurs, e => e.Source == "Structurelle");
+    }
+
+    [Fact]
+    public void ValiderDocumentComplet_MauvaiseRacineXml_RetourneErreur()
+    {
+        string wrongRootXml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<DocumentInconnu xmlns=""http://www.impots.finances.gov.tn/liasse"">
+    <VersionDocument>1.0</VersionDocument>
+</DocumentInconnu>";
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(wrongRootXml));
+        var resultat = _validationService.ValiderDocumentComplet("F6001", stream);
+
+        Assert.False(resultat.EstValide);
+        Assert.Contains(resultat.Erreurs, e => e.Source == "Structurelle" && e.Message.Contains("racine XML"));
+    }
+
+    [Fact]
+    public void ValiderDocumentComplet_NonConformeXsd_ChampInterdit_RetourneErreurStructurelle()
+    {
+        string badXsdXml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<F6001 xmlns=""http://www.impots.finances.gov.tn/liasse"">
+    <VersionDocument>1.0</VersionDocument>
+    <Entete>
+        <MatriculeFiscalDeclarant>1234567APM000</MatriculeFiscalDeclarant>
+        <Exercice>2024</Exercice>
+        <ChampInexistantDansLeSchema>Invalide</ChampInexistantDansLeSchema>
+    </Entete>
+    <Details>
+        <F60010001>100</F60010001>
+    </Details>
+</F6001>";
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(badXsdXml));
+        var resultat = _validationService.ValiderDocumentComplet("F6001", stream);
+
+        Assert.False(resultat.EstValide);
+        Assert.Contains(resultat.Erreurs, e => e.Source == "Structurelle");
+    }
+
+    [Fact]
+    public void ValiderDocumentComplet_NonRespectRegleMetier_RetourneErreurRegleMetier()
+    {
+        string invalidBusinessRuleXml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<F6001 xmlns=""http://www.impots.finances.gov.tn/liasse"">
+    <VersionDocument>1.0</VersionDocument>
+    <Entete>
+        <MatriculeFiscalDeclarant>1234567APM000</MatriculeFiscalDeclarant>
+        <Exercice>2024</Exercice>
+    </Entete>
+    <Details>
+        <!-- F60010001 doit être égal à F60010002 + F60010031. Ici 999 != 100 + 50 -->
+        <F60010001>999</F60010001>
+        <F60010002>100</F60010002>
+        <F60010031>50</F60010031>
+    </Details>
+</F6001>";
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(invalidBusinessRuleXml));
+        var resultat = _validationService.ValiderDocumentComplet("F6001", stream);
+
+        Assert.False(resultat.EstValide);
+        Assert.Contains(resultat.Erreurs, e => e.Source == "RegleMetier" && e.Champ == "F60010001");
+    }
 }
 
 

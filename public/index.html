@@ -953,18 +953,17 @@
   const documentErrorsMap = {}; // codeDocument -> liste d'erreurs de la dernière validation
 
   function statutBadgeHtml(doc) {
-    if (doc.statut === 'Soumis') {
-      return '<span class="badge badge-validee">✔ Soumis</span>';
+    if (doc.statut === 'Soumis' || doc.statut === 'Valide') {
+      return '<span class="badge badge-validee">✔ Valide / Soumis</span>';
     }
 
-    // 'NonSoumis' couvre deux cas distincts côté serveur : jamais uploadé, ou uploadé
-    // puis rejeté. On les distingue ici via la présence d'un nom de fichier.
-    if (doc.nomFichier) {
+    // 'Invalide' ou présence d'un nom de fichier non valide
+    if (doc.statut === 'Invalide' || doc.nomFichier) {
       const erreurs = documentErrorsMap[doc.codeDocument] || [];
       const detail = erreurs.length
         ? ` (${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''})`
         : '';
-      return `<span class="badge badge-erreur" onclick="voirErreursDocument('${doc.codeDocument}')">✘ Non soumis${detail}</span>`;
+      return `<span class="badge badge-erreur" style="cursor:pointer;" onclick="voirErreursDocument('${doc.codeDocument}')">✘ Non conforme${detail}</span>`;
     }
 
     return doc.estObligatoire
@@ -977,23 +976,25 @@
     const doc = currentLiasseDocuments.find(d => d.codeDocument === codeDocument);
 
     document.getElementById('modal-erreurs-doc-title').innerText =
-      `${codeDocument} — Non soumis${doc ? ' · ' + doc.libelle : ''}`;
+      `${codeDocument} — Non conforme${doc ? ' · ' + doc.libelle : ''}`;
 
     const liste = erreurs.length
-      ? erreurs.map(e => `<tr><td>${e.code || '—'}</td><td>${e.message}</td></tr>`).join('')
+      ? erreurs.map(e => `<tr><td><strong>${e.source || e.code || 'Structurelle'}</strong></td><td>${e.champ || e.xmlElement || '—'}</td><td>${e.message || JSON.stringify(e)}</td></tr>`).join('')
       : '';
     const body = document.getElementById('modal-erreurs-doc-body');
     if (erreurs.length === 0) {
-      body.innerHTML = `<p style="color:#666;">Aucun détail d'erreur en mémoire pour ce document — renvoyez le fichier pour le récupérer.</p>`;
+      body.innerHTML = `<p style="color:#666;">Document rejeté par le serveur. Veuillez sélectionner un fichier XML conforme et réessayer.</p>`;
     } else {
       body.innerHTML = `
-        <p style="margin:0 0 10px;font-size:12.5px;color:#666;">
-          ${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''} détectée${erreurs.length > 1 ? 's' : ''} :
+        <p style="margin:0 0 10px;font-size:12.5px;color:#c53030;font-weight:600;">
+          ${erreurs.length} anomalie${erreurs.length > 1 ? 's' : ''} détectée${erreurs.length > 1 ? 's' : ''} par la validation ASP.NET Core :
         </p>
-        <table>
-          <thead><tr><th>Code</th><th>Message</th></tr></thead>
-          <tbody>${liste}</tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Niveau / Source</th><th>Élément XML</th><th>Message d'erreur</th></tr></thead>
+            <tbody>${liste}</tbody>
+          </table>
+        </div>
       `;
     }
 
@@ -1368,7 +1369,7 @@
           delete selectedFilesMap[code];
           documentErrorsMap[code] = data.erreurs || [];
 
-          if (data.statut === 'Soumis') {
+          if (data.statut === 'Soumis' || data.statut === 'Valide') {
             soumis++;
           } else {
             nonSoumis++;

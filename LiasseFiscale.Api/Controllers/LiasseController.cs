@@ -203,10 +203,37 @@ public class LiasseController : ControllerBase
                 l.DateCreation,
                 TotalDocuments = l.Documents.Count,
                 DocumentsUploade = l.Documents.Count(d => d.NomFichier != null),
-                EstPretPourDepot = l.Documents.Where(d => d.EstObligatoire).All(d => d.Statut == StatutValidation.Valide)
+                EstPretPourDepot = l.Documents.Where(d => d.EstObligatoire).All(d => d.Statut == StatutValidation.Valide),
+                Documents = l.Documents.Select(d => new
+                {
+                    d.CodeDocument,
+                    d.Libelle,
+                    Format = d.Format.ToString(),
+                    d.EstObligatoire,
+                    Statut = d.Statut.ToString(),
+                    d.NomFichier
+                }).ToList()
             })
             .ToListAsync();
 
         return Ok(liasses);
+    }
+
+    /// <summary>
+    /// Suppression d'une liasse en cours de saisie.
+    /// </summary>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> SupprimerLiasse(int id)
+    {
+        var liasse = await _db.Liasses.FirstOrDefaultAsync(l => l.Id == id);
+        if (liasse is null)
+        {
+            return NotFound(new { message = "Liasse introuvable." });
+        }
+
+        liasse.Statut = StatutLiasse.Supprimee;
+        await _db.SaveChangesAsync();
+
+        return Ok(new { message = "Liasse en cours supprimée avec succès." });
     }
 }

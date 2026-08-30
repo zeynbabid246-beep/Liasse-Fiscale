@@ -22,11 +22,19 @@ public class AssertRuleEngine : IAssertRuleEngine
         _logger = logger;
 
         var rulesPath = configuration["SchemaAssets:RulesPath"] ?? "SchemaAssets/rules";
-        var fullPath = Path.Combine(AppContext.BaseDirectory, rulesPath);
-
-        if (!Directory.Exists(fullPath))
+        var candidatePaths = new[]
         {
-            _logger.LogWarning("Dossier de règles introuvable : {Path}", fullPath);
+            Path.IsPathRooted(rulesPath) ? rulesPath : Path.Combine(AppContext.BaseDirectory, rulesPath),
+            Path.Combine(Directory.GetCurrentDirectory(), rulesPath),
+            Path.Combine(Directory.GetCurrentDirectory(), "LiasseFiscale.Api", rulesPath),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "LiasseFiscale.Api", rulesPath)
+        };
+
+        var fullPath = candidatePaths.FirstOrDefault(Directory.Exists);
+
+        if (fullPath is null)
+        {
+            _logger.LogWarning("Dossier de règles introuvable dans les chemins testés.");
             return;
         }
 
