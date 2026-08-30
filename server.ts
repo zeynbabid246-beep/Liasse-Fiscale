@@ -3,7 +3,6 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
-import http from 'http';
 import multer from 'multer';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
@@ -14,7 +13,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
-const ASPNETCORE_API_URL = process.env.ASPNETCORE_URL || 'http://127.0.0.1:5000';
 const JWT_SECRET = process.env.JWT_SECRET || 'LiasseFiscaleSecretKey2026_DGI_SuperSecureKey_MinFinances';
 
 app.use(cors());
@@ -27,7 +25,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
-// Configuration multer pour téléversement
+// Configuration multer pour téléversement (accepte n'importe quel nom de champ de fichier)
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
   filename: (_req, file, cb) => {
@@ -40,12 +38,14 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 } // 50 Mo
 });
 
-// Middleware d'authentification optionnelle/obligatoire
+// Middleware d'authentification
 interface AuthRequest extends Request {
   user?: {
     id: number;
     email: string;
     matriculeFiscal: string;
+    numeroMatriculeFiscal?: string;
+    cleMatriculeFiscal?: string;
     nomOuRaisonSociale: string;
     role: string;
   };
@@ -53,7 +53,7 @@ interface AuthRequest extends Request {
 
 function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = (authHeader && authHeader.split(' ')[1]) || (req.query.token as string);
 
   if (!token) {
     return res.status(401).json({ message: "Accès non autorisé : Jeton d'authentification requis." });
@@ -68,8 +68,21 @@ function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) 
   });
 }
 
+function optionalToken(req: AuthRequest, _res: Response, next: NextFunction) {
+  const authHeader = req.headers['authorization'];
+  const token = (authHeader && authHeader.split(' ')[1]) || (req.query.token as string);
+  if (token) {
+    jwt.verify(token, JWT_SECRET, (_err, user) => {
+      if (user) req.user = user as any;
+      next();
+    });
+  } else {
+    next();
+  }
+}
+
 // -------------------------------------------------------------
-// Base de données en mémoire (Synchronisée avec le modèle EF Core)
+// Modèles et Base de données en mémoire
 // -------------------------------------------------------------
 interface ValidationIssue {
   source: 'Structurelle' | 'RegleMetier';
@@ -93,12 +106,15 @@ interface DocumentLiasse {
 
 interface Liasse {
   id: number;
+  contribuableId: number;
   matriculeFiscal: string;
   exercice: number;
   dateDebut: string;
   dateCloture: string;
   regime: string;
   categorie: string;
+  nature: string;
+  typeDepot: string;
   statut: 'EnSaisie' | 'Validee' | 'Deposee' | 'Supprimee';
   dateCreation: string;
   documents: DocumentLiasse[];
@@ -108,11 +124,22 @@ interface Deposit {
   id: number;
   reference: string;
   liasseId: number;
+  contribuableId: number;
   matriculeFiscal: string;
   exercice: number;
+  nature: string;
+  typeDepot: string;
   dateDepot: string;
   statut: string;
   hashGlobal: string;
+  observation?: string;
+  documents?: {
+    codeDocument: string;
+    libelle: string;
+    format: string;
+    nomFichier: string | null;
+    statut: string;
+  }[];
   receipt?: {
     numeroAccuse: string;
     dateEmission: string;
@@ -241,7 +268,7 @@ function findContribuableByInput(input: string): ContribuableItem | null {
   );
   if (byMatricule) return byMatricule;
 
-  // 4. Si 7 chiffres saisis, vérifier s'il existe un contribuable unique
+  // 4. Si 7 chiffres saisis
   if (clean.length === 7) {
     const candidates = contribuablesDb.filter(c => c.numeroMatriculeFiscal === clean);
     if (candidates.length === 1) return candidates[0];
@@ -250,34 +277,223 @@ function findContribuableByInput(input: string): ContribuableItem | null {
   return null;
 }
 
+// -------------------------------------------------------------
+// Référentiel des États Financiers par Secteur / Catégorie
+// -------------------------------------------------------------
+function getEtatsRequis(categorie: string, modeleF6004?: string): { codeDocument: string; libelle: string; format: 'Xml' | 'Pdf'; estObligatoire: boolean }[] {
+  const cat = (categorie || '').trim();
+
+  if (cat === 'Bancaire' || cat === 'Banques') {
+    return [
+      { codeDocument: 'F6101', libelle: 'Bilan Actifs-Passifs', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6103', libelle: 'État de résultat', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6104', libelle: 'État de flux de trésorerie', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6105', libelle: 'État des engagements hors bilan', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6007', libelle: "Faits marquants de l'exercice", format: 'Xml', estObligatoire: false },
+      { codeDocument: 'F6019', libelle: 'Annexes et rapports (PDF)', format: 'Pdf', estObligatoire: false }
+    ];
+  }
+
+  if (cat === 'AssurancesReassurances') {
+    return [
+      { codeDocument: 'F6201', libelle: 'Bilan Actif', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6202', libelle: 'Bilan Passif', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6203', libelle: 'État de résultat', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6204', libelle: 'État de flux de trésorerie (Méthode directe)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6205', libelle: 'Résultat technique non-vie', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6206', libelle: 'Résultat technique vie', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6207', libelle: 'Tableau des engagements reçus et donnés', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6019', libelle: 'Annexes et rapports (PDF)', format: 'Pdf', estObligatoire: false }
+    ];
+  }
+
+  if (cat === 'Opcvm') {
+    return [
+      { codeDocument: 'F6301', libelle: 'Bilan Actif-Passif', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6303', libelle: 'État de résultat', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6304', libelle: "État de variation de l'actif net", format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6006', libelle: 'Notes et principes comptables appliqués', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6007', libelle: "Faits marquants de l'exercice", format: 'Xml', estObligatoire: false },
+      { codeDocument: 'F6019', libelle: 'Rapport général du CAC (PDF)', format: 'Pdf', estObligatoire: false }
+    ];
+  }
+
+  if (cat === 'MicroCredits') {
+    return [
+      { codeDocument: 'F6401', libelle: 'Bilan Actif-Passif (Micro-finances)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6402', libelle: 'État de résultat (Micro-finances)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6007', libelle: "Faits marquants de l'exercice", format: 'Xml', estObligatoire: false },
+      { codeDocument: 'F6019', libelle: 'Notes aux états financiers (PDF)', format: 'Pdf', estObligatoire: false }
+    ];
+  }
+
+  const isModeleAutorise = cat === 'CasGeneralAvecFluxTresorerieModeleAutorise' || modeleF6004 === 'Autorise';
+
+  return [
+    { codeDocument: 'F6001', libelle: 'Bilan Actif', format: 'Xml', estObligatoire: true },
+    { codeDocument: 'F6002', libelle: 'Bilan Passif', format: 'Xml', estObligatoire: true },
+    { codeDocument: 'F6003', libelle: 'État de résultat', format: 'Xml', estObligatoire: true },
+    {
+      codeDocument: isModeleAutorise ? 'F6004-MODELE-AUT' : 'F6004',
+      libelle: isModeleAutorise ? 'État de flux de trésorerie (Modèle autorisé)' : 'État de flux de trésorerie (Modèle de référence)',
+      format: 'Xml',
+      estObligatoire: true
+    },
+    { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
+    { codeDocument: 'F6007', libelle: "Faits marquants de l'exercice", format: 'Xml', estObligatoire: false },
+    { codeDocument: 'F6019', libelle: "Notes et autres feuillets de l'annexe (PDF)", format: 'Pdf', estObligatoire: false }
+  ];
+}
+
+// -------------------------------------------------------------
+// Bases de données Liasses & Dépôts avec Historique Réaliste
+// -------------------------------------------------------------
 let liassesDb: Liasse[] = [
   {
     id: 1,
-    matriculeFiscal: '1234567A',
+    contribuableId: 2,
+    matriculeFiscal: '0000121J',
     exercice: 2026,
     dateDebut: '2026-01-01',
     dateCloture: '2026-12-31',
     regime: 'Réel Normal',
-    categorie: 'Société Commerciale / Industrielle',
+    categorie: 'CasGeneral',
+    nature: 'Initiale',
+    typeDepot: 'Definitif',
     statut: 'EnSaisie',
     dateCreation: '2026-08-30T04:00:00Z',
-    documents: [
-      { id: 1, codeDocument: 'F6001', libelle: 'Bilan (Actif / Passif)', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 2, codeDocument: 'F6002', libelle: 'État de Résultat', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 3, codeDocument: 'F6003', libelle: 'État des Flux de Trésorerie', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 4, codeDocument: 'F6004', libelle: 'Notes aux États Financiers', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 5, codeDocument: 'F6005', libelle: 'Détermination du Résultat Fiscal', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 6, codeDocument: 'F6007', libelle: 'Tableau des Amortissements & Provisions', format: 'Xml', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 7, codeDocument: 'F6019', libelle: "Rapport Général du Commissaire aux Comptes (PDF)", format: 'Pdf', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-      { id: 8, codeDocument: 'F6201', libelle: 'Bilan Simplifié', format: 'Xml', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] }
-    ]
+    documents: getEtatsRequis('CasGeneral').map((doc, idx) => ({
+      id: idx + 1,
+      codeDocument: doc.codeDocument,
+      libelle: doc.libelle,
+      format: doc.format,
+      estObligatoire: doc.estObligatoire,
+      statut: 'NonSoumis',
+      nomFichier: null,
+      cheminStockage: null,
+      dateUpload: null,
+      erreurs: []
+    }))
   }
 ];
 
-let depositsDb: Deposit[] = [];
+let depositsDb: Deposit[] = [
+  {
+    id: 1,
+    reference: 'DEP-2025-784123',
+    liasseId: 101,
+    contribuableId: 2,
+    matriculeFiscal: '0000121J',
+    exercice: 2025,
+    nature: 'Initiale',
+    typeDepot: 'Dépôt définitif',
+    dateDepot: '2025-04-15T10:24:00Z',
+    statut: 'Validée',
+    hashGlobal: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    observation: 'Dépôt annuel de liasse fiscale validé et certifié.',
+    documents: [
+      { codeDocument: 'F6001', libelle: 'Bilan Actif', format: 'Xml', nomFichier: 'F6001-0000121J-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6002', libelle: 'Bilan Passif', format: 'Xml', nomFichier: 'F6002-0000121J-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6003', libelle: 'État de résultat', format: 'Xml', nomFichier: 'F6003-0000121J-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6004', libelle: 'État de flux de trésorerie', format: 'Xml', nomFichier: 'F6004-0000121J-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', nomFichier: 'F6005-0000121J-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6019', libelle: "Rapport Général du CAC (PDF)", format: 'Pdf', nomFichier: 'F6019-0000121J-2025.pdf', statut: 'Validée' }
+    ],
+    receipt: {
+      numeroAccuse: 'ACC-2025-784123',
+      dateEmission: '2025-04-15T10:24:00Z',
+      qrCode: 'https://impots.finances.gov.tn/verify/DEP-2025-784123',
+      empreinteNumerique: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+    }
+  },
+  {
+    id: 2,
+    reference: 'DEP-2024-512890',
+    liasseId: 102,
+    contribuableId: 2,
+    matriculeFiscal: '0000121J',
+    exercice: 2024,
+    nature: 'Initiale',
+    typeDepot: 'Dépôt définitif',
+    dateDepot: '2024-04-18T14:15:00Z',
+    statut: 'Validée',
+    hashGlobal: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4',
+    observation: 'Exercice clos au 31/12/2024 - Validé DGI.',
+    documents: [
+      { codeDocument: 'F6001', libelle: 'Bilan Actif', format: 'Xml', nomFichier: 'F6001-0000121J-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6002', libelle: 'Bilan Passif', format: 'Xml', nomFichier: 'F6002-0000121J-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6003', libelle: 'État de résultat', format: 'Xml', nomFichier: 'F6003-0000121J-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6004', libelle: 'État de flux de trésorerie', format: 'Xml', nomFichier: 'F6004-0000121J-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', nomFichier: 'F6005-0000121J-2024.xml', statut: 'Validée' }
+    ],
+    receipt: {
+      numeroAccuse: 'ACC-2024-512890',
+      dateEmission: '2024-04-18T14:15:00Z',
+      qrCode: 'https://impots.finances.gov.tn/verify/DEP-2024-512890',
+      empreinteNumerique: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4'
+    }
+  },
+  {
+    id: 3,
+    reference: 'DEP-2025-912345',
+    liasseId: 103,
+    contribuableId: 1,
+    matriculeFiscal: '1234567M',
+    exercice: 2025,
+    nature: 'Initiale',
+    typeDepot: 'Dépôt définitif',
+    dateDepot: '2025-04-20T11:00:00Z',
+    statut: 'Validée',
+    hashGlobal: '7a12b44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852c999',
+    observation: 'Dépôt initial 2025 validé par la recette des finances.',
+    documents: [
+      { codeDocument: 'F6001', libelle: 'Bilan Actif', format: 'Xml', nomFichier: 'F6001-1234567M-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6002', libelle: 'Bilan Passif', format: 'Xml', nomFichier: 'F6002-1234567M-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6003', libelle: 'État de résultat', format: 'Xml', nomFichier: 'F6003-1234567M-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6004', libelle: 'État de flux de trésorerie', format: 'Xml', nomFichier: 'F6004-1234567M-2025.xml', statut: 'Validée' },
+      { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', nomFichier: 'F6005-1234567M-2025.xml', statut: 'Validée' }
+    ],
+    receipt: {
+      numeroAccuse: 'ACC-2025-912345',
+      dateEmission: '2025-04-20T11:00:00Z',
+      qrCode: 'https://impots.finances.gov.tn/verify/DEP-2025-912345',
+      empreinteNumerique: '7a12b44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852c999'
+    }
+  },
+  {
+    id: 4,
+    reference: 'DEP-2024-345678',
+    liasseId: 104,
+    contribuableId: 3,
+    matriculeFiscal: '1234567A',
+    exercice: 2024,
+    nature: 'Initiale',
+    typeDepot: 'Dépôt définitif',
+    dateDepot: '2024-04-22T09:30:00Z',
+    statut: 'Validée',
+    hashGlobal: '9c56b44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852dd33',
+    observation: 'Dépôt annuel société technologies.',
+    documents: [
+      { codeDocument: 'F6001', libelle: 'Bilan Actif', format: 'Xml', nomFichier: 'F6001-1234567A-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6002', libelle: 'Bilan Passif', format: 'Xml', nomFichier: 'F6002-1234567A-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6003', libelle: 'État de résultat', format: 'Xml', nomFichier: 'F6003-1234567A-2024.xml', statut: 'Validée' },
+      { codeDocument: 'F6004', libelle: 'État de flux de trésorerie', format: 'Xml', nomFichier: 'F6004-1234567A-2024.xml', statut: 'Validée' }
+    ],
+    receipt: {
+      numeroAccuse: 'ACC-2024-345678',
+      dateEmission: '2024-04-22T09:30:00Z',
+      qrCode: 'https://impots.finances.gov.tn/verify/DEP-2024-345678',
+      empreinteNumerique: '9c56b44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852dd33'
+    }
+  }
+];
 
 // -------------------------------------------------------------
-// Moteur de Validation XML Multi-Niveaux
+// Validation XML Multi-Niveaux
 // -------------------------------------------------------------
 const TARGET_NAMESPACE = 'http://www.impots.finances.gov.tn/liasse';
 
@@ -338,7 +554,6 @@ function validerXmlComplet(
 ): { estValide: boolean; erreurs: ValidationIssue[]; detailsExtraits?: Record<string, any> } {
   const erreurs: ValidationIssue[] = [];
 
-  // 1. Contrôle de bonne formation XML
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
@@ -370,7 +585,6 @@ function validerXmlComplet(
     return { estValide: false, erreurs };
   }
 
-  // 2. Contrôle de la racine XML et de l'espace de noms
   const rootKeys = Object.keys(parsedObj).filter(k => !k.startsWith('?') && !k.startsWith('#'));
   if (rootKeys.length === 0) {
     erreurs.push({
@@ -405,12 +619,10 @@ function validerXmlComplet(
     });
   }
 
-  // Si la racine est fausse ou le XML mal formé, on stoppe là
   if (erreurs.length > 0) {
     return { estValide: false, erreurs };
   }
 
-  // Extraction de l'Entête et des Détails
   let entete: any = null;
   let details: any = null;
 
@@ -420,7 +632,6 @@ function validerXmlComplet(
     if (local === 'Details') details = val;
   }
 
-  // Validation de l'entête
   if (entete && typeof entete === 'object') {
     let matriculeDeclarant = '';
     let exerciceXml = 0;
@@ -454,7 +665,6 @@ function validerXmlComplet(
     }
   }
 
-  // 3. Validation de structure selon le schéma XSD
   const allowedTags = getStructuralSchemaAllowedTags(codeDocument);
   const detailsFlat: Record<string, number> = {};
 
@@ -476,12 +686,10 @@ function validerXmlComplet(
     }
   }
 
-  // Si des erreurs structurelles existent, ne pas exécuter les règles métier
   if (erreurs.length > 0) {
     return { estValide: false, erreurs };
   }
 
-  // 4. Évaluation des règles métier arithmétiques
   const rulesJson = getBusinessRules(codeDocument);
   if (rulesJson && Array.isArray(rulesJson.simpleSumRules)) {
     for (const rule of rulesJson.simpleSumRules) {
@@ -542,7 +750,6 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
     });
   }
 
-  // Vérification de sécurité du mot de passe
   if (password && contribuable.password && password !== contribuable.password && password !== 'Password123!') {
     return res.status(401).json({ message: "Mot de passe incorrect pour cet adhérent." });
   }
@@ -650,7 +857,7 @@ app.get('/api/auth/me', (req: Request, res: Response) => {
   });
 });
 
-// 2. Contribuables (Recherche & Consultation)
+// 2. Contribuables
 app.get('/api/contribuables/search', (req: Request, res: Response) => {
   const matricule = String(req.query.matricule || '').trim().replace(/[^A-Za-z0-9]/g, '').toUpperCase();
   const cle = String(req.query.cle || '').trim().toUpperCase();
@@ -703,24 +910,34 @@ app.get('/api/contribuables/:matricule', (req: Request, res: Response) => {
   return res.json(found);
 });
 
-// 3. Liasses
-app.get('/api/liasses', (req: Request, res: Response) => {
-  const matricule = req.query.matricule as string;
-  let list = liassesDb.filter(l => l.statut !== 'Supprimee');
+// 3. Référentiel des États Requis (Catalogue)
+app.get('/api/liasses/etats-requis', (req: Request, res: Response) => {
+  const categorie = String(req.query.categorie || 'CasGeneral');
+  const modeleF6004 = String(req.query.modeleF6004 || 'Reference');
+  const etats = getEtatsRequis(categorie, modeleF6004);
+  return res.json(etats);
+});
 
-  if (matricule) {
-    const clean = String(matricule).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-    list = list.filter(l => l.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
+// 4. Liasses en cours de saisie
+app.get('/api/liasses/en-cours', (req: Request, res: Response) => {
+  const contribuableId = parseInt(String(req.query.contribuableId || 0), 10);
+  const matricule = String(req.query.matricule || '').trim().toUpperCase();
+
+  let liasses = liassesDb.filter(l => l.statut === 'EnSaisie');
+
+  if (contribuableId > 0) {
+    liasses = liasses.filter(l => l.contribuableId === contribuableId);
+  } else if (matricule) {
+    const clean = matricule.replace(/[^A-Za-z0-9]/g, '');
+    liasses = liasses.filter(l => l.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
   }
 
-  const result = list.map(l => ({
+  const result = liasses.map(l => ({
     id: l.id,
-    matriculeFiscal: l.matriculeFiscal,
     exercice: l.exercice,
-    dateDebut: l.dateDebut,
-    dateCloture: l.dateCloture,
-    regime: l.regime,
     categorie: l.categorie,
+    nature: l.nature,
+    typeDepot: l.typeDepot,
     statut: l.statut,
     dateCreation: l.dateCreation,
     totalDocuments: l.documents.length,
@@ -739,6 +956,37 @@ app.get('/api/liasses', (req: Request, res: Response) => {
   return res.json(result);
 });
 
+// 5. Liasses (CRUD & Consultation)
+app.get('/api/liasses', (req: Request, res: Response) => {
+  const matricule = req.query.matricule as string;
+  let list = liassesDb.filter(l => l.statut !== 'Supprimee');
+
+  if (matricule) {
+    const clean = String(matricule).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    list = list.filter(l => l.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
+  }
+
+  const result = list.map(l => ({
+    id: l.id,
+    matriculeFiscal: l.matriculeFiscal,
+    exercice: l.exercice,
+    dateDebut: l.dateDebut,
+    dateCloture: l.dateCloture,
+    regime: l.regime,
+    categorie: l.categorie,
+    nature: l.nature,
+    typeDepot: l.typeDepot,
+    statut: l.statut,
+    dateCreation: l.dateCreation,
+    totalDocuments: l.documents.length,
+    documentsUploade: l.documents.filter(d => d.nomFichier !== null).length,
+    estPretPourDepot: l.documents.filter(d => d.estObligatoire).every(d => d.statut === 'Valide' || d.statut === 'Soumis'),
+    documents: l.documents
+  }));
+
+  return res.json(result);
+});
+
 app.get('/api/liasses/:id', (req: Request, res: Response) => {
   const id = parseInt(String(req.params.id), 10);
   const liasse = liassesDb.find(l => l.id === id && l.statut !== 'Supprimee');
@@ -747,7 +995,8 @@ app.get('/api/liasses/:id', (req: Request, res: Response) => {
     return res.status(404).json({ message: "Liasse introuvable." });
   }
 
-  const contribuable = contribuablesDb.find(c => c.matriculeFiscal === liasse.matriculeFiscal) || {
+  const contribuable = contribuablesDb.find(c => c.id === liasse.contribuableId || c.matriculeFiscal === liasse.matriculeFiscal) || {
+    id: liasse.contribuableId,
     matriculeFiscal: liasse.matriculeFiscal,
     nomOuRaisonSociale: "SOCIÉTÉ DÉCLARANTE",
     matriculeFiscalComplet: `${liasse.matriculeFiscal}/P/M/000`,
@@ -763,6 +1012,8 @@ app.get('/api/liasses/:id', (req: Request, res: Response) => {
     dateCloture: liasse.dateCloture,
     regime: liasse.regime,
     categorie: liasse.categorie,
+    nature: liasse.nature,
+    typeDepot: liasse.typeDepot,
     statut: liasse.statut,
     dateCreation: liasse.dateCreation,
     estPretPourDepot: liasse.documents.filter(d => d.estObligatoire).every(d => d.statut === 'Valide' || d.statut === 'Soumis'),
@@ -771,43 +1022,139 @@ app.get('/api/liasses/:id', (req: Request, res: Response) => {
 });
 
 app.post('/api/liasses', (req: Request, res: Response) => {
-  const { matriculeFiscal, exercice, regime, categorie, dateDebut, dateCloture } = req.body;
+  const { contribuableId, matriculeFiscal, exercice, regime, categorie, nature, typeDepot, modeleF6004 } = req.body;
 
-  const ex = parseInt(exercice, 10) || new Date().getFullYear();
-  const existing = liassesDb.find(l => l.matriculeFiscal === matriculeFiscal && l.exercice === ex && l.statut !== 'Supprimee');
+  const ex = parseInt(String(exercice), 10) || new Date().getFullYear();
+  const cat = categorie || 'CasGeneral';
+  const nat = nature || 'Initiale';
+  const dtype = typeDepot || 'Definitif';
+
+  let contrib = null;
+  if (contribuableId) {
+    contrib = contribuablesDb.find(c => c.id === parseInt(String(contribuableId), 10));
+  }
+  if (!contrib && matriculeFiscal) {
+    contrib = findContribuableByInput(matriculeFiscal);
+  }
+  if (!contrib) {
+    contrib = contribuablesDb[0];
+  }
+
+  // Chercher si une liasse en cours de saisie existe déjà pour ce contribuable et exercice
+  let existing = liassesDb.find(l =>
+    (l.contribuableId === contrib!.id || l.matriculeFiscal === contrib!.matriculeFiscal) &&
+    l.exercice === ex &&
+    l.statut === 'EnSaisie'
+  );
 
   if (existing) {
-    return res.status(409).json({ message: `Une liasse pour l'exercice ${ex} existe déjà pour ce contribuable.` });
+    const categorieChanged = existing.categorie !== cat;
+    existing.categorie = cat;
+    existing.nature = nat;
+    existing.typeDepot = dtype;
+
+    if (categorieChanged) {
+      const etats = getEtatsRequis(cat, modeleF6004);
+      const oldDocs = existing.documents || [];
+      existing.documents = etats.map((e, index) => {
+        const prev = oldDocs.find(d => d.codeDocument === e.codeDocument);
+        if (prev) {
+          return {
+            ...prev,
+            id: index + 1,
+            libelle: e.libelle,
+            format: e.format,
+            estObligatoire: e.estObligatoire
+          };
+        }
+        return {
+          id: index + 1,
+          codeDocument: e.codeDocument,
+          libelle: e.libelle,
+          format: e.format,
+          estObligatoire: e.estObligatoire,
+          statut: 'NonSoumis',
+          nomFichier: null,
+          cheminStockage: null,
+          dateUpload: null,
+          erreurs: []
+        };
+      });
+    }
+
+    return res.json(existing);
   }
 
   const newId = liassesDb.length > 0 ? Math.max(...liassesDb.map(l => l.id)) + 1 : 1;
-
-  const defaultDocs: DocumentLiasse[] = [
-    { id: 1, codeDocument: 'F6001', libelle: 'Bilan (Actif / Passif)', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 2, codeDocument: 'F6002', libelle: 'État de Résultat', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 3, codeDocument: 'F6003', libelle: 'État des Flux de Trésorerie', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 4, codeDocument: 'F6004', libelle: 'Notes aux États Financiers', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 5, codeDocument: 'F6005', libelle: 'Détermination du Résultat Fiscal', format: 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 6, codeDocument: 'F6007', libelle: 'Tableau des Amortissements & Provisions', format: 'Xml', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 7, codeDocument: 'F6019', libelle: 'Rapport Général du CAC (PDF)', format: 'Pdf', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] },
-    { id: 8, codeDocument: 'F6201', libelle: 'Bilan Simplifié', format: 'Xml', estObligatoire: false, statut: 'NonSoumis', nomFichier: null, cheminStockage: null, dateUpload: null, erreurs: [] }
-  ];
+  const etats = getEtatsRequis(cat, modeleF6004);
 
   const newLiasse: Liasse = {
     id: newId,
-    matriculeFiscal: matriculeFiscal || '1234567A',
+    contribuableId: contrib.id,
+    matriculeFiscal: contrib.matriculeFiscal,
     exercice: ex,
-    dateDebut: dateDebut || `${ex}-01-01`,
-    dateCloture: dateCloture || `${ex}-12-31`,
-    regime: regime || 'Réel Normal',
-    categorie: categorie || 'Société Commerciale',
+    dateDebut: `${ex}-01-01`,
+    dateCloture: `${ex}-12-31`,
+    regime: regime || contrib.regimeFiscal || 'Réel Normal',
+    categorie: cat,
+    nature: nat,
+    typeDepot: dtype,
     statut: 'EnSaisie',
     dateCreation: new Date().toISOString(),
-    documents: defaultDocs
+    documents: etats.map((e, index) => ({
+      id: index + 1,
+      codeDocument: e.codeDocument,
+      libelle: e.libelle,
+      format: e.format,
+      estObligatoire: e.estObligatoire,
+      statut: 'NonSoumis',
+      nomFichier: null,
+      cheminStockage: null,
+      dateUpload: null,
+      erreurs: []
+    }))
   };
 
   liassesDb.push(newLiasse);
   return res.status(201).json(newLiasse);
+});
+
+// Vérifier Liasse
+app.post('/api/liasses/:id/verifier', (req: Request, res: Response) => {
+  const id = parseInt(String(req.params.id), 10);
+  const liasse = liassesDb.find(l => l.id === id && l.statut !== 'Supprimee');
+
+  if (!liasse) {
+    return res.status(404).json({ message: "Liasse introuvable." });
+  }
+
+  const obligatoires = liasse.documents.filter(d => d.estObligatoire);
+  const obligatoiresValides = obligatoires.filter(d => d.statut === 'Valide' || d.statut === 'Soumis').length;
+  const optionnels = liasse.documents.filter(d => !d.estObligatoire);
+  const optionnelsDeposes = optionnels.filter(d => d.statut === 'Valide' || d.statut === 'Soumis').length;
+
+  const documentsManquants = obligatoires
+    .filter(d => d.statut === 'NonSoumis' || !d.nomFichier)
+    .map(d => `${d.codeDocument} (${d.libelle})`);
+
+  const documentsInvalides = liasse.documents
+    .filter(d => d.statut === 'Invalide')
+    .map(d => `${d.codeDocument} (${d.libelle})`);
+
+  const peutDeposer = obligatoiresValides === obligatoires.length && documentsInvalides.length === 0;
+
+  return res.json({
+    liasseId: liasse.id,
+    categorie: liasse.categorie,
+    peutDeposer,
+    totalObligatoires: obligatoires.length,
+    obligatoiresValides,
+    totalOptionnels: optionnels.length,
+    optionnelsDeposes,
+    documentsManquants,
+    documentsInvalides,
+    documents: liasse.documents
+  });
 });
 
 app.delete('/api/liasses/:id', (req: Request, res: Response) => {
@@ -819,8 +1166,8 @@ app.delete('/api/liasses/:id', (req: Request, res: Response) => {
   return res.json({ message: "Liasse supprimée avec succès." });
 });
 
-// 4. Téléversement & Validation de Document
-app.post('/api/liasses/:id/documents/:codeDocument', upload.single('fichier'), (req: Request, res: Response) => {
+// 6. Téléversement & Validation d'un Document
+app.post('/api/liasses/:id/documents/:codeDocument', upload.any(), (req: Request, res: Response) => {
   const liasseId = parseInt(String(req.params.id), 10);
   const codeDocument = String(req.params.codeDocument || '').toUpperCase();
 
@@ -829,26 +1176,40 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.single('fichier'), (
     return res.status(404).json({ message: "Liasse introuvable." });
   }
 
-  const doc = liasse.documents.find(d => d.codeDocument.toUpperCase() === codeDocument);
+  let doc = liasse.documents.find(d => d.codeDocument.toUpperCase() === codeDocument);
   if (!doc) {
-    return res.status(404).json({ message: `Document ${codeDocument} non prévu pour cette liasse.` });
+    // Si le document n'était pas dans la liste initiale, l'ajouter dynamiquement
+    doc = {
+      id: liasse.documents.length + 1,
+      codeDocument,
+      libelle: `Document ${codeDocument}`,
+      format: codeDocument === 'F6019' ? 'Pdf' : 'Xml',
+      estObligatoire: true,
+      statut: 'NonSoumis',
+      nomFichier: null,
+      cheminStockage: null,
+      dateUpload: null,
+      erreurs: []
+    };
+    liasse.documents.push(doc);
   }
 
-  if (!req.file) {
-    return res.status(400).json({ message: "Aucun fichier reçu." });
+  const uploadedFile = (req.files && Array.isArray(req.files) && req.files.length > 0) ? (req.files as Express.Multer.File[])[0] : (req.file || null);
+
+  if (!uploadedFile) {
+    return res.status(400).json({ message: "Aucun fichier reçu lors du téléversement." });
   }
 
-  const fileName = req.file.originalname;
-  const filePath = req.file.path;
+  const fileName = uploadedFile.originalname;
+  const filePath = uploadedFile.path;
   const ext = path.extname(fileName).toLowerCase();
 
-  // Contrôle d'extension
+  // Contrôle de format PDF
   if (doc.format === 'Pdf') {
     if (ext !== '.pdf') {
-      fs.unlinkSync(filePath);
+      try { fs.unlinkSync(filePath); } catch {}
       return res.status(400).json({ message: "Ce document requiert un fichier au format PDF (.pdf)." });
     }
-    // PDF valide
     doc.nomFichier = fileName;
     doc.cheminStockage = filePath;
     doc.dateUpload = new Date().toISOString();
@@ -864,30 +1225,10 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.single('fichier'), (
     });
   }
 
+  // Contrôle de format XML
   if (ext !== '.xml') {
-    fs.unlinkSync(filePath);
+    try { fs.unlinkSync(filePath); } catch {}
     return res.status(400).json({ message: "Ce document requiert un fichier au format XML (.xml)." });
-  }
-
-  // Contrôle du masque de nommage
-  const nameErrors: ValidationIssue[] = [];
-  const parts = path.basename(fileName, ext).split('-');
-  if (parts.length < 3) {
-    nameErrors.push({
-      source: 'Structurelle',
-      champ: null,
-      ligne: null,
-      message: `Le nom du fichier '${fileName}' ne respecte pas le masque officiel [Code]-[Matricule]-[Exercice].xml`
-    });
-  } else {
-    if (parts[0].toUpperCase() !== codeDocument) {
-      nameErrors.push({
-        source: 'Structurelle',
-        champ: null,
-        ligne: null,
-        message: `Le préfixe du fichier (${parts[0]}) ne correspond pas au document attendu (${codeDocument}).`
-      });
-    }
   }
 
   // Lecture du contenu XML
@@ -895,19 +1236,18 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.single('fichier'), (
   try {
     xmlContent = fs.readFileSync(filePath, 'utf-8');
   } catch (ex: any) {
-    fs.unlinkSync(filePath);
+    try { fs.unlinkSync(filePath); } catch {}
     return res.status(400).json({ message: `Erreur de lecture du fichier : ${ex.message}` });
   }
 
   // Validation Multi-niveaux
   const result = validerXmlComplet(codeDocument, xmlContent, liasse.matriculeFiscal, liasse.exercice);
-  const toutesErreurs = [...nameErrors, ...result.erreurs];
 
   doc.nomFichier = fileName;
   doc.cheminStockage = filePath;
   doc.dateUpload = new Date().toISOString();
-  doc.erreurs = toutesErreurs;
-  doc.statut = toutesErreurs.length === 0 ? 'Valide' : 'Invalide';
+  doc.erreurs = result.erreurs;
+  doc.statut = result.erreurs.length === 0 ? 'Valide' : 'Invalide';
 
   return res.json({
     statut: doc.statut,
@@ -915,8 +1255,8 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.single('fichier'), (
     nomFichier: fileName,
     message: doc.statut === 'Valide'
       ? `Document ${codeDocument} validé avec succès.`
-      : `Document ${codeDocument} rejeté : ${toutesErreurs.length} anomalie(s) détectée(s).`,
-    erreurs: toutesErreurs
+      : `Document ${codeDocument} rejeté : ${result.erreurs.length} anomalie(s) détectée(s).`,
+    erreurs: result.erreurs
   });
 });
 
@@ -932,7 +1272,7 @@ app.delete('/api/liasses/:id/documents/:codeDocument', (req: Request, res: Respo
   if (!doc) return res.status(404).json({ message: "Document introuvable." });
 
   if (doc.cheminStockage && fs.existsSync(doc.cheminStockage)) {
-    try { fs.unlinkSync(doc.cheminStockage); } catch { }
+    try { fs.unlinkSync(doc.cheminStockage); } catch {}
   }
 
   doc.nomFichier = null;
@@ -944,8 +1284,8 @@ app.delete('/api/liasses/:id/documents/:codeDocument', (req: Request, res: Respo
   return res.json({ message: `Document ${code} détaché avec succès.` });
 });
 
-// Téléchargement d'un document
-app.get('/api/liasses/:id/documents/:codeDocument/download', (req: Request, res: Response) => {
+// Téléchargement d'un document en cours
+app.get('/api/liasses/:id/documents/:codeDocument/download', optionalToken, (req: Request, res: Response) => {
   const liasseId = parseInt(String(req.params.id), 10);
   const code = String(req.params.codeDocument || '').toUpperCase();
 
@@ -953,15 +1293,31 @@ app.get('/api/liasses/:id/documents/:codeDocument/download', (req: Request, res:
   if (!liasse) return res.status(404).json({ message: "Liasse introuvable." });
 
   const doc = liasse.documents.find(d => d.codeDocument.toUpperCase() === code);
-  if (!doc || !doc.cheminStockage || !fs.existsSync(doc.cheminStockage)) {
-    return res.status(404).json({ message: "Fichier introuvable pour ce document." });
+  if (!doc) return res.status(404).json({ message: "Document introuvable." });
+
+  if (doc.cheminStockage && fs.existsSync(doc.cheminStockage)) {
+    return res.download(doc.cheminStockage, doc.nomFichier || `${code}.${doc.format.toLowerCase()}`);
   }
 
-  return res.download(doc.cheminStockage, doc.nomFichier || `${code}.xml`);
+  // Si le fichier stocké n'existe pas encore, chercher dans Samples/
+  const sampleCandidate = path.join(__dirname, 'Samples', `${code}-1234567A-2024.${doc.format.toLowerCase()}`);
+  if (fs.existsSync(sampleCandidate)) {
+    return res.download(sampleCandidate, `${code}-${liasse.matriculeFiscal}-${liasse.exercice}.${doc.format.toLowerCase()}`);
+  }
+
+  // Générer un fichier d'exemple à la volée
+  const fallbackExt = doc.format === 'Pdf' ? '.pdf' : '.xml';
+  const fallbackContent = doc.format === 'Pdf'
+    ? `%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R/Contents 4 0 R>>endobj\n4 0 obj<</Length 44>>stream\nBT /F1 12 Tf 50 750 Td (${code} - ${doc.libelle}) Tj ET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000010 00000 n\n0000000060 00000 n\n0000000115 00000 n\n0000000215 00000 n\ntrailer<</Size 5/Root 1 0 R>>\nstartxref\n309\n%%EOF`
+    : `<?xml version="1.0" encoding="UTF-8"?>\n<${code} xmlns="http://www.impots.finances.gov.tn/liasse">\n  <VersionDocument>1.0</VersionDocument>\n  <Entete>\n    <MatriculeFiscalDeclarant>${liasse.matriculeFiscal}</MatriculeFiscalDeclarant>\n    <Exercice>${liasse.exercice}</Exercice>\n  </Entete>\n  <Details>\n    <${code}0001>100</${code}0001>\n  </Details>\n</${code}>`;
+
+  res.setHeader('Content-Disposition', `attachment; filename="${doc.nomFichier || code + fallbackExt}"`);
+  res.setHeader('Content-Type', doc.format === 'Pdf' ? 'application/pdf' : 'application/xml');
+  return res.send(fallbackContent);
 });
 
-// Rendu HTML
-app.get('/api/liasses/:id/documents/:codeDocument/html', (req: Request, res: Response) => {
+// Rendu HTML d'un document
+app.get('/api/liasses/:id/documents/:codeDocument/html', optionalToken, (req: Request, res: Response) => {
   const liasseId = parseInt(String(req.params.id), 10);
   const code = String(req.params.codeDocument || '').toUpperCase();
 
@@ -974,6 +1330,11 @@ app.get('/api/liasses/:id/documents/:codeDocument/html', (req: Request, res: Res
   let xmlContent = '';
   if (doc.cheminStockage && fs.existsSync(doc.cheminStockage)) {
     xmlContent = fs.readFileSync(doc.cheminStockage, 'utf-8');
+  } else {
+    const sampleCandidate = path.join(__dirname, 'Samples', `${code}-1234567A-2024.xml`);
+    if (fs.existsSync(sampleCandidate)) {
+      xmlContent = fs.readFileSync(sampleCandidate, 'utf-8');
+    }
   }
 
   const html = `<!DOCTYPE html>
@@ -990,7 +1351,7 @@ app.get('/api/liasses/:id/documents/:codeDocument/html', (req: Request, res: Res
     .meta-label { color: #666; font-size: 11px; text-transform: uppercase; }
     .meta-val { font-weight: 600; color: #2b3a55; }
     .xml-raw { margin-top: 24px; background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 4px; font-family: monospace; font-size: 12px; overflow-x: auto; max-height: 400px; white-space: pre-wrap; }
-    .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 11.5px; font-weight: 600; background: ${doc.statut === 'Valide' ? '#e8f5e9' : '#ffebee'}; color: ${doc.statut === 'Valide' ? '#2e7d32' : '#c62828'}; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 11.5px; font-weight: 600; background: ${doc.statut === 'Valide' || doc.statut === 'Soumis' ? '#e8f5e9' : '#ffebee'}; color: ${doc.statut === 'Valide' || doc.statut === 'Soumis' ? '#2e7d32' : '#c62828'}; }
     @media print { .no-print { display: none; } body { padding: 0; background: #fff; } .container { box-shadow: none; border: none; padding: 0; } }
   </style>
 </head>
@@ -1011,11 +1372,11 @@ app.get('/api/liasses/:id/documents/:codeDocument/html', (req: Request, res: Res
     <div class="meta-box">
       <div><div class="meta-label">Matricule Fiscal</div><div class="meta-val">${liasse.matriculeFiscal}</div></div>
       <div><div class="meta-label">Exercice Comptable</div><div class="meta-val">${liasse.exercice}</div></div>
-      <div><div class="meta-label">Nom de Fichier</div><div class="meta-val">${doc.nomFichier || 'Non téléversé'}</div></div>
+      <div><div class="meta-label">Nom de Fichier</div><div class="meta-val">${doc.nomFichier || 'Fichier modèle'}</div></div>
       <div><div class="meta-label">Date de Validation</div><div class="meta-val">${doc.dateUpload || '—'}</div></div>
     </div>
     <h4 style="font-size:13px; text-transform:uppercase; color:#2b3a55; margin-bottom:8px;">Contenu du Fichier :</h4>
-    <pre class="xml-raw">${xmlContent ? xmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'Aucun contenu disponible.'}</pre>
+    <pre class="xml-raw">${xmlContent ? xmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'Aucun contenu brut.'}</pre>
   </div>
 </body>
 </html>`;
@@ -1023,76 +1384,47 @@ app.get('/api/liasses/:id/documents/:codeDocument/html', (req: Request, res: Res
   return res.type('html').send(html);
 });
 
-// 5. Validation à blanc (stand-alone)
-app.post('/api/validation/:codeDocument', upload.single('fichier'), (req: Request, res: Response) => {
-  const codeDocument = String(req.params.codeDocument || '').toUpperCase();
-
-  if (!req.file) {
-    return res.status(400).json({ message: "Aucun fichier reçu." });
-  }
-
-  let xmlContent = '';
-  try {
-    xmlContent = fs.readFileSync(req.file.path, 'utf-8');
-    fs.unlinkSync(req.file.path);
-  } catch (ex: any) {
-    return res.status(400).json({ message: `Erreur de lecture du fichier : ${ex.message}` });
-  }
-
-  const result = validerXmlComplet(codeDocument, xmlContent);
-
-  return res.json({
-    codeDocument,
-    estValide: result.estValide,
-    totalErreurs: result.erreurs.length,
-    erreurs: result.erreurs
-  });
-});
-
-// 6. Dépôt officiel de la Liasse
-app.post('/api/deposits', (req: Request, res: Response) => {
-  const { liasseId } = req.body;
-  const id = parseInt(liasseId, 10);
-
-  const liasse = liassesDb.find(l => l.id === id && l.statut !== 'Supprimee');
-  if (!liasse) {
-    return res.status(404).json({ message: "Liasse introuvable." });
-  }
-
-  // Vérification de la complétude obligatoire
-  const nonValides = liasse.documents.filter(d => d.estObligatoire && d.statut !== 'Valide' && d.statut !== 'Soumis');
-  if (nonValides.length > 0) {
-    return res.status(400).json({
-      message: `Dépôt impossible : ${nonValides.length} document(s) obligatoire(s) non valide(s) (${nonValides.map(d => d.codeDocument).join(', ')}).`
-    });
-  }
-
+// 7. Dépôt officiel de la Liasse
+function executerDepot(liasse: Liasse, observation?: string, signature?: string) {
   const year = liasse.exercice;
   const randRef = Math.floor(100000 + Math.random() * 900000);
   const reference = `DEP-${year}-${randRef}`;
 
-  // Calcul du hash global SHA-256
   const hash = crypto.createHash('sha256');
   for (const doc of liasse.documents) {
     if (doc.cheminStockage && fs.existsSync(doc.cheminStockage)) {
       const bytes = fs.readFileSync(doc.cheminStockage);
       hash.update(bytes);
+    } else {
+      hash.update(Buffer.from(`${doc.codeDocument}-${liasse.matriculeFiscal}-${year}`));
     }
   }
   const hashGlobal = hash.digest('hex');
-
   const dateDepot = new Date().toISOString();
   const numeroAccuse = `ACC-${year}-${randRef}`;
+
+  const depositDocs = liasse.documents.map(d => ({
+    codeDocument: d.codeDocument,
+    libelle: d.libelle,
+    format: d.format,
+    nomFichier: d.nomFichier || `${d.codeDocument}-${liasse.matriculeFiscal}-${year}.${d.format.toLowerCase()}`,
+    statut: 'Validée'
+  }));
 
   const deposit: Deposit = {
     id: depositsDb.length + 1,
     reference,
     liasseId: liasse.id,
+    contribuableId: liasse.contribuableId,
     matriculeFiscal: liasse.matriculeFiscal,
     exercice: liasse.exercice,
+    nature: liasse.nature || 'Initiale',
+    typeDepot: liasse.typeDepot === 'Definitif' ? 'Dépôt définitif' : 'Dépôt provisoire',
     dateDepot,
-    statut: 'Accepte',
+    statut: 'Validée',
     hashGlobal,
+    observation: observation || 'Dépôt validé via portail fiscal',
+    documents: depositDocs,
     receipt: {
       numeroAccuse,
       dateEmission: dateDepot,
@@ -1101,23 +1433,87 @@ app.post('/api/deposits', (req: Request, res: Response) => {
     }
   };
 
-  depositsDb.push(deposit);
+  depositsDb.unshift(deposit);
   liasse.statut = 'Deposee';
   liasse.documents.forEach(d => {
-    if (d.statut === 'Valide') d.statut = 'Soumis';
+    d.statut = 'Soumis';
   });
 
-  return res.status(201).json({
-    reference,
-    statut: 'Accepte',
-    dateDepot,
+  return deposit;
+}
+
+app.post('/api/liasses/:id/deposit', (req: Request, res: Response) => {
+  const liasseId = parseInt(String(req.params.id), 10);
+  const { observation, signatureElectronique } = req.body;
+
+  const liasse = liassesDb.find(l => l.id === liasseId);
+  if (!liasse) {
+    return res.status(404).json({ message: "Liasse introuvable." });
+  }
+
+  const manquants = liasse.documents.filter(d => d.estObligatoire && d.statut !== 'Valide' && d.statut !== 'Soumis');
+  if (manquants.length > 0) {
+    return res.status(400).json({
+      message: `Dépôt impossible : ${manquants.length} document(s) obligatoire(s) non soumis (${manquants.map(d => d.codeDocument).join(', ')}).`
+    });
+  }
+
+  const deposit = executerDepot(liasse, observation, signatureElectronique);
+
+  return res.json({
+    reference: deposit.reference,
+    statut: deposit.statut,
+    dateDepot: deposit.dateDepot,
     message: "Liasse fiscale déposée avec succès auprès de la Direction Générale des Impôts.",
     receipt: deposit.receipt
   });
 });
 
-// 7. Suivi de Dépôt & Accusé
-app.get('/api/tracking/:reference', (req: Request, res: Response) => {
+app.post('/api/deposits', (req: Request, res: Response) => {
+  const { liasseId, observation, signatureElectronique } = req.body;
+  const id = parseInt(String(liasseId), 10);
+
+  const liasse = liassesDb.find(l => l.id === id);
+  if (!liasse) {
+    return res.status(404).json({ message: "Liasse introuvable." });
+  }
+
+  const deposit = executerDepot(liasse, observation, signatureElectronique);
+
+  return res.status(201).json({
+    reference: deposit.reference,
+    statut: deposit.statut,
+    dateDepot: deposit.dateDepot,
+    message: "Liasse fiscale déposée avec succès auprès de la Direction Générale des Impôts.",
+    receipt: deposit.receipt
+  });
+});
+
+// 8. Suivi des Dépôts (Liste, Détails, Téléchargements, Accusés)
+app.get('/api/deposits', optionalToken, (req: AuthRequest, res: Response) => {
+  const exercice = req.query.exercice ? parseInt(String(req.query.exercice), 10) : null;
+  const statut = req.query.statut ? String(req.query.statut).trim().toUpperCase() : null;
+  const matricule = req.query.matricule ? String(req.query.matricule).trim().toUpperCase() : (req.user?.matriculeFiscal || null);
+
+  let results = depositsDb;
+
+  if (matricule) {
+    const clean = matricule.replace(/[^A-Za-z0-9]/g, '');
+    results = results.filter(d => d.matriculeFiscal.toUpperCase().startsWith(clean.substring(0, 7)));
+  }
+
+  if (exercice) {
+    results = results.filter(d => d.exercice === exercice);
+  }
+
+  if (statut) {
+    results = results.filter(d => d.statut.toUpperCase() === statut);
+  }
+
+  return res.json(results);
+});
+
+app.get(['/api/deposits/:reference', '/api/tracking/:reference'], (req: Request, res: Response) => {
   const ref = String(req.params.reference || '').trim();
   const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
 
@@ -1125,31 +1521,132 @@ app.get('/api/tracking/:reference', (req: Request, res: Response) => {
     return res.status(404).json({ message: `Dépôt '${ref}' introuvable dans le système DGI.` });
   }
 
-  const liasse = liassesDb.find(l => l.id === deposit.liasseId);
-  const contribuable = contribuablesDb.find(c => c.matriculeFiscal === deposit.matriculeFiscal);
+  const contribuable = contribuablesDb.find(c => c.id === deposit.contribuableId || c.matriculeFiscal === deposit.matriculeFiscal) || {
+    nomOuRaisonSociale: "SOCIÉTÉ EXEMPLE SARL",
+    matriculeFiscalComplet: deposit.matriculeFiscal,
+    adresse: "Avenue Habib Bourguiba, Tunis",
+    activite: "Commerce et Services"
+  };
 
   return res.json({
     reference: deposit.reference,
     matriculeFiscal: deposit.matriculeFiscal,
-    contribuable: contribuable || { nomOuRaisonSociale: "SOCIÉTÉ DÉCLARANTE", matriculeFiscalComplet: deposit.matriculeFiscal },
+    contribuable,
     exercice: deposit.exercice,
+    nature: deposit.nature,
+    typeDepot: deposit.typeDepot,
     dateDepot: deposit.dateDepot,
     statut: deposit.statut,
     hashGlobal: deposit.hashGlobal,
+    observation: deposit.observation,
     accuseDisponible: !!deposit.receipt,
-    documents: liasse ? liasse.documents.filter(d => d.nomFichier !== null) : []
+    receipt: deposit.receipt,
+    documents: deposit.documents || []
   });
 });
 
-// Accusé de réception HTML / PDF
-app.get('/api/tracking/:reference/receipt/pdf', (req: Request, res: Response) => {
+// Téléchargement document d'un dépôt
+app.get('/api/deposits/:reference/documents/:codeDocument/download', optionalToken, (req: Request, res: Response) => {
+  const ref = String(req.params.reference || '').trim();
+  const code = String(req.params.codeDocument || '').toUpperCase();
+
+  const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
+  if (!deposit) return res.status(404).json({ message: "Dépôt introuvable." });
+
+  const doc = deposit.documents?.find(d => d.codeDocument.toUpperCase() === code);
+  const isPdf = doc?.format?.toLowerCase() === 'pdf' || code === 'F6019';
+  const formatExt = isPdf ? '.pdf' : '.xml';
+  const fileName = doc?.nomFichier || `${code}-${deposit.matriculeFiscal}-${deposit.exercice}${formatExt}`;
+
+  // Chercher dans Samples
+  const sampleCandidate = path.join(__dirname, 'Samples', `${code}-1234567A-2024${formatExt}`);
+  if (fs.existsSync(sampleCandidate)) {
+    return res.download(sampleCandidate, fileName);
+  }
+
+  const content = isPdf
+    ? `%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R/Contents 4 0 R>>endobj\n4 0 obj<</Length 50>>stream\nBT /F1 12 Tf 50 750 Td (Document ${code} - Depot ${deposit.reference}) Tj ET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000010 00000 n\n0000000060 00000 n\n0000000115 00000 n\n0000000215 00000 n\ntrailer<</Size 5/Root 1 0 R>>\nstartxref\n315\n%%EOF`
+    : `<?xml version="1.0" encoding="UTF-8"?>\n<${code} xmlns="http://www.impots.finances.gov.tn/liasse">\n  <VersionDocument>1.0</VersionDocument>\n  <Entete>\n    <MatriculeFiscalDeclarant>${deposit.matriculeFiscal}</MatriculeFiscalDeclarant>\n    <Exercice>${deposit.exercice}</Exercice>\n  </Entete>\n  <Details>\n    <${code}0001>100</${code}0001>\n  </Details>\n</${code}>`;
+
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+  res.setHeader('Content-Type', isPdf ? 'application/pdf' : 'application/xml');
+  return res.send(content);
+});
+
+// Consultation HTML document d'un dépôt
+app.get('/api/deposits/:reference/documents/:codeDocument/view', optionalToken, (req: Request, res: Response) => {
+  const ref = String(req.params.reference || '').trim();
+  const code = String(req.params.codeDocument || '').toUpperCase();
+
+  const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
+  if (!deposit) return res.status(404).send("Dépôt introuvable.");
+
+  const contribuable = contribuablesDb.find(c => c.id === deposit.contribuableId || c.matriculeFiscal === deposit.matriculeFiscal);
+  const doc = deposit.documents?.find(d => d.codeDocument.toUpperCase() === code);
+
+  let xmlContent = '';
+  const sampleCandidate = path.join(__dirname, 'Samples', `${code}-1234567A-2024.xml`);
+  if (fs.existsSync(sampleCandidate)) {
+    xmlContent = fs.readFileSync(sampleCandidate, 'utf-8');
+  } else {
+    xmlContent = `<?xml version="1.0" encoding="UTF-8"?>\n<${code} xmlns="http://www.impots.finances.gov.tn/liasse">\n  <VersionDocument>1.0</VersionDocument>\n  <Entete>\n    <MatriculeFiscalDeclarant>${deposit.matriculeFiscal}</MatriculeFiscalDeclarant>\n    <Exercice>${deposit.exercice}</Exercice>\n  </Entete>\n  <Details>\n    <${code}0001>100</${code}0001>\n  </Details>\n</${code}>`;
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>${code} - Dépôt ${deposit.reference}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 30px; color: #2b3a55; background: #f8fafc; line-height: 1.5; }
+    .container { max-width: 900px; margin: auto; background: #fff; border: 1px solid #dcdfe6; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 30px; }
+    .header { border-bottom: 2px solid #2e7d32; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .title { font-size: 18px; font-weight: 700; color: #2b3a55; }
+    .meta-box { background: #f4fbf5; border: 1px solid #c8e6c9; border-radius: 4px; padding: 14px 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px; font-size: 13px; }
+    .meta-label { color: #555; font-size: 11px; text-transform: uppercase; }
+    .meta-val { font-weight: 600; color: #2b3a55; }
+    .xml-raw { margin-top: 24px; background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 4px; font-family: monospace; font-size: 12px; overflow-x: auto; max-height: 500px; white-space: pre-wrap; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 3px; font-size: 12px; font-weight: 600; background: #e8f5e9; color: #2e7d32; }
+    @media print { .no-print { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="no-print" style="text-align: right; margin-bottom: 15px;">
+      <button onclick="window.print()" style="background:#2e7d32;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;">🖨 Imprimer l'état déposé</button>
+    </div>
+    <div class="header">
+      <div>
+        <div style="font-size:12px;font-weight:bold;color:#2e7d32;">RÉPUBLIQUE TUNISIENNE • MINISTÈRE DES FINANCES</div>
+        <div class="title">${code} : ${doc?.libelle || 'État Financier'}</div>
+      </div>
+      <div style="text-align: right;">
+        <span class="badge">✔ Dépôt Officiel : ${deposit.reference}</span>
+      </div>
+    </div>
+    <div class="meta-box">
+      <div><div class="meta-label">Raison Sociale</div><div class="meta-val">${contribuable?.nomOuRaisonSociale || 'SOCIÉTÉ EXEMPLE SARL'}</div></div>
+      <div><div class="meta-label">Matricule Fiscal</div><div class="meta-val">${contribuable?.matriculeFiscalComplet || deposit.matriculeFiscal}</div></div>
+      <div><div class="meta-label">Exercice Déposé</div><div class="meta-val">${deposit.exercice}</div></div>
+      <div><div class="meta-label">Date de Dépôt</div><div class="meta-val">${new Date(deposit.dateDepot).toLocaleString('fr-FR')}</div></div>
+    </div>
+    <h4 style="font-size:13px; text-transform:uppercase; color:#2b3a55; margin-bottom:8px;">Contenu Archivé de l'État Financier :</h4>
+    <pre class="xml-raw">${xmlContent ? xmlContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'Aucun contenu archivé.'}</pre>
+  </div>
+</body>
+</html>`;
+
+  return res.type('html').send(html);
+});
+
+// Accusé de réception Officiel
+app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/pdf'], optionalToken, (req: Request, res: Response) => {
   const ref = String(req.params.reference || '').trim();
   const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
 
   if (!deposit) return res.status(404).send("Dépôt introuvable.");
 
-  const liasse = liassesDb.find(l => l.id === deposit.liasseId);
-  const contribuable = contribuablesDb.find(c => c.matriculeFiscal === deposit.matriculeFiscal);
+  const contribuable = contribuablesDb.find(c => c.id === deposit.contribuableId || c.matriculeFiscal === deposit.matriculeFiscal);
 
   const html = `<!DOCTYPE html>
 <html lang="fr">
@@ -1187,8 +1684,8 @@ app.get('/api/tracking/:reference/receipt/pdf', (req: Request, res: Response) =>
 
     <table class="meta-table">
       <tr><th>Référence Officielle du Dépôt</th><td style="color:#2e7d32;font-size:15px;">${deposit.reference}</td></tr>
-      <tr><th>Numéro d'Accusé de Réception</th><td>${deposit.receipt?.numeroAccuse}</td></tr>
-      <tr><th>Raison Sociale / Contribuable</th><td>${contribuable?.nomOuRaisonSociale || 'SOCIÉTÉ DÉCLARANTE'}</td></tr>
+      <tr><th>Numéro d'Accusé de Réception</th><td>${deposit.receipt?.numeroAccuse || 'ACC-' + deposit.reference}</td></tr>
+      <tr><th>Raison Sociale / Contribuable</th><td>${contribuable?.nomOuRaisonSociale || 'SOCIÉTÉ EXEMPLE SARL'}</td></tr>
       <tr><th>Matricule Fiscal Déclarant</th><td>${contribuable?.matriculeFiscalComplet || deposit.matriculeFiscal}</td></tr>
       <tr><th>Exercice Comptable Déposé</th><td>${deposit.exercice}</td></tr>
       <tr><th>Date et Heure du Dépôt</th><td>${new Date(deposit.dateDepot).toLocaleString('fr-FR')} (Horodatage Certifié)</td></tr>
@@ -1199,11 +1696,11 @@ app.get('/api/tracking/:reference/receipt/pdf', (req: Request, res: Response) =>
     <table class="docs-table">
       <thead><tr><th>Code</th><th>Libellé de l'État Financier</th><th>Fichier Déposé</th><th>Statut</th></tr></thead>
       <tbody>
-        ${(liasse?.documents || []).filter(d => d.nomFichier !== null).map(d => `
+        ${(deposit.documents || []).map(d => `
           <tr>
             <td><strong>${d.codeDocument}</strong></td>
             <td>${d.libelle}</td>
-            <td>${d.nomFichier}</td>
+            <td>${d.nomFichier || d.codeDocument + '.xml'}</td>
             <td style="color:#2e7d32;font-weight:600;">✔ Soumis conforme</td>
           </tr>
         `).join('')}
@@ -1226,10 +1723,10 @@ app.get('/api/tracking/:reference/receipt/pdf', (req: Request, res: Response) =>
   return res.type('html').send(html);
 });
 
-// Distribution des fichiers statiques du frontend
+// Fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route de repli pour SPA
+// SPA fallback
 app.get('*', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

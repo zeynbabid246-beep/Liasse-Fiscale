@@ -1150,6 +1150,7 @@
 
       goToApp();
       showPasswordPrompt(identifiant, password);
+      await handleSearchContribuable();
     } catch (err) {
       showAlert('login-alert', err.message || 'Erreur réseau.');
     }
@@ -1350,7 +1351,7 @@
   /// obligatoire manque ou n'est pas soumis, le backend renvoie 400 avec la liste précise —
   /// on l'affiche telle quelle sous forme de message "Dépôt invalide", sans rien inventer.
   async function tenterFinaliserDepot() {
-    const manquants = currentLiasseDocuments.filter(d => d.estObligatoire && d.statut !== 'Soumis');
+    const manquants = currentLiasseDocuments.filter(d => d.estObligatoire && d.statut !== 'Soumis' && d.statut !== 'Valide');
 
     if (manquants.length > 0) {
       const liste = manquants.map(d => `${d.codeDocument} (${d.libelle})`).join(', ');
