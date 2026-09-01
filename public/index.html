@@ -982,17 +982,19 @@
   const documentErrorsMap = {}; // codeDocument -> liste d'erreurs de la dernière validation
 
   function statutBadgeHtml(doc) {
-    if (doc.statut === 'Soumis' || doc.statut === 'Valide') {
-      return '<span class="badge badge-validee">✔ Valide / Soumis</span>';
-    }
+    const erreurs = (documentErrorsMap[doc.codeDocument] && documentErrorsMap[doc.codeDocument].length > 0)
+      ? documentErrorsMap[doc.codeDocument]
+      : (doc.erreurs || []);
 
-    // 'Invalide' ou présence d'un nom de fichier non valide
-    if (doc.statut === 'Invalide' || doc.nomFichier) {
-      const erreurs = documentErrorsMap[doc.codeDocument] || [];
+    if (doc.statut === 'Invalide' || erreurs.length > 0) {
       const detail = erreurs.length
         ? ` (${erreurs.length} erreur${erreurs.length > 1 ? 's' : ''})`
         : '';
       return `<span class="badge badge-erreur" style="cursor:pointer;" onclick="voirErreursDocument('${doc.codeDocument}')">✘ Non conforme${detail}</span>`;
+    }
+
+    if (doc.nomFichier && (doc.statut === 'Soumis' || doc.statut === 'Valide')) {
+      return '<span class="badge badge-validee">✔ Valide / Soumis</span>';
     }
 
     return doc.estObligatoire
@@ -1311,34 +1313,90 @@
     });
   }
 
-  function onFileSelected(codeDocument) {
+  async function onFileSelected(codeDocument) {
     const input = document.getElementById(`file-${codeDocument}`);
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const docDef = currentLiasseDocuments.find(d => d.codeDocument === codeDocument);
-      const isPdfExpected = docDef && docDef.format.toLowerCase() === 'pdf';
-      const fileExt = file.name.split('.').pop().toLowerCase();
-      
-      // Technical format check
-      if (isPdfExpected && fileExt !== 'pdf') {
-        showAlert('app-alert', `Erreur technique : Le document ${codeDocument} exige le format PDF (.pdf).`);
-        input.value = '';
-        return;
-      }
-      if (!isPdfExpected && fileExt !== 'xml') {
-        showAlert('app-alert', `Erreur technique : Le document ${codeDocument} exige le format XML normalisé (.xml).`);
-        input.value = '';
-        return;
-      }
+    if (!input || !input.files || !input.files[0]) return;
 
-      selectedFilesMap[codeDocument] = file;
-      const hint = document.getElementById(`hint-${codeDocument}`);
-      if (hint) {
-        hint.innerHTML = `<span style="color:#1e8a4c;font-weight:700;">✔ ${file.name}</span> <span style="font-size:11px;color:#666;">(${(file.size / 1024).toFixed(1)} KB - Conforme)</span>`;
-      }
-
-      checkUploaderReadiness();
+    const file = input.files[0];
+    const docDef = currentLiasseDocuments.find(d => d.codeDocument === codeDocument);
+    const isPdfExpected = docDef && docDef.format.toLowerCase() === 'pdf';
+    const fileExt = file.name.split('.').pop().toLowerCase();
+    
+    // Technical format check
+    if (isPdfExpected && fileExt !== 'pdf') {
+      showAlert('app-alert', `Erreur technique : Le document ${codeDocument} exige le format PDF (.pdf).`);
+      input.value = '';
+      return;
     }
+    if (!isPdfExpected && fileExt !== 'xml') {
+      showAlert('app-alert', `Erreur technique : Le document ${codeDocument} exige le format XML normalisé (.xml).`);
+      input.value = '';
+      return;
+    }
+
+    const hint = document.getElementById(`hint-${codeDocument}`);
+    const statutCell = document.getElementById(`statut-${codeDocument}`);
+    if (hint) hint.innerHTML = `<span style="color:#2b3a55;">⏳ Téléversement & validation en cours...</span>`;
+    if (statutCell) statutCell.innerHTML = `<span class="badge badge-loading">⏳ Validation...</span>`;
+
+    if (!currentLiasseId) await initOrFetchLiasse();
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await apiCall(`/liasses/${currentLiasseId}/documents/${codeDocument}`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+
+      let targetDoc = currentLiasseDocuments.find(d => d.codeDocument === codeDocument);
+      if (!targetDoc) {
+        targetDoc = { codeDocument, libelle: `Document ${codeDocument}`, format: isPdfExpected ? 'Pdf' : 'Xml', estObligatoire: true, statut: 'NonSoumis', nomFichier: null, erreurs: [] };
+        currentLiasseDocuments.push(targetDoc);
+      }
+
+      if (res.ok && data.statut === 'Valide') {
+        targetDoc.statut = 'Valide';
+        targetDoc.nomFichier = file.name;
+        targetDoc.erreurs = [];
+        delete documentErrorsMap[codeDocument];
+        delete selectedFilesMap[codeDocument];
+
+        if (hint) {
+          hint.innerHTML = `<span style="color:#1e8a4c;font-weight:700;">✔ ${file.name}</span> <span style="font-size:11px;color:#666;">(${(file.size / 1024).toFixed(1)} KB - Conforme)</span>`;
+        }
+        if (statutCell) {
+          statutCell.innerHTML = statutBadgeHtml(targetDoc);
+        }
+        showAlert('app-alert', `✔ Document ${codeDocument} (${file.name}) téléversé et validé avec succès.`, false);
+      } else {
+        const errs = (data.erreurs && data.erreurs.length > 0)
+          ? data.erreurs
+          : [{ source: 'Structurelle', champ: null, ligne: null, message: data.message || 'Document XML non conforme aux spécifications DGI.' }];
+
+        targetDoc.statut = 'Invalide';
+        targetDoc.nomFichier = file.name;
+        targetDoc.erreurs = errs;
+        documentErrorsMap[codeDocument] = errs;
+        delete selectedFilesMap[codeDocument];
+
+        if (hint) {
+          hint.innerHTML = `<span style="color:#c0392b;font-weight:700;">✘ ${file.name}</span> <span style="font-size:11px;color:#c0392b;">(Non conforme)</span>`;
+        }
+        if (statutCell) {
+          statutCell.innerHTML = statutBadgeHtml(targetDoc);
+        }
+        showAlert('app-alert', `❌ Document ${codeDocument} (${file.name}) rejeté : ${errs.length} anomalie(s) détectée(s). Cliquez sur le badge rouge pour afficher le détail.`, true);
+      }
+    } catch (err) {
+      console.error('Erreur upload:', err);
+      showAlert('app-alert', `Erreur réseau lors de l'envoi du document ${codeDocument} : ${err.message}`, true);
+      if (hint) hint.innerHTML = `<span style="color:#c0392b;">Erreur réseau</span>`;
+    }
+
+    checkUploaderReadiness();
   }
 
   function checkUploaderReadiness() {

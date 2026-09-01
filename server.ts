@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import multer from 'multer';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -554,6 +554,22 @@ function validerXmlComplet(
 ): { estValide: boolean; erreurs: ValidationIssue[]; detailsExtraits?: Record<string, any> } {
   const erreurs: ValidationIssue[] = [];
 
+  // Niveau 0 : Validation formelle de syntaxe et de bien-formation XML
+  const xmlValidation = XMLValidator.validate(xmlString, {
+    allowBooleanAttributes: false
+  });
+
+  if (xmlValidation !== true) {
+    const errObj = (xmlValidation as any).err || {};
+    erreurs.push({
+      source: 'Structurelle',
+      champ: null,
+      ligne: errObj.line || null,
+      message: `XML mal formé (ligne ${errObj.line || '?'}, col ${errObj.col || '?'}) : ${errObj.msg || 'Syntaxe XML non conforme'}`
+    });
+    return { estValide: false, erreurs };
+  }
+
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
@@ -570,7 +586,7 @@ function validerXmlComplet(
       source: 'Structurelle',
       champ: null,
       ligne: null,
-      message: `XML mal formé : ${ex.message || 'Syntaxe XML invalide'}`
+      message: `Erreur de décodage XML : ${ex.message || 'Syntaxe XML invalide'}`
     });
     return { estValide: false, erreurs };
   }
@@ -609,6 +625,16 @@ function validerXmlComplet(
   }
 
   const rootElement = parsedObj[rawRootTag];
+  if (!rootElement || typeof rootElement !== 'object') {
+    erreurs.push({
+      source: 'Structurelle',
+      champ: rootLocalName,
+      ligne: 1,
+      message: `Le document XML '${codeDocument}' est vide ou ne comporte pas d'éléments enfants.`
+    });
+    return { estValide: false, erreurs };
+  }
+
   const xmlns = rootElement?.['@_xmlns'] || rootElement?.['@_xmlns:lf'] || '';
   if (xmlns && xmlns !== TARGET_NAMESPACE) {
     erreurs.push({
@@ -619,30 +645,71 @@ function validerXmlComplet(
     });
   }
 
-  if (erreurs.length > 0) {
-    return { estValide: false, erreurs };
-  }
-
+  // Contrôle des éléments enfants directs de la racine (seuls VersionDocument, Entete, Details autorisés)
   let entete: any = null;
   let details: any = null;
 
   for (const [key, val] of Object.entries(rootElement)) {
+    if (key.startsWith('@_')) continue;
     const local = key.includes(':') ? key.split(':')[1] : key;
     if (local === 'Entete') entete = val;
-    if (local === 'Details') details = val;
+    else if (local === 'Details') details = val;
+    else if (local !== 'VersionDocument') {
+      erreurs.push({
+        source: 'Structurelle',
+        champ: local,
+        ligne: null,
+        message: `Élément inattendu '${local}' sous la racine '${codeDocument}'. Seuls 'VersionDocument', 'Entete' et 'Details' sont autorisés par le schéma XSD officiel.`
+      });
+    }
   }
 
+  if (!entete || typeof entete !== 'object') {
+    erreurs.push({
+      source: 'Structurelle',
+      champ: 'Entete',
+      ligne: null,
+      message: `Élément obligatoire '<Entete>' manquant ou invalide dans le document '${codeDocument}'.`
+    });
+  }
+
+  if (!details || typeof details !== 'object') {
+    erreurs.push({
+      source: 'Structurelle',
+      champ: 'Details',
+      ligne: null,
+      message: `Élément obligatoire '<Details>' manquant ou invalide dans le document '${codeDocument}'.`
+    });
+  }
+
+  // Contrôle strict de l'Entete
   if (entete && typeof entete === 'object') {
     let matriculeDeclarant = '';
     let exerciceXml = 0;
 
     for (const [k, v] of Object.entries(entete)) {
+      if (k.startsWith('@_')) continue;
       const local = k.includes(':') ? k.split(':')[1] : k;
       if (local === 'MatriculeFiscalDeclarant') matriculeDeclarant = String(v).trim();
-      if (local === 'Exercice') exerciceXml = parseInt(String(v), 10);
+      else if (local === 'Exercice') exerciceXml = parseInt(String(v), 10);
+      else if (local !== 'CodeDocument' && local !== 'NatureDepot' && local !== 'TypeDepot' && local !== 'Periodicite' && local !== 'DateDepot') {
+        erreurs.push({
+          source: 'Structurelle',
+          champ: local,
+          ligne: null,
+          message: `Élément non standard '${local}' détecté dans l'entête XML du document '${codeDocument}'.`
+        });
+      }
     }
 
-    if (matriculeAttendu && matriculeDeclarant) {
+    if (!matriculeDeclarant) {
+      erreurs.push({
+        source: 'Structurelle',
+        champ: 'MatriculeFiscalDeclarant',
+        ligne: null,
+        message: `L'élément '<MatriculeFiscalDeclarant>' est obligatoire dans l'entête XML.`
+      });
+    } else if (matriculeAttendu) {
       const cleanExpected = matriculeAttendu.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       const cleanFound = matriculeDeclarant.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       if (!cleanFound.startsWith(cleanExpected) && !cleanExpected.startsWith(cleanFound)) {
@@ -655,7 +722,14 @@ function validerXmlComplet(
       }
     }
 
-    if (exerciceAttendu && exerciceXml && exerciceXml !== exerciceAttendu) {
+    if (!exerciceXml || isNaN(exerciceXml)) {
+      erreurs.push({
+        source: 'Structurelle',
+        champ: 'Exercice',
+        ligne: null,
+        message: `L'élément '<Exercice>' est obligatoire et doit être une année valide dans l'entête XML.`
+      });
+    } else if (exerciceAttendu && exerciceXml !== exerciceAttendu) {
       erreurs.push({
         source: 'Structurelle',
         champ: 'Exercice',
