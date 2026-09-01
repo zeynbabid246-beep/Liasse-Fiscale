@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lf:F6001 xmlns:lf="http://www.impots.finances.gov.tn/liasse">
+  <lf:Entete>
+    <lf:MatriculeFiscal>0000121J</lf:MatriculeFiscal>
+    <lf:Exercice>2026</lf:Exercice>
+    <lf:CodeDocument>F6001</lf:CodeDocument>
+  </lf:Entete>
+  <lf:Corps>
+    <lf:Ligne code="01" libelle="Chiffre d'affaires" montant="150000.000"/>
+    <lf:Ligne code="02" libelle="Charges d'exploitation" montant="95000.000">
+    <!-- missing closing tag for Ligne 02 on purpose, and Corps/root never closed -->

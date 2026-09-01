@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lf:F6003 xmlns:lf="http://www.impots.finances.gov.tn/liasse" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.impots.finances.gov.tn/liasse F6003.xsd">
+  <lf:Entete>
+    <lf:MatriculeFiscalDeclarant>0000121J</lf:MatriculeFiscalDeclarant>
+    <lf:NometPrenomouRaisonSociale>SOCIETE EXEMPLE SARL</lf:NometPrenomouRaisonSociale>
+    <lf:Activite>COMMERCE ET SERVICES</lf:Activite>
+    <lf:Adresse>AVENUE HABIB BOURGUIBA, TUNIS</lf:Adresse>
+    <lf:Exercice>2026</lf:Exercice>
+    <lf:DateDebutExercice>01/01/2026</lf:DateDebutExercice>
+    <lf:DateClotureExercice>31/12/2026</lf:DateClotureExercice>
+    <lf:ActeDeDepot>0</lf:ActeDeDepot>
+    <lf:NatureDepot>D</lf:NatureDepot>
+  </lf:Entete>
+  <lf:F60030001>4850000</lf:F60030001>
+  <lf:F60030002>4850000</lf:F60030002>
+  <lf:F60030003>4850000</lf:F60030003>
+  <lf:F60030020>4320000</lf:F60030020>
+  <lf:F60030025>2650000</lf:F60030025>
+  <lf:F60030036>1120000</lf:F60030036>
+  <lf:F60030046>350000</lf:F60030046>
+  <lf:F60030053>200000</lf:F60030053>
+  <lf:F60030061>530000</lf:F60030061>
+  <lf:F60030062>65000</lf:F60030062>
+  <lf:F60030065>15000</lf:F60030065>
+  <lf:F60030076>480000</lf:F60030076>
+  <lf:F60030077>141450</lf:F60030077>
+  <lf:F60030084>338550</lf:F60030084>
+  <lf:F60030173>295000</lf:F60030173>
+</lf:F6003>

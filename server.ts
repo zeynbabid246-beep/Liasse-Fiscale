@@ -507,7 +507,7 @@ function getStructuralSchemaAllowedTags(codeDocument: string): Set<string> | nul
     if (fs.existsSync(candidate)) {
       try {
         const content = fs.readFileSync(candidate, 'utf-8');
-        const matches = content.matchAll(/<xs:element\s+name="([^"]+)"/g);
+        const matches = content.matchAll(/<(?:xsd|xs):element\s+name="([^"]+)"/g);
         const tags = new Set<string>();
         for (const m of matches) {
           tags.add(m[1]);
