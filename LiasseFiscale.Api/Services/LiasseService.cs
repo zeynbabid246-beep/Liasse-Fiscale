@@ -40,7 +40,7 @@ public class LiasseService : ILiasseService
             ActeDeDepot = request.ActeDeDepot,
             TypeDepot = request.TypeDepot,
             ModeleF6004Choisi = request.ModeleF6004Choisi,
-            Statut = StatutLiasse.EnCoursDeSaisie
+            Statut = StatutLiasse.Brouillon
         };
 
         // Génère la liste des états financiers selon la catégorie / secteur
@@ -114,6 +114,34 @@ public class LiasseService : ILiasseService
             l.Statut != StatutLiasse.Supprimee);
 
         return !existeDefinitive;
+    }
+
+    public bool PeutSupprimer(Liasse liasse)
+    {
+        return liasse.Statut switch
+        {
+            StatutLiasse.Brouillon => true,
+            StatutLiasse.EnSaisie => true,
+            StatutLiasse.EnErreur => true,
+            StatutLiasse.Rejetee => true,
+            _ => false
+        };
+    }
+
+    public bool PeutTransitionVers(Liasse liasse, StatutLiasse nouveauStatut)
+    {
+        return (liasse.Statut, nouveauStatut) switch
+        {
+            (StatutLiasse.Brouillon, StatutLiasse.EnSaisie) => true,
+            (StatutLiasse.Brouillon, StatutLiasse.EnErreur) => true,
+            (StatutLiasse.EnSaisie, StatutLiasse.EnAttenteDeValidation) => true,
+            (StatutLiasse.EnSaisie, StatutLiasse.EnErreur) => true,
+            (StatutLiasse.EnAttenteDeValidation, StatutLiasse.Validee) => true,
+            (StatutLiasse.EnAttenteDeValidation, StatutLiasse.Rejetee) => true,
+            (StatutLiasse.EnErreur, StatutLiasse.EnSaisie) => true,
+            (StatutLiasse.Rejetee, StatutLiasse.EnSaisie) => true,
+            _ => false
+        };
     }
 
     public bool CombinaisonEstAutorisee(NatureLiasse nature, TypeDepot type, ActeDeDepot acte)

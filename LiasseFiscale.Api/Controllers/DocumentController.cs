@@ -24,15 +24,18 @@ public class DocumentController : ControllerBase
     private readonly AppDbContext _db;
     private readonly IXmlValidationService _xmlValidationService;
     private readonly IWebHostEnvironment _env;
+    private readonly ISecureFileService _secureFileService;
 
     public DocumentController(
         AppDbContext db,
         IXmlValidationService xmlValidationService,
-        IWebHostEnvironment env)
+        IWebHostEnvironment env,
+        ISecureFileService secureFileService)
     {
         _db = db;
         _xmlValidationService = xmlValidationService;
         _env = env;
+        _secureFileService = secureFileService;
     }
 
     /// <summary>
@@ -48,6 +51,18 @@ public class DocumentController : ControllerBase
             return BadRequest(new { message = "Fichier vide ou manquant." });
         }
 
+        // PHASE 3: Validate file size (max 50 MB)
+        if (!_secureFileService.IsFileSizeValid(uploadedFile.Length, 50_000_000))
+        {
+            return BadRequest(new { message = "Le fichier est trop volumineux. Taille maximale : 50 MB." });
+        }
+
+        // PHASE 3: Validate filename is safe
+        if (!_secureFileService.IsFilenameValid(uploadedFile.FileName))
+        {
+            return BadRequest(new { message = "Nom de fichier invalide ou contenant des caractères non autorisés." });
+        }
+
         var liasse = await _db.Liasses
             .Include(l => l.Contribuable)
             .Include(l => l.Documents)
@@ -56,6 +71,14 @@ public class DocumentController : ControllerBase
         if (liasse is null)
         {
             return NotFound(new { message = "Liasse introuvable." });
+        }
+
+        if (!await _db.UserCompanyAuthorizations.AnyAsync(a => a.UserId == HttpContext.GetUserId()
+                && a.ContribuableId == liasse.ContribuableId
+                && a.IsActive
+                && (a.DateExpired == null || a.DateExpired > DateTime.UtcNow)))
+        {
+            return Forbid();
         }
 
         var documentSlot = liasse.Documents.FirstOrDefault(d => d.CodeDocument.Equals(codeDocument, StringComparison.OrdinalIgnoreCase));
@@ -99,14 +122,27 @@ public class DocumentController : ControllerBase
             Directory.CreateDirectory(dossierStockage);
             var cheminStockage = Path.Combine(dossierStockage, uploadedFile.FileName);
 
+            // PHASE 3: Verify path is safe (no traversal)
+            if (!_secureFileService.IsPathSafe(dossierStockage, cheminStockage))
+            {
+                return BadRequest(new { message = "Chemin de stockage invalide." });
+            }
+
+            // PHASE 3: Calculate checksum before storing
+            await using var pdfStream = uploadedFile.OpenReadStream();
+            var pdfChecksum = await _secureFileService.CalculateChecksumAsync(pdfStream);
+
             await using (var fileStream = System.IO.File.Create(cheminStockage))
             {
-                await uploadedFile.CopyToAsync(fileStream);
+                pdfStream.Position = 0;
+                await pdfStream.CopyToAsync(fileStream);
             }
 
             documentSlot.NomFichier = uploadedFile.FileName;
             documentSlot.CheminStockage = cheminStockage;
+            documentSlot.ChecksumSha256 = pdfChecksum; // PHASE 3: Store checksum
             documentSlot.DateUpload = DateTime.UtcNow;
+            documentSlot.UploadedBy = HttpContext.GetUserId(); // PHASE 1: Track uploader
             documentSlot.Statut = StatutValidation.Valide;
             documentSlot.Erreurs.Clear();
 
@@ -191,6 +227,16 @@ public class DocumentController : ControllerBase
         Directory.CreateDirectory(dossierStockageXml);
         var cheminStockageXml = Path.Combine(dossierStockageXml, uploadedFile.FileName);
 
+        // PHASE 3: Verify path is safe (no traversal)
+        if (!_secureFileService.IsPathSafe(dossierStockageXml, cheminStockageXml))
+        {
+            return BadRequest(new { message = "Chemin de stockage invalide." });
+        }
+
+        // PHASE 3: Calculate checksum before storing
+        stream.Position = 0;
+        var xmlChecksum = await _secureFileService.CalculateChecksumAsync(stream);
+
         await using (var fileStream = System.IO.File.Create(cheminStockageXml))
         {
             stream.Position = 0;
@@ -199,7 +245,9 @@ public class DocumentController : ControllerBase
 
         documentSlot.NomFichier = uploadedFile.FileName;
         documentSlot.CheminStockage = cheminStockageXml;
+        documentSlot.ChecksumSha256 = xmlChecksum; // PHASE 3: Store checksum
         documentSlot.DateUpload = DateTime.UtcNow;
+        documentSlot.UploadedBy = HttpContext.GetUserId(); // PHASE 1: Track uploader
         documentSlot.Statut = toutesErreurs.Count == 0 ? StatutValidation.Valide : StatutValidation.Invalide;
 
         documentSlot.Erreurs = toutesErreurs
@@ -238,6 +286,14 @@ public class DocumentController : ControllerBase
             return NotFound(new { message = "Liasse introuvable." });
         }
 
+        if (!await _db.UserCompanyAuthorizations.AnyAsync(a => a.UserId == HttpContext.GetUserId()
+                && a.ContribuableId == liasse.ContribuableId
+                && a.IsActive
+                && (a.DateExpired == null || a.DateExpired > DateTime.UtcNow)))
+        {
+            return Forbid();
+        }
+
         var documentSlot = liasse.Documents.FirstOrDefault(d => d.CodeDocument.Equals(codeDocument, StringComparison.OrdinalIgnoreCase));
         if (documentSlot is null)
         {
@@ -252,7 +308,7 @@ public class DocumentController : ControllerBase
         documentSlot.NomFichier = null;
         documentSlot.CheminStockage = null;
         documentSlot.DateUpload = null;
-        documentSlot.Statut = StatutValidation.NonSoumis;
+        documentSlot.Statut = StatutValidation.NonDepose;
         documentSlot.Erreurs.Clear();
 
         await _db.SaveChangesAsync();
@@ -346,7 +402,7 @@ public class DocumentController : ControllerBase
     <div class=""meta-box"">
       <div><div class=""meta-label"">Contribuable / Raison Sociale</div><div class=""meta-val"">{liasse.Contribuable.NomOuRaisonSociale}</div></div>
       <div><div class=""meta-label"">Matricule Fiscal</div><div class=""meta-val"">{liasse.Contribuable.MatriculeFiscalComplet}</div></div>
-      <div><div class=""meta-label"">Exercice Comptable</div><div class=""meta-val"">{liasse.Exercice} ({liasse.DateDebut:dd/MM/yyyy} au {liasse.DateCloture:dd/MM/yyyy})</div></div>
+      <div><div class=""meta-label"">Exercice Comptable</div><div class=""meta-val"">{liasse.Exercice} ({liasse.DateDebutExercice:dd/MM/yyyy} au {liasse.DateClotureExercice:dd/MM/yyyy})</div></div>
       <div><div class=""meta-label"">Nom de Fichier</div><div class=""meta-val"">{displayFileName}</div></div>
     </div>
     <h4 style=""font-size:13px; text-transform:uppercase; color:#2b3a55; margin-bottom:8px;"">Contenu du Fichier :</h4>

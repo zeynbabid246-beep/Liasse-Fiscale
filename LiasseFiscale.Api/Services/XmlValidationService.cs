@@ -58,6 +58,27 @@ public class XmlValidationService : IXmlValidationService
         }
     }
 
+    private XmlReaderSettings GetSecureXmlSettings(bool includeSchema = false, XmlSchemaSet? schemaSet = null)
+    {
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Prohibit,
+            XmlResolver = null, // Disable external entity resolution
+            MaxCharactersInDocument = 67_108_864, // 64 MB limit
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            ConformanceLevel = ConformanceLevel.Document
+        };
+
+        if (includeSchema && schemaSet != null)
+        {
+            settings.ValidationType = ValidationType.Schema;
+            settings.Schemas = schemaSet;
+        }
+
+        return settings;
+    }
+
     public ValidationResult ValiderStructure(string codeDocument, Stream xmlStream)
     {
         if (!_schemaSets.TryGetValue(codeDocument, out var schemaSet))
@@ -87,9 +108,9 @@ public class XmlValidationService : IXmlValidationService
 
         try
         {
-            // 1. Contrôle explicite de la racine XML et de l'espace de noms cible
+            // 1. Contrôle explicite de la racine XML et de l'espace de noms cible (with XXE protection)
             memoryStream.Position = 0;
-            using (var rawReader = XmlReader.Create(memoryStream, new XmlReaderSettings { IgnoreComments = true, IgnoreWhitespace = true }))
+            using (var rawReader = XmlReader.Create(memoryStream, GetSecureXmlSettings()))
             {
                 while (rawReader.Read())
                 {
@@ -118,13 +139,9 @@ public class XmlValidationService : IXmlValidationService
                 }
             }
 
-            // 2. Validation formelle par le schéma XSD 1.0
+            // 2. Validation formelle par le schéma XSD 1.0 (with XXE protection)
             memoryStream.Position = 0;
-            var settings = new XmlReaderSettings
-            {
-                ValidationType = ValidationType.Schema,
-                Schemas = schemaSet
-            };
+            var settings = GetSecureXmlSettings(includeSchema: true, schemaSet: schemaSet);
 
             settings.ValidationEventHandler += (sender, args) =>
             {
@@ -185,10 +202,11 @@ public class XmlValidationService : IXmlValidationService
             var resultatStructurel = ValiderStructure(codeDocument, memoryStream);
             var toutesErreurs = new List<ValidationIssue>(resultatStructurel.Erreurs);
 
-            // Si le XML est fondamentalement mal formé ou comporte des erreurs structurelles graves,
-            // on ne déclenche pas les règles métier.
+            // Les règles métier doivent toujours être évaluées sur un XML bien formé,
+            // même si le schéma XSD signale des éléments manquants ou des écarts de structure.
+            // On n'empêche l'évaluation métier que pour un XML réellement mal formé.
             bool hasXmlMalformed = resultatStructurel.Erreurs.Any(e => e.Message.StartsWith("XML mal formé", StringComparison.OrdinalIgnoreCase));
-            if (!hasXmlMalformed && resultatStructurel.Erreurs.Count == 0)
+            if (!hasXmlMalformed)
             {
                 // 2) Couche métier (Formules et assertions XPath)
                 try

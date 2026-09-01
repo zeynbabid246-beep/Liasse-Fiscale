@@ -88,6 +88,26 @@ builder.Services.AddSingleton<IXmlValidationService, XmlValidationService>();
 // Couche 2 : règles métier (formules d'agrégation + logique conditionnelle F6005)
 builder.Services.AddSingleton<IAssertRuleEngine, AssertRuleEngine>();
 
+// PHASE 3: File upload security and checksums
+builder.Services.AddScoped<ISecureFileService, SecureFileService>();
+
+// PHASE 1: Authorization & Audit
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<ILiasseManagementService, LiasseManagementService>();
+
+// Authentication (choose mode: Local or Official)
+var authMode = builder.Configuration["Authentication:Mode"] ?? "Local";
+if (authMode == "Official")
+{
+    builder.Services.AddScoped<IAuthenticationService, OfficialAuthenticationService>();
+}
+else
+{
+    builder.Services.AddScoped<IAuthenticationService, LocalAuthenticationService>();
+}
+
+// Keep existing services for backward compatibility
 builder.Services.AddScoped<ILiasseService, LiasseService>();
 builder.Services.AddScoped<IDepositService, DepositService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();

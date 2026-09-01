@@ -22,6 +22,32 @@ public class LiasseController : ControllerBase
         _db = db;
     }
 
+    private async Task<bool> UserCanAccessContribuableAsync(int contribuableId)
+    {
+        var userId = HttpContext.GetUserId();
+        if (userId <= 0)
+        {
+            return false;
+        }
+
+        return await _db.UserCompanyAuthorizations
+            .AnyAsync(a => a.UserId == userId
+                && a.ContribuableId == contribuableId
+                && a.IsActive
+                && (a.DateExpired == null || a.DateExpired > DateTime.UtcNow));
+    }
+
+    private async Task<bool> UserCanAccessLiasseAsync(int liasseId)
+    {
+        var liasse = await _db.Liasses.AsNoTracking().FirstOrDefaultAsync(l => l.Id == liasseId);
+        if (liasse is null)
+        {
+            return false;
+        }
+
+        return await UserCanAccessContribuableAsync(liasse.ContribuableId);
+    }
+
     /// <summary>
     /// Consulte la liste des états financiers (obligatoires et optionnels, XML ou PDF)
     /// requis pour une catégorie / secteur donné.
@@ -29,6 +55,11 @@ public class LiasseController : ControllerBase
     [HttpGet("etats-requis")]
     public IActionResult ObtenirEtatsRequis([FromQuery] CategorieLiasse categorie, [FromQuery] ModeleF6004 modeleF6004 = ModeleF6004.Reference)
     {
+        if (HttpContext.GetUserId() <= 0)
+        {
+            return Unauthorized();
+        }
+
         var etats = SecteurLiasseCatalog.ObtenirEtatsRequis(categorie, modeleF6004)
             .Select(e => new DefinitionEtatFinancierDto(
                 e.CodeDocument,
@@ -130,6 +161,11 @@ public class LiasseController : ControllerBase
             return NotFound();
         }
 
+        if (!await UserCanAccessContribuableAsync(liasse.ContribuableId))
+        {
+            return Forbid();
+        }
+
         var dto = new LiasseStatutDto(
             liasse.Id,
             liasse.Exercice,
@@ -161,6 +197,11 @@ public class LiasseController : ControllerBase
             return NotFound(new { message = "Liasse introuvable." });
         }
 
+        if (!await UserCanAccessContribuableAsync(liasse.ContribuableId))
+        {
+            return Forbid();
+        }
+
         var bilan = _liasseService.VerifierLiasse(liasse);
 
         var dto = new BilanVerificationLiasseDto(
@@ -187,10 +228,16 @@ public class LiasseController : ControllerBase
     [HttpGet("en-cours")]
     public async Task<IActionResult> ObtenirEnCours([FromQuery] int contribuableId)
     {
+        if (!await UserCanAccessContribuableAsync(contribuableId))
+        {
+            return Forbid();
+        }
+
         var liasses = await _db.Liasses
             .Include(l => l.Documents)
             .Include(l => l.Contribuable)
-            .Where(l => l.ContribuableId == contribuableId && l.Statut == StatutLiasse.EnCoursDeSaisie)
+            .Where(l => l.ContribuableId == contribuableId && 
+                       (l.Statut == StatutLiasse.Brouillon || l.Statut == StatutLiasse.EnSaisie || l.Statut == StatutLiasse.EnErreur))
             .OrderByDescending(l => l.DateCreation)
             .Select(l => new
             {
@@ -229,6 +276,20 @@ public class LiasseController : ControllerBase
         if (liasse is null)
         {
             return NotFound(new { message = "Liasse introuvable." });
+        }
+
+        if (!await UserCanAccessContribuableAsync(liasse.ContribuableId))
+        {
+            return Forbid();
+        }
+
+        if (!_liasseService.PeutSupprimer(liasse))
+        {
+            return Conflict(new
+            {
+                message = "Une liasse déjà validée ou déposée ne peut pas être supprimée. " +
+                          "Vous devez d'abord créer une nouvelle liasse correcte ou annuler le dépôt dans le workflow applicatif."
+            });
         }
 
         liasse.Statut = StatutLiasse.Supprimee;

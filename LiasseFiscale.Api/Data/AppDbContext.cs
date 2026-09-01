@@ -9,64 +9,131 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Contribuable> Contribuables => Set<Contribuable>();
+    public DbSet<UserCompanyAuthorization> UserCompanyAuthorizations => Set<UserCompanyAuthorization>();
     public DbSet<Liasse> Liasses => Set<Liasse>();
     public DbSet<DocumentFiscal> Documents => Set<DocumentFiscal>();
     public DbSet<ValidationError> ValidationErrors => Set<ValidationError>();
     public DbSet<Deposit> Deposits => Set<Deposit>();
     public DbSet<Receipt> Receipts => Set<Receipt>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // User indexes
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
+        // Contribuable indexes
         modelBuilder.Entity<Contribuable>()
             .HasIndex(c => new { c.NumeroMatriculeFiscal, c.CleMatriculeFiscal })
             .IsUnique();
 
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Contribuables)
-            .WithMany(c => c.Utilisateurs)
-            .UsingEntity(j => j.ToTable("UserContribuables"));
+        // UserCompanyAuthorization relationships
+        modelBuilder.Entity<UserCompanyAuthorization>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.Authorizations)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<UserCompanyAuthorization>()
+            .HasOne(a => a.Contribuable)
+            .WithMany(c => c.UserAuthorizations)
+            .HasForeignKey(a => a.ContribuableId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserCompanyAuthorization>()
+            .HasIndex(a => new { a.UserId, a.ContribuableId })
+            .IsUnique()
+            .HasName("IX_UserCompanyAuthorization_Unique");
+
+        // AuditLog relationships
+        modelBuilder.Entity<AuditLog>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.AuditLogs)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<AuditLog>()
+            .HasOne(a => a.Contribuable)
+            .WithMany()
+            .HasForeignKey(a => a.ContribuableId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<AuditLog>()
+            .HasIndex(a => new { a.UserId, a.Timestamp })
+            .HasName("IX_AuditLog_UserTimestamp");
+
+        modelBuilder.Entity<AuditLog>()
+            .HasIndex(a => new { a.ContribuableId, a.Timestamp })
+            .HasName("IX_AuditLog_ContribuableTimestamp");
+
+        // Liasse relationships and indexes
         modelBuilder.Entity<Liasse>()
             .HasOne(l => l.Contribuable)
             .WithMany(c => c.Liasses)
-            .HasForeignKey(l => l.ContribuableId);
+            .HasForeignKey(l => l.ContribuableId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        // Une liasse ne peut avoir qu'un seul dépôt définitif par (contribuable, exercice) —
-        // appliqué en code dans LiasseService, pas seulement en base, car la règle dépend
-        // aussi de l'état "Supprimée".
         modelBuilder.Entity<Liasse>()
-            .HasIndex(l => new { l.ContribuableId, l.Exercice });
+            .HasOne(l => l.SubmittedByUser)
+            .WithMany()
+            .HasForeignKey(l => l.SubmittedBy)
+            .OnDelete(DeleteBehavior.SetNull);
 
+        modelBuilder.Entity<Liasse>()
+            .HasOne(l => l.ReviewedByUser)
+            .WithMany()
+            .HasForeignKey(l => l.ReviewedBy)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Liasse>()
+            .HasIndex(l => new { l.ContribuableId, l.Exercice, l.ActeDeDepot })
+            .HasName("IX_Liasse_UniqueContext");
+
+        modelBuilder.Entity<Liasse>()
+            .HasIndex(l => new { l.ContribuableId, l.Statut })
+            .HasName("IX_Liasse_StatusLookup");
+
+        // DocumentFiscal relationships
         modelBuilder.Entity<DocumentFiscal>()
             .HasOne(d => d.Liasse)
             .WithMany(l => l.Documents)
-            .HasForeignKey(d => d.LiasseId);
+            .HasForeignKey(d => d.LiasseId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<DocumentFiscal>()
+            .HasOne(d => d.UploadedByUser)
+            .WithMany()
+            .HasForeignKey(d => d.UploadedBy)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // ValidationError relationships
         modelBuilder.Entity<ValidationError>()
             .HasOne(e => e.DocumentFiscal)
             .WithMany(d => d.Erreurs)
-            .HasForeignKey(e => e.DocumentFiscalId);
+            .HasForeignKey(e => e.DocumentFiscalId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Deposit relationships
         modelBuilder.Entity<Deposit>()
             .HasOne(d => d.Liasse)
             .WithOne(l => l.Deposit)
-            .HasForeignKey<Deposit>(d => d.LiasseId);
+            .HasForeignKey<Deposit>(d => d.LiasseId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Deposit>()
             .HasIndex(d => d.Reference)
             .IsUnique();
 
+        // Receipt relationships
         modelBuilder.Entity<Receipt>()
             .HasOne(r => r.Deposit)
             .WithOne(d => d.Receipt)
-            .HasForeignKey<Receipt>(r => r.DepositId);
+            .HasForeignKey<Receipt>(r => r.DepositId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // Enums stockés en texte pour rester lisibles directement en base (plus simple à déboguer
-        // qu'un entier opaque quand on inspecte les données à la main).
+        // Enum conversions (store as string for readability)
         modelBuilder.Entity<Contribuable>().Property(c => c.Categorie).HasConversion<string>();
         modelBuilder.Entity<Liasse>().Property(l => l.Categorie).HasConversion<string>();
         modelBuilder.Entity<Liasse>().Property(l => l.ActeDeDepot).HasConversion<string>();
@@ -77,5 +144,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<DocumentFiscal>().Property(d => d.Format).HasConversion<string>();
         modelBuilder.Entity<DocumentFiscal>().Property(d => d.Statut).HasConversion<string>();
         modelBuilder.Entity<ValidationError>().Property(e => e.Source).HasConversion<string>();
+        modelBuilder.Entity<UserCompanyAuthorization>().Property(a => a.Type).HasConversion<string>();
+        modelBuilder.Entity<AuditLog>().Property(a => a.Action).HasConversion<string>();
     }
 }

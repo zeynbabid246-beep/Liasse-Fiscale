@@ -13,6 +13,18 @@ public record LoginRequest(
 
 public record LoginResponse(string Token);
 
+public record IdentifyTaxpayerRequest(
+    [property: JsonPropertyName("matriculeFiscal")] string MatriculeFiscal);
+
+public record IdentifyTaxpayerResponse(
+    [property: JsonPropertyName("id")] int Id,
+    [property: JsonPropertyName("matriculeFiscal")] string MatriculeFiscal,
+    [property: JsonPropertyName("matriculeFiscalComplet")] string MatriculeFiscalComplet,
+    [property: JsonPropertyName("raisonSociale")] string RaisonSociale,
+    [property: JsonPropertyName("codeCategorie")] string CodeCategorie,
+    [property: JsonPropertyName("codeTva")] string CodeTva,
+    [property: JsonPropertyName("isAuthorized")] bool IsAuthorized);
+
 public record RegisterRequest(
     [property: JsonPropertyName("email")] string Email,
     [property: JsonPropertyName("password")] string Password,

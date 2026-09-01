@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace LiasseFiscale.Api.Services;
@@ -30,12 +31,30 @@ public static class XmlFieldExtractor
 {
     private static readonly XNamespace Lf = "http://www.impots.finances.gov.tn/liasse";
 
+    /// <summary>
+    /// Get secure XML reader settings that prevent XXE attacks.
+    /// </summary>
+    private static XmlReaderSettings GetSecureXmlSettings()
+    {
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Prohibit,
+            XmlResolver = null, // Disable external entity resolution
+            MaxCharactersInDocument = 67_108_864, // 64 MB limit
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            ConformanceLevel = ConformanceLevel.Document
+        };
+        return settings;
+    }
+
     public static ExtractedXmlData ExtraireTout(Stream xmlStream)
     {
         var result = new ExtractedXmlData();
 
         xmlStream.Position = 0;
-        var document = XDocument.Load(xmlStream);
+        using var xmlReader = XmlReader.Create(xmlStream, GetSecureXmlSettings());
+        var document = XDocument.Load(xmlReader);
         result.RawDocument = document;
 
         // 1) Entête

@@ -12,13 +12,15 @@ namespace LiasseFiscale.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthenticationService _authenticationService;
     private readonly AppDbContext _db;
+    private readonly LiasseFiscale.Api.Services.IAuthorizationService _authorizationService;
 
-    public AuthController(IAuthService authService, AppDbContext db)
+    public AuthController(IAuthenticationService authenticationService, AppDbContext db, LiasseFiscale.Api.Services.IAuthorizationService authorizationService)
     {
-        _authService = authService;
+        _authenticationService = authenticationService;
         _db = db;
+        _authorizationService = authorizationService;
     }
 
     /// <summary>
@@ -29,10 +31,10 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var success = await _authService.InscrireAsync(request);
+            var (success, message) = await _authenticationService.RegisterAsync(request.Email, request.Password, request.MatriculeFiscal);
             if (!success)
             {
-                return Conflict(new { message = "Un compte existe déjà avec cet email." });
+                return Conflict(new { message });
             }
             return Ok(new { message = "Inscription réussie." });
         }
@@ -48,16 +50,55 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var token = await _authService.ConnecterAsync(request.Email, request.Password);
-        if (token is null)
+        var result = await _authenticationService.AuthenticateAsync(request.Email, request.Password, HttpContext.Connection.RemoteIpAddress?.ToString());
+        if (!result.IsSuccess || string.IsNullOrWhiteSpace(result.Token))
         {
-            return Unauthorized(new { message = "Email ou mot de passe incorrect." });
+            return Unauthorized(new { message = result.ErrorMessage ?? "Email ou mot de passe incorrect." });
         }
-        return Ok(new LoginResponse(token));
+
+        return Ok(new LoginResponse(result.Token));
     }
 
     /// <summary>
-    /// Profil du déclarant connecté et contribuable associé.
+    /// Identifie un contribuable à partir de son matricule fiscal.
+    /// </summary>
+    [Authorize]
+    [HttpPost("identify-taxpayer")]
+    public async Task<IActionResult> IdentifyTaxpayer([FromBody] IdentifyTaxpayerRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.MatriculeFiscal))
+        {
+            return BadRequest(new { message = "Le matricule fiscal est obligatoire." });
+        }
+
+        var matricule = request.MatriculeFiscal.Trim().ToUpperInvariant();
+        var num = matricule.Length >= 7 ? matricule.Substring(0, 7) : matricule;
+        var cle = matricule.Length >= 8 ? matricule.Substring(7, 1) : "";
+
+        var contribuable = await _db.Contribuables
+            .FirstOrDefaultAsync(c => c.NumeroMatriculeFiscal == num &&
+                (string.IsNullOrEmpty(cle) || c.CleMatriculeFiscal == cle));
+
+        if (contribuable is null)
+        {
+            return NotFound(new { message = "Contribuable introuvable pour ce matricule fiscal." });
+        }
+
+        var userId = HttpContext.GetUserId();
+        var isAuthorized = await _authorizationService.IsAuthorizedForCompanyAsync(userId, contribuable.Id);
+
+        return Ok(new IdentifyTaxpayerResponse(
+            contribuable.Id,
+            contribuable.MatriculeCourt,
+            contribuable.MatriculeFiscalComplet,
+            contribuable.NomOuRaisonSociale,
+            contribuable.CodeCategorie,
+            contribuable.CodeTva,
+            isAuthorized));
+    }
+
+    /// <summary>
+    /// Profil du déclarant connecté et contribuables auxquels il a accès.
     /// </summary>
     [Authorize]
     [HttpGet("me")]
@@ -70,7 +111,8 @@ public class AuthController : ControllerBase
         }
 
         var user = await _db.Users
-            .Include(u => u.Contribuables)
+            .Include(u => u.Authorizations)
+            .ThenInclude(a => a.Contribuable)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null)
@@ -78,15 +120,34 @@ public class AuthController : ControllerBase
             return NotFound(new { message = "Utilisateur introuvable." });
         }
 
-        var contribuable = user.Contribuables.FirstOrDefault();
+        var authorizations = user.Authorizations
+            .Where(a => a.IsValid)
+            .Select(a => new
+            {
+                a.ContribuableId,
+                a.Type,
+                a.Permissions,
+                Contribuable = new
+                {
+                    a.Contribuable.Id,
+                    a.Contribuable.MatriculeFiscalComplet,
+                    a.Contribuable.MatriculeCourt,
+                    a.Contribuable.NomOuRaisonSociale,
+                    a.Contribuable.CodeCategorie,
+                    a.Contribuable.CodeTva
+                }
+            })
+            .ToList();
 
         return Ok(new
         {
             user.Email,
-            RaisonSociale = contribuable?.NomOuRaisonSociale ?? user.Email,
-            MatriculeFiscal = contribuable?.MatriculeFiscalComplet ?? string.Empty,
-            ContribuableId = contribuable?.Id,
-            MatriculeCourt = contribuable?.MatriculeCourt ?? string.Empty
+            user.DateCreation,
+            user.LastLoginAt,
+            user.LastLoginIp,
+            Contribuables = authorizations,
+            ContribuableCount = authorizations.Count,
+            PrimaryContribuable = authorizations.FirstOrDefault()?.Contribuable
         });
     }
 }

@@ -37,4 +37,11 @@ public class DocumentFiscal
     public List<ValidationError> Erreurs { get; set; } = new();
 
     public DateTime? DateUpload { get; set; }
+
+    /// <summary>User who uploaded this document.</summary>
+    public int? UploadedBy { get; set; }
+    public User? UploadedByUser { get; set; }
+
+    /// <summary>SHA256 checksum of uploaded file for integrity verification.</summary>
+    public string? ChecksumSha256 { get; set; }
 }

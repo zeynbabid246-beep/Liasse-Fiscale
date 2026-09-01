@@ -1,5 +1,7 @@
+using LiasseFiscale.Api.Data;
 using LiasseFiscale.Api.Models;
 using LiasseFiscale.Api.Services;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace LiasseFiscale.Tests;
@@ -147,5 +149,64 @@ public class SecteurLiasseTests
         Assert.True(bilan.PeutDeposer);
         Assert.Empty(bilan.DocumentsManquants);
         Assert.Empty(bilan.DocumentsInvalides);
+    }
+
+    [Fact]
+    public async Task PeutCreerDepotProvisoireAsync_QuandDefinitiveExiste_RetourneFalse()
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        db.Contribuables.Add(new Contribuable
+        {
+            NumeroMatriculeFiscal = "1234567",
+            CleMatriculeFiscal = "M",
+            NomOuRaisonSociale = "Societe Test",
+            CodeCategorie = "M",
+            CodeTva = "A"
+        });
+        await db.SaveChangesAsync();
+
+        var contribuable = await db.Contribuables.FirstAsync();
+        db.Liasses.Add(new Liasse
+        {
+            ContribuableId = contribuable.Id,
+            Exercice = 2026,
+            DateDebutExercice = new DateOnly(2026, 1, 1),
+            DateClotureExercice = new DateOnly(2026, 12, 31),
+            Categorie = CategorieLiasse.CasGeneral,
+            Nature = NatureLiasse.Initiale,
+            ActeDeDepot = ActeDeDepot.Spontane,
+            TypeDepot = TypeDepot.Definitif,
+            Statut = StatutLiasse.Validee
+        });
+        await db.SaveChangesAsync();
+
+        var service = new LiasseService(db);
+        var peutCreer = await service.PeutCreerDepotProvisoireAsync(contribuable.Id, 2026);
+
+        Assert.False(peutCreer);
+    }
+
+    [Fact]
+    public void PeutSupprimer_LiasseValidee_RetourneFalse()
+    {
+        var service = new LiasseService(null!);
+        var liasse = new Liasse { Statut = StatutLiasse.Validee };
+
+        Assert.False(service.PeutSupprimer(liasse));
+    }
+
+    [Fact]
+    public void PeutTransitionVers_TransitionsValideesAutorisees()
+    {
+        var service = new LiasseService(null!);
+        var liasse = new Liasse { Statut = StatutLiasse.EnSaisie };
+
+        Assert.True(service.PeutTransitionVers(liasse, StatutLiasse.EnAttenteDeValidation));
+        Assert.True(service.PeutTransitionVers(liasse, StatutLiasse.EnErreur));
+        Assert.False(service.PeutTransitionVers(liasse, StatutLiasse.Validee));
     }
 }

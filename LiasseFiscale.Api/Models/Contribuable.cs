@@ -31,9 +31,10 @@ public class Contribuable
 
     public CategorieContribuable Categorie { get; set; } = CategorieContribuable.PersonneMorale;
 
-    /// <summary>Utilisateur(s) autorisé(s) à déposer pour ce contribuable.</summary>
-    public List<User> Utilisateurs { get; set; } = new();
+    /// <summary>Users authorized to act for this company.</summary>
+    public List<UserCompanyAuthorization> UserAuthorizations { get; set; } = new();
 
+    /// <summary>Liasses filed by/for this taxpayer.</summary>
     public List<Liasse> Liasses { get; set; } = new();
 
     /// <summary>Matricule fiscal complet à 13 caractères (T_MatriculeFiscal_13c), ex: 1234567MAM000.</summary>

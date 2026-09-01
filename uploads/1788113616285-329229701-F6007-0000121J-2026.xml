@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lf:F6007 xmlns:lf="http://www.impots.finances.gov.tn/liasse" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.impots.finances.gov.tn/liasse F6007.xsd">
+  <lf:Entete>
+    <lf:MatriculeFiscalDeclarant>0000121J</lf:MatriculeFiscalDeclarant>
+    <lf:NometPrenomouRaisonSociale>SOCIETE EXEMPLE SARL</lf:NometPrenomouRaisonSociale>
+    <lf:Activite>COMMERCE ET SERVICES</lf:Activite>
+    <lf:Adresse>AVENUE HABIB BOURGUIBA, TUNIS</lf:Adresse>
+    <lf:Exercice>2026</lf:Exercice>
+    <lf:DateDebutExercice>01/01/2026</lf:DateDebutExercice>
+    <lf:DateClotureExercice>31/12/2026</lf:DateClotureExercice>
+    <lf:ActeDeDepot>0</lf:ActeDeDepot>
+    <lf:NatureDepot>D</lf:NatureDepot>
+  </lf:Entete>
+  <lf:F60070001Reunion="RO" F60073001="0" F60073002="0">
+    <lf:Organe>Assemblee Generale Ordinaire</lf:Organe>
+    <lf:Date>30/06/2026</lf:Date>
+  </lf:F60070001Reunion>
+</lf:F6007>

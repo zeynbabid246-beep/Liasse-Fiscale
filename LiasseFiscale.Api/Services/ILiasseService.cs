@@ -31,5 +31,7 @@ public interface ILiasseService
     bool EstComplete(Liasse liasse);
     BilanVerificationLiasse VerifierLiasse(Liasse liasse);
     Task<bool> PeutCreerDepotProvisoireAsync(int contribuableId, int exercice);
+    bool PeutSupprimer(Liasse liasse);
+    bool PeutTransitionVers(Liasse liasse, StatutLiasse nouveauStatut);
     bool CombinaisonEstAutorisee(NatureLiasse nature, TypeDepot type, ActeDeDepot acte);
 }

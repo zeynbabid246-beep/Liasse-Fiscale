@@ -59,10 +59,29 @@ public enum ModeleF6004
 
 public enum StatutLiasse
 {
-    EnCoursDeSaisie,
+    /// <summary>Newly created, not yet populated with documents.</summary>
+    Brouillon,
+
+    /// <summary>In progress; documents being uploaded.</summary>
+    EnSaisie,
+
+    /// <summary>All documents uploaded; awaiting validation.</summary>
+    EnAttenteDeValidation,
+
+    /// <summary>Validation errors detected in one or more documents.</summary>
+    EnErreur,
+
+    /// <summary>Deposited/submitted locally; system-accepted.</summary>
     Deposee,
+
+    /// <summary>Officially validated and accepted.</summary>
     Validee,
-    Supprimee
+
+    /// <summary>Deleted by user while non-valid.</summary>
+    Supprimee,
+
+    /// <summary>Rejected by validation engine.</summary>
+    Rejetee
 }
 
 public class Liasse
@@ -90,9 +109,26 @@ public class Liasse
     /// </summary>
     public ModeleF6004 ModeleF6004Choisi { get; set; } = ModeleF6004.Reference;
 
-    public StatutLiasse Statut { get; set; } = StatutLiasse.EnCoursDeSaisie;
+    public StatutLiasse Statut { get; set; } = StatutLiasse.Brouillon;
 
     public List<DocumentFiscal> Documents { get; set; } = new();
+
+    /// <summary>User who created/submitted this liasse.</summary>
+    public int? SubmittedBy { get; set; }
+    public User? SubmittedByUser { get; set; }
+
+    /// <summary>When the liasse was submitted for validation.</summary>
+    public DateTime? DateSubmission { get; set; }
+
+    /// <summary>User who validated/reviewed this liasse.</summary>
+    public int? ReviewedBy { get; set; }
+    public User? ReviewedByUser { get; set; }
+
+    /// <summary>When the liasse was validated.</summary>
+    public DateTime? DateReview { get; set; }
+
+    /// <summary>Validation notes/comments from reviewer.</summary>
+    public string? ReviewNotes { get; set; }
 
     public Deposit? Deposit { get; set; }
 

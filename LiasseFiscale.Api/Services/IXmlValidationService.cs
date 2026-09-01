@@ -4,7 +4,7 @@ public record ValidationIssue(string Source, string? Champ, int? Ligne, string M
 
 public record ValidationResult(bool EstValide, IReadOnlyList<ValidationIssue> Erreurs)
 {
-    public ValidationResult()
+    public ValidationResult() : this(true, new List<ValidationIssue>())
     {
     }
 }
