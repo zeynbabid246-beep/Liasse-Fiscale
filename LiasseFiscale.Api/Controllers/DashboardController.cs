@@ -1,8 +1,10 @@
 using LiasseFiscale.Api.Data;
 using LiasseFiscale.Api.Models;
+using LiasseFiscale.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ICompanyAuthService = LiasseFiscale.Api.Services.IAuthorizationService;
 
 namespace LiasseFiscale.Api.Controllers;
 
@@ -12,9 +14,9 @@ namespace LiasseFiscale.Api.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly AppDbContext _db;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly ICompanyAuthService _authorizationService;
 
-    public DashboardController(AppDbContext db, IAuthorizationService authorizationService)
+    public DashboardController(AppDbContext db, ICompanyAuthService authorizationService)
     {
         _db = db;
         _authorizationService = authorizationService;
