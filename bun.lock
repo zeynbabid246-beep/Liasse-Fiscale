@@ -10,6 +10,7 @@
         "fast-xml-parser": "^5.11.1",
         "jsonwebtoken": "^9.0.2",
         "multer": "^1.4.5-lts.1",
+        "xml-xsd-engine": "^1.7.3",
       },
       "devDependencies": {
         "@types/cors": "^2.8.17",
@@ -322,6 +323,8 @@
     "vary": ["vary@1.1.2", "", {}, "sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg=="],
 
     "xml-naming": ["xml-naming@0.3.0", "", {}, "sha512-ghig2TBE/H11aOVgmahA3MhimvkBr6JIYknH/Dhdk10nXwdbIqBJsbfMxpvFPG8bAw77gN29aQWvKpmVoPlvPQ=="],
+
+    "xml-xsd-engine": ["xml-xsd-engine@1.7.3", "", { "bin": { "xml-validate": "dist/cjs/cli/cli.js", "xml-format": "dist/cjs/cli/format.js" } }, "sha512-sjTScTy+N4B8/0Lbc+8VOxYIABe+VJCYb579/TWTWq8UIEBPpuRTS87v5DlgTCI+KZ2e/7CDlHPl4aqMKjSwrA=="],
 
     "xtend": ["xtend@4.0.2", "", {}, "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ=="],
 

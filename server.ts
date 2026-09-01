@@ -6,7 +6,37 @@ import crypto from 'crypto';
 import multer from 'multer';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
-import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { XmlParser, parseXsd, ValidationEngine, SchemaModel } from 'xml-xsd-engine';
+
+// Patch SchemaModel pour la résolution robuste des préfixes QName (ex: lf:T_NombrePositif15)
+const origResolveSimple = (SchemaModel.prototype as any).resolveSimpleType;
+(SchemaModel.prototype as any).resolveSimpleType = function (qname: string) {
+  if (!qname) return null;
+  let res = origResolveSimple.call(this, qname);
+  if (res) return res;
+  const colonIdx = qname.indexOf(':');
+  const bareName = colonIdx !== -1 ? qname.slice(colonIdx + 1) : qname;
+  if (this.targetNamespace) {
+    res = origResolveSimple.call(this, '{' + this.targetNamespace + '}' + bareName);
+    if (res) return res;
+  }
+  res = origResolveSimple.call(this, 'xs:' + bareName) || origResolveSimple.call(this, 'xsd:' + bareName) || origResolveSimple.call(this, bareName);
+  return res;
+};
+
+const origResolveComplex = (SchemaModel.prototype as any).resolveComplexType;
+(SchemaModel.prototype as any).resolveComplexType = function (qname: string) {
+  if (!qname) return null;
+  let res = origResolveComplex.call(this, qname);
+  if (res) return res;
+  const colonIdx = qname.indexOf(':');
+  const bareName = colonIdx !== -1 ? qname.slice(colonIdx + 1) : qname;
+  if (this.targetNamespace) {
+    res = origResolveComplex.call(this, '{' + this.targetNamespace + '}' + bareName);
+    if (res) return res;
+  }
+  return origResolveComplex.call(this, bareName);
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -130,9 +160,12 @@ interface Deposit {
   nature: string;
   typeDepot: string;
   dateDepot: string;
-  statut: string;
+  statut: 'En cours de validation' | 'Validée' | 'Rejetée' | 'Supprimée';
   hashGlobal: string;
   observation?: string;
+  dateValidationAdmin?: string;
+  validePar?: string;
+  motifRejet?: string;
   documents?: {
     codeDocument: string;
     libelle: string;
@@ -241,12 +274,40 @@ const contribuablesDb: ContribuableItem[] = [
     email: 'technologies.sud@finances.gov.tn',
     password: 'Password123!',
     dateCreation: '2018-09-20'
+  },
+  {
+    id: 99,
+    numeroMatriculeFiscal: '0000000',
+    cleMatriculeFiscal: 'A',
+    matriculeFiscal: 'ADMIN-DGI',
+    matriculeFiscalComplet: '0000000A/P/M/000',
+    cleControle: 'A',
+    categorie: 'PM',
+    tva: 'P',
+    codeCategorie: 'M',
+    etablissementSecondaire: '000',
+    nomOuRaisonSociale: 'DIRECTION GÉNÉRALE DES IMPÔTS • MINISTÈRE DES FINANCES',
+    activite: 'Administration Centrale & Contrôle Fiscal des Télé-déclarations',
+    codeActivite: '8411',
+    regimeFiscal: 'Administration',
+    bureauRattachement: 'DGI Tunis - Direction du Contrôle Fiscal',
+    adresse: 'Place du Gouvernement, La Kasbah, 1020 Tunis',
+    codePostal: '1020',
+    telephone: '+216 71 560 000',
+    email: 'admin@finances.gov.tn',
+    password: 'Password123!',
+    dateCreation: '2020-01-01'
   }
 ];
 
 function findContribuableByInput(input: string): ContribuableItem | null {
   if (!input) return null;
   const trimmed = input.trim();
+
+  // 0. Identifiant direct Admin
+  if (trimmed.toUpperCase() === 'ADMIN' || trimmed.toUpperCase() === 'ADMIN-DGI' || trimmed.toLowerCase() === 'admin@finances.gov.tn') {
+    return contribuablesDb.find(c => c.id === 99) || null;
+  }
 
   // 1. Recherche par Email
   const byEmail = contribuablesDb.find(c => c.email.toLowerCase() === trimmed.toLowerCase());
@@ -493,28 +554,41 @@ let depositsDb: Deposit[] = [
 ];
 
 // -------------------------------------------------------------
-// Validation XML Multi-Niveaux
+// Validation XML Conforme XSD Officiels (Dossier /original)
 // -------------------------------------------------------------
-const TARGET_NAMESPACE = 'http://www.impots.finances.gov.tn/liasse';
+const ORIGINAL_XSD_DIR = path.join(__dirname, 'SchemaAssets', 'original');
+const xsdCache = new Map<string, SchemaModel>();
 
-function getStructuralSchemaAllowedTags(codeDocument: string): Set<string> | null {
-  const schemaCandidates = [
-    path.join(__dirname, 'LiasseFiscale.Api', 'SchemaAssets', 'structural', `${codeDocument}.xsd`),
-    path.join(__dirname, 'SchemaAssets', 'structural', `${codeDocument}.xsd`)
+const xsdLoader = (location: string): string => {
+  const clean = path.basename(location);
+  const target = path.join(ORIGINAL_XSD_DIR, clean);
+  if (fs.existsSync(target)) {
+    return fs.readFileSync(target, 'utf8');
+  }
+  throw new Error(`Fichier XSD inclus introuvable : ${clean}`);
+};
+
+function getOfficialXsdSchema(codeDocument: string): SchemaModel | null {
+  const normalizedCode = codeDocument.trim().toUpperCase();
+  if (xsdCache.has(normalizedCode)) {
+    return xsdCache.get(normalizedCode)!;
+  }
+
+  const candidates = [
+    path.join(ORIGINAL_XSD_DIR, `${normalizedCode}.xsd`),
+    path.join(ORIGINAL_XSD_DIR, `${codeDocument}.xsd`),
+    path.join(ORIGINAL_XSD_DIR, `${normalizedCode === 'F6004-MODELE-AUT' ? 'F6004-MODELE-AUT' : normalizedCode}.xsd`)
   ];
 
-  for (const candidate of schemaCandidates) {
+  for (const candidate of candidates) {
     if (fs.existsSync(candidate)) {
       try {
-        const content = fs.readFileSync(candidate, 'utf-8');
-        const matches = content.matchAll(/<(?:xsd|xs):element\s+name="([^"]+)"/g);
-        const tags = new Set<string>();
-        for (const m of matches) {
-          tags.add(m[1]);
-        }
-        return tags;
-      } catch (err) {
-        console.error(`Erreur lecture XSD pour ${codeDocument}:`, err);
+        const schema = parseXsd(fs.readFileSync(candidate, 'utf8'), xsdLoader);
+        xsdCache.set(normalizedCode, schema);
+        return schema;
+      } catch (err: any) {
+        console.error(`Erreur de compilation du schéma XSD pour ${codeDocument}:`, err);
+        return null;
       }
     }
   }
@@ -523,8 +597,8 @@ function getStructuralSchemaAllowedTags(codeDocument: string): Set<string> | nul
 
 function getBusinessRules(codeDocument: string): any | null {
   const ruleCandidates = [
-    path.join(__dirname, 'LiasseFiscale.Api', 'SchemaAssets', 'rules', `${codeDocument}.rules.json`),
-    path.join(__dirname, 'SchemaAssets', 'rules', `${codeDocument}.rules.json`)
+    path.join(__dirname, 'SchemaAssets', 'rules', `${codeDocument}.rules.json`),
+    path.join(__dirname, 'LiasseFiscale.Api', 'SchemaAssets', 'rules', `${codeDocument}.rules.json`)
   ];
 
   for (const candidate of ruleCandidates) {
@@ -538,6 +612,38 @@ function getBusinessRules(codeDocument: string): any | null {
     }
   }
   return null;
+}
+
+function formatXsdErrorMessage(rawMessage: string, elemName: string): string {
+  if (!rawMessage) return 'Erreur de validation de schéma XSD.';
+  if (rawMessage.includes('is not a valid xs:nonNegativeInteger') || rawMessage.includes('is not a valid xs:integer')) {
+    return `Valeur non valide pour <${elemName}> : un entier numérique positif ou nul est attendu.`;
+  }
+  if (rawMessage.includes('is out of range for xs:nonNegativeInteger (min 0)')) {
+    return `Valeur hors limites pour <${elemName}> : la valeur doit être un nombre positif ou nul (>= 0).`;
+  }
+  if (rawMessage.includes('does not match pattern')) {
+    if (elemName.includes('Date')) {
+      return `Format de date invalide pour <${elemName}>. Format officiel attendu : JJ/MM/AAAA (ex: 01/01/2026).`;
+    }
+    if (elemName.includes('Matricule')) {
+      return `Format de matricule fiscal invalide pour <${elemName}>. Format attendu : 7 chiffres suivis d'une clé (ex: 0000121J).`;
+    }
+    return `La valeur de <${elemName}> ne respecte pas le motif d'expression régulière exigé par le schéma XSD officiel.`;
+  }
+  if (rawMessage.includes('required (minOccurs=') || rawMessage.includes('requires at least')) {
+    return `Élément obligatoire manquant selon le schéma XSD officiel : <${elemName}>.`;
+  }
+  if (rawMessage.includes('Unexpected element') || rawMessage.includes('Unknown element')) {
+    return `Élément <${elemName}> non autorisé ou inattendu selon la structure officielle du schéma XSD.`;
+  }
+  if (rawMessage.includes('is not in the enumeration')) {
+    return `Valeur non autorisée pour <${elemName}> : la valeur doit appartenir à la nomenclature officielle.`;
+  }
+  if (rawMessage.includes('length must be')) {
+    return `Longueur de valeur non conforme pour <${elemName}>.`;
+  }
+  return rawMessage;
 }
 
 function parseNumber(val: any): number {
@@ -554,217 +660,138 @@ function validerXmlComplet(
 ): { estValide: boolean; erreurs: ValidationIssue[]; detailsExtraits?: Record<string, any> } {
   const erreurs: ValidationIssue[] = [];
 
-  // Niveau 0 : Validation formelle de syntaxe et de bien-formation XML
-  const xmlValidation = XMLValidator.validate(xmlString, {
-    allowBooleanAttributes: false
-  });
-
-  if (xmlValidation !== true) {
-    const errObj = (xmlValidation as any).err || {};
-    erreurs.push({
-      source: 'Structurelle',
-      champ: null,
-      ligne: errObj.line || null,
-      message: `XML mal formé (ligne ${errObj.line || '?'}, col ${errObj.col || '?'}) : ${errObj.msg || 'Syntaxe XML non conforme'}`
-    });
-    return { estValide: false, erreurs };
-  }
-
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: '@_',
-    removeNSPrefix: false,
-    parseTagValue: false,
-    trimValues: true
-  });
-
-  let parsedObj: any;
+  // Niveau 1 : Analyse syntaxique & Bien-formation XML
+  const xmlParser = new XmlParser({ resolveNamespaces: true });
+  let doc: any;
   try {
-    parsedObj = parser.parse(xmlString);
+    doc = xmlParser.parse(xmlString);
   } catch (ex: any) {
     erreurs.push({
       source: 'Structurelle',
       champ: null,
       ligne: null,
-      message: `Erreur de décodage XML : ${ex.message || 'Syntaxe XML invalide'}`
+      message: `XML mal formé ou syntaxe invalide : ${ex.message || 'erreur de parsing XML'}`
     });
     return { estValide: false, erreurs };
   }
 
-  if (!parsedObj || typeof parsedObj !== 'object') {
-    erreurs.push({
-      source: 'Structurelle',
-      champ: null,
-      ligne: null,
-      message: "Le fichier XML ne contient aucun document valide."
-    });
-    return { estValide: false, erreurs };
-  }
-
-  const rootKeys = Object.keys(parsedObj).filter(k => !k.startsWith('?') && !k.startsWith('#'));
-  if (rootKeys.length === 0) {
+  if (!doc || !doc.root) {
     erreurs.push({
       source: 'Structurelle',
       champ: null,
       ligne: 1,
-      message: "Aucun élément racine détecté dans le document XML."
+      message: "Le fichier XML ne contient aucun élément racine valide."
     });
     return { estValide: false, erreurs };
   }
 
-  const rawRootTag = rootKeys[0];
-  const rootLocalName = rawRootTag.includes(':') ? rawRootTag.split(':')[1] : rawRootTag;
+  const rootLocalName = doc.root.localName || doc.root.tagName;
+  const normalizedDocCode = codeDocument.trim().toUpperCase();
+  const normalizedRootName = (rootLocalName || '').trim().toUpperCase();
 
-  if (rootLocalName.toUpperCase() !== codeDocument.toUpperCase()) {
+  // Niveau 2 : Correspondance du formulaire (ex: F6001, F6004, F6004-MODELE-AUT)
+  const isMatch = normalizedRootName === normalizedDocCode ||
+    (normalizedDocCode === 'F6004-MODELE-AUT' && normalizedRootName === 'F6004') ||
+    (normalizedDocCode === 'F6004' && normalizedRootName === 'F6004');
+
+  if (!isMatch) {
     erreurs.push({
       source: 'Structurelle',
       champ: rootLocalName,
-      ligne: 1,
-      message: `La racine XML '${rootLocalName}' ne correspond pas au document attendu '${codeDocument}'.`
+      ligne: doc.root.sourceLine || 1,
+      message: `La racine XML <${rootLocalName}> ne correspond pas au formulaire attendu (${codeDocument}).`
     });
   }
 
-  const rootElement = parsedObj[rawRootTag];
-  if (!rootElement || typeof rootElement !== 'object') {
+  // Niveau 3 : Validation basée sur le schéma XSD officiel dans /SchemaAssets/original
+  const schema = getOfficialXsdSchema(normalizedDocCode === 'F6004-MODELE-AUT' ? 'F6004-MODELE-AUT' : normalizedDocCode);
+
+  if (!schema) {
     erreurs.push({
       source: 'Structurelle',
-      champ: rootLocalName,
-      ligne: 1,
-      message: `Le document XML '${codeDocument}' est vide ou ne comporte pas d'éléments enfants.`
+      champ: codeDocument,
+      ligne: null,
+      message: `Schéma XSD officiel introuvable pour le formulaire ${codeDocument} dans /SchemaAssets/original.`
     });
     return { estValide: false, erreurs };
   }
 
-  const xmlns = rootElement?.['@_xmlns'] || rootElement?.['@_xmlns:lf'] || '';
-  if (xmlns && xmlns !== TARGET_NAMESPACE) {
-    erreurs.push({
-      source: 'Structurelle',
-      champ: rootLocalName,
-      ligne: 1,
-      message: `L'espace de noms '${xmlns}' ne correspond pas à l'espace officiel attendu '${TARGET_NAMESPACE}'.`
-    });
-  }
+  const engine = new ValidationEngine(schema, { mode: 'strict' });
+  const validationResult = engine.validate(doc);
 
-  // Contrôle des éléments enfants directs de la racine (seuls VersionDocument, Entete, Details autorisés)
-  let entete: any = null;
-  let details: any = null;
-
-  for (const [key, val] of Object.entries(rootElement)) {
-    if (key.startsWith('@_')) continue;
-    const local = key.includes(':') ? key.split(':')[1] : key;
-    if (local === 'Entete') entete = val;
-    else if (local === 'Details') details = val;
-    else if (local !== 'VersionDocument') {
-      erreurs.push({
-        source: 'Structurelle',
-        champ: local,
-        ligne: null,
-        message: `Élément inattendu '${local}' sous la racine '${codeDocument}'. Seuls 'VersionDocument', 'Entete' et 'Details' sont autorisés par le schéma XSD officiel.`
-      });
-    }
-  }
-
-  if (!entete || typeof entete !== 'object') {
-    erreurs.push({
-      source: 'Structurelle',
-      champ: 'Entete',
-      ligne: null,
-      message: `Élément obligatoire '<Entete>' manquant ou invalide dans le document '${codeDocument}'.`
-    });
-  }
-
-  if (!details || typeof details !== 'object') {
-    erreurs.push({
-      source: 'Structurelle',
-      champ: 'Details',
-      ligne: null,
-      message: `Élément obligatoire '<Details>' manquant ou invalide dans le document '${codeDocument}'.`
-    });
-  }
-
-  // Contrôle strict de l'Entete
-  if (entete && typeof entete === 'object') {
-    let matriculeDeclarant = '';
-    let exerciceXml = 0;
-
-    for (const [k, v] of Object.entries(entete)) {
-      if (k.startsWith('@_')) continue;
-      const local = k.includes(':') ? k.split(':')[1] : k;
-      if (local === 'MatriculeFiscalDeclarant') matriculeDeclarant = String(v).trim();
-      else if (local === 'Exercice') exerciceXml = parseInt(String(v), 10);
-      else if (local !== 'CodeDocument' && local !== 'NatureDepot' && local !== 'TypeDepot' && local !== 'Periodicite' && local !== 'DateDepot') {
-        erreurs.push({
-          source: 'Structurelle',
-          champ: local,
-          ligne: null,
-          message: `Élément non standard '${local}' détecté dans l'entête XML du document '${codeDocument}'.`
-        });
+  if (!validationResult.valid) {
+    const lines = xmlString.split('\n');
+    for (const issue of validationResult.errors) {
+      let elemName = issue.path ? issue.path.split('/').pop()?.replace(/\[\d+\]/g, '') || '' : (rootLocalName || '');
+      let line = issue.line;
+      if (!line && elemName) {
+        const tagPattern = new RegExp(`<(?:[a-zA-Z0-9_]+:)?${elemName}[\\s>]`);
+        for (let i = 0; i < lines.length; i++) {
+          if (tagPattern.test(lines[i])) {
+            line = i + 1;
+            break;
+          }
+        }
       }
-    }
 
-    if (!matriculeDeclarant) {
       erreurs.push({
         source: 'Structurelle',
-        champ: 'MatriculeFiscalDeclarant',
-        ligne: null,
-        message: `L'élément '<MatriculeFiscalDeclarant>' est obligatoire dans l'entête XML.`
+        champ: elemName || null,
+        ligne: line || null,
+        message: formatXsdErrorMessage(issue.message, elemName || codeDocument)
       });
-    } else if (matriculeAttendu) {
+    }
+  }
+
+  // Niveau 4 : Extraction des données et vérification de cohérence d'Entete
+  const detailsFlat: Record<string, number> = {};
+  const root = doc.root;
+  const enteteEl = root?.childElements?.find((c: any) => c.localName === 'Entete');
+  const detailsEl = root?.childElements?.find((c: any) => c.localName === 'Details');
+
+  if (enteteEl) {
+    const matriculeDeclarant = enteteEl.childElements?.find((c: any) => c.localName === 'MatriculeFiscalDeclarant')?.textContent?.trim() || '';
+    const exerciceStr = enteteEl.childElements?.find((c: any) => c.localName === 'Exercice')?.textContent?.trim() || '';
+    const exerciceXml = parseInt(exerciceStr, 10);
+
+    if (matriculeAttendu && matriculeDeclarant) {
       const cleanExpected = matriculeAttendu.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       const cleanFound = matriculeDeclarant.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       if (!cleanFound.startsWith(cleanExpected) && !cleanExpected.startsWith(cleanFound)) {
         erreurs.push({
           source: 'Structurelle',
           champ: 'MatriculeFiscalDeclarant',
-          ligne: null,
-          message: `Le matricule fiscal dans l'entête XML (${matriculeDeclarant}) ne correspond pas au contribuable (${matriculeAttendu}).`
+          ligne: enteteEl.childElements?.find((c: any) => c.localName === 'MatriculeFiscalDeclarant')?.sourceLine || null,
+          message: `Le matricule fiscal dans l'entête XML (${matriculeDeclarant}) ne correspond pas au contribuable déclarant (${matriculeAttendu}).`
         });
       }
     }
 
-    if (!exerciceXml || isNaN(exerciceXml)) {
+    if (exerciceAttendu && exerciceXml && exerciceXml !== exerciceAttendu) {
       erreurs.push({
         source: 'Structurelle',
         champ: 'Exercice',
-        ligne: null,
-        message: `L'élément '<Exercice>' est obligatoire et doit être une année valide dans l'entête XML.`
-      });
-    } else if (exerciceAttendu && exerciceXml !== exerciceAttendu) {
-      erreurs.push({
-        source: 'Structurelle',
-        champ: 'Exercice',
-        ligne: null,
+        ligne: enteteEl.childElements?.find((c: any) => c.localName === 'Exercice')?.sourceLine || null,
         message: `L'exercice comptable dans l'entête XML (${exerciceXml}) ne correspond pas à l'exercice de la liasse (${exerciceAttendu}).`
       });
     }
   }
 
-  const allowedTags = getStructuralSchemaAllowedTags(codeDocument);
-  const detailsFlat: Record<string, number> = {};
-
-  if (details && typeof details === 'object') {
-    for (const [key, val] of Object.entries(details)) {
-      if (key.startsWith('@_')) continue;
-      const local = key.includes(':') ? key.split(':')[1] : key;
-
-      if (allowedTags && !allowedTags.has(local) && !allowedTags.has(rawRootTag)) {
-        erreurs.push({
-          source: 'Structurelle',
-          champ: local,
-          ligne: null,
-          message: `L'élément '${local}' n'est pas autorisé par le schéma XSD du document ${codeDocument}.`
-        });
-      }
-
-      detailsFlat[local] = parseNumber(val);
+  if (detailsEl && Array.isArray(detailsEl.childElements)) {
+    for (const child of detailsEl.childElements) {
+      const tag = child.localName || child.tagName;
+      const num = Number(child.textContent);
+      detailsFlat[tag] = isNaN(num) ? 0 : num;
     }
   }
 
+  // Si des erreurs structurelles XSD existent, arrêter et rejeter
   if (erreurs.length > 0) {
-    return { estValide: false, erreurs };
+    return { estValide: false, erreurs, detailsExtraits: detailsFlat };
   }
 
-  const rulesJson = getBusinessRules(codeDocument);
+  // Niveau 5 : Règles de calcul arithmétique métier
+  const rulesJson = getBusinessRules(normalizedDocCode);
   if (rulesJson && Array.isArray(rulesJson.simpleSumRules)) {
     for (const rule of rulesJson.simpleSumRules) {
       const target = rule.target;
@@ -828,6 +855,9 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
     return res.status(401).json({ message: "Mot de passe incorrect pour cet adhérent." });
   }
 
+  const isAdm = contribuable.id === 99 || contribuable.matriculeFiscal === 'ADMIN-DGI' || contribuable.email === 'admin@finances.gov.tn';
+  const role = isAdm ? 'Administration' : 'Contribuable';
+
   const token = jwt.sign(
     {
       id: contribuable.id,
@@ -836,7 +866,7 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       numeroMatriculeFiscal: contribuable.numeroMatriculeFiscal,
       cleMatriculeFiscal: contribuable.cleMatriculeFiscal,
       nomOuRaisonSociale: contribuable.nomOuRaisonSociale,
-      role: 'Contribuable'
+      role
     },
     JWT_SECRET,
     { expiresIn: '24h' }
@@ -852,7 +882,7 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       cleMatriculeFiscal: contribuable.cleMatriculeFiscal,
       matriculeFiscalComplet: contribuable.matriculeFiscalComplet,
       nomOuRaisonSociale: contribuable.nomOuRaisonSociale,
-      role: 'Contribuable',
+      role,
       regime: contribuable.regimeFiscal,
       adresse: contribuable.adresse,
       activite: contribuable.activite
@@ -1483,14 +1513,13 @@ function executerDepot(liasse: Liasse, observation?: string, signature?: string)
   }
   const hashGlobal = hash.digest('hex');
   const dateDepot = new Date().toISOString();
-  const numeroAccuse = `ACC-${year}-${randRef}`;
 
   const depositDocs = liasse.documents.map(d => ({
     codeDocument: d.codeDocument,
     libelle: d.libelle,
     format: d.format,
     nomFichier: d.nomFichier || `${d.codeDocument}-${liasse.matriculeFiscal}-${year}.${d.format.toLowerCase()}`,
-    statut: 'Validée'
+    statut: 'En cours de validation'
   }));
 
   const deposit: Deposit = {
@@ -1503,16 +1532,10 @@ function executerDepot(liasse: Liasse, observation?: string, signature?: string)
     nature: liasse.nature || 'Initiale',
     typeDepot: liasse.typeDepot === 'Definitif' ? 'Dépôt définitif' : 'Dépôt provisoire',
     dateDepot,
-    statut: 'Validée',
+    statut: 'En cours de validation',
     hashGlobal,
-    observation: observation || 'Dépôt validé via portail fiscal',
-    documents: depositDocs,
-    receipt: {
-      numeroAccuse,
-      dateEmission: dateDepot,
-      qrCode: `https://impots.finances.gov.tn/verify/${reference}`,
-      empreinteNumerique: hashGlobal
-    }
+    observation: observation || 'Dépôt soumis par le contribuable - En attente de validation administrative DGI',
+    documents: depositDocs
   };
 
   depositsDb.unshift(deposit);
@@ -1553,8 +1576,8 @@ app.post('/api/liasses/:id/deposit', (req: Request, res: Response) => {
     reference: deposit.reference,
     statut: deposit.statut,
     dateDepot: deposit.dateDepot,
-    message: "Liasse fiscale déposée avec succès auprès de la Direction Générale des Impôts.",
-    receipt: deposit.receipt
+    message: "Liasse fiscale déposée avec succès. Statut : En cours de validation (en attente d'instruction et de validation par l'administration fiscale).",
+    receipt: null
   });
 });
 
@@ -1587,8 +1610,86 @@ app.post('/api/deposits', (req: Request, res: Response) => {
     reference: deposit.reference,
     statut: deposit.statut,
     dateDepot: deposit.dateDepot,
-    message: "Liasse fiscale déposée avec succès auprès de la Direction Générale des Impôts.",
-    receipt: deposit.receipt
+    message: "Liasse fiscale déposée avec succès. Statut : En cours de validation (en attente de validation administrative).",
+    receipt: null
+  });
+});
+
+// 7.b Administration - Revue et Validation Administrative par le Ministère / DGI
+app.get('/api/admin/deposits', optionalToken, (req: AuthRequest, res: Response) => {
+  const statut = req.query.statut ? String(req.query.statut).trim().toUpperCase() : null;
+  let list = depositsDb;
+  if (statut) {
+    list = list.filter(d => d.statut.toUpperCase() === statut);
+  }
+  return res.json(list);
+});
+
+app.post('/api/admin/deposits/:reference/validate', optionalToken, (req: AuthRequest, res: Response) => {
+  const ref = String(req.params.reference || '').trim();
+  const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
+
+  if (!deposit) {
+    return res.status(404).json({ message: `Dépôt '${ref}' introuvable.` });
+  }
+
+  if (deposit.statut === 'Validée') {
+    return res.status(400).json({ message: "Ce dépôt a déjà été validé par l'administration fiscale." });
+  }
+
+  const dateValidation = new Date().toISOString();
+  const adminName = req.user?.nomOuRaisonSociale || 'Direction Générale des Impôts - Contrôle Fiscal';
+  const numeroAccuse = `ACC-${deposit.exercice}-${deposit.reference.replace('DEP-' + deposit.exercice + '-', '')}`;
+
+  deposit.statut = 'Validée';
+  deposit.dateValidationAdmin = dateValidation;
+  deposit.validePar = adminName;
+  deposit.observation = (deposit.observation ? deposit.observation + ' | ' : '') + `Validé par l'administration fiscale le ${new Date(dateValidation).toLocaleDateString('fr-FR')}`;
+
+  // Génération de l'accusé de réception fiscal officiel définitif
+  deposit.receipt = {
+    numeroAccuse,
+    dateEmission: dateValidation,
+    qrCode: `https://impots.finances.gov.tn/verify/${deposit.reference}`,
+    empreinteNumerique: deposit.hashGlobal
+  };
+
+  if (deposit.documents) {
+    deposit.documents.forEach(d => {
+      d.statut = 'Validée';
+    });
+  }
+
+  const liasse = liassesDb.find(l => l.id === deposit.liasseId);
+  if (liasse) {
+    liasse.statut = 'Validee';
+  }
+
+  return res.json({
+    message: "Le dépôt a été validé avec succès par l'administration fiscale. L'accusé de réception officiel est désormais disponible.",
+    deposit
+  });
+});
+
+app.post('/api/admin/deposits/:reference/reject', optionalToken, (req: AuthRequest, res: Response) => {
+  const ref = String(req.params.reference || '').trim();
+  const { motif } = req.body;
+  const deposit = depositsDb.find(d => d.reference.toUpperCase() === ref.toUpperCase());
+
+  if (!deposit) {
+    return res.status(404).json({ message: `Dépôt '${ref}' introuvable.` });
+  }
+
+  const dateRejet = new Date().toISOString();
+  deposit.statut = 'Rejetée';
+  deposit.dateValidationAdmin = dateRejet;
+  deposit.validePar = req.user?.nomOuRaisonSociale || 'Direction Générale des Impôts - Contrôle Fiscal';
+  deposit.motifRejet = motif || 'Non-conformité ou anomalie constatée lors de l\'instruction du dossier fiscal.';
+  deposit.receipt = undefined;
+
+  return res.json({
+    message: "Le dépôt a été rejeté par l'administration fiscale.",
+    deposit
   });
 });
 
@@ -1751,6 +1852,61 @@ app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/p
 
   const contribuable = contribuablesDb.find(c => c.id === deposit.contribuableId || c.matriculeFiscal === deposit.matriculeFiscal);
 
+  if (deposit.statut !== 'Validée') {
+    const noticeHtml = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Attestation de Dépôt Provisoire - ${deposit.reference}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #1e293b; background: #f8fafc; line-height: 1.5; }
+    .card { max-width: 800px; margin: auto; background: #fff; border: 2px solid #d97706; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); padding: 40px; }
+    .header { text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 25px; }
+    .republique { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: #475569; }
+    .title { font-size: 21px; font-weight: 800; color: #d97706; margin-top: 8px; }
+    .notice { background: #fffbeb; border: 1px solid #fde68a; padding: 18px; border-radius: 6px; color: #92400e; font-size: 13px; line-height: 1.6; margin-bottom: 24px; }
+    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 13px; }
+    .meta-table th, .meta-table td { padding: 10px 14px; border: 1px solid #e2e8f0; text-align: left; }
+    .meta-table th { background: #f8fafc; font-weight: 600; color: #475569; width: 35%; }
+    .meta-table td { font-weight: 600; color: #0f172a; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 700; background: #fef3c7; color: #92400e; }
+    .footer { text-align: center; margin-top: 30px; font-size: 11.5px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+    @media print { body { padding: 0; background: #fff; } .card { border: 1px solid #000; box-shadow: none; padding: 20px; } .no-print { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="no-print" style="text-align: right; margin-bottom: 20px;">
+      <button onclick="window.print()" style="background:#d97706;color:#fff;border:none;padding:10px 20px;border-radius:4px;cursor:pointer;font-weight:700;font-size:13px;">🖨 Imprimer l'Attestation Provisoire</button>
+    </div>
+    <div class="header">
+      <div class="republique">RÉPUBLIQUE TUNISIENNE • MINISTÈRE DES FINANCES</div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 2px;">DIRECTION GÉNÉRALE DES IMPÔTS — TÉLÉDÉCLARATION FISCALE</div>
+      <div class="title">ATTESTATION PROVISOIRE DE SOUMISSION DE DÉPÔT</div>
+    </div>
+    <div class="notice">
+      <strong>⚠️ Information importante :</strong> L'accusé de réception fiscal officiel définitif sera délivré une fois le dossier vérifié et validé par les services du Ministère des Finances / Direction Générale des Impôts.<br/>
+      Le dépôt n° <strong>${deposit.reference}</strong> est actuellement enregistré au statut : <strong>${deposit.statut}</strong>.
+    </div>
+    <table class="meta-table">
+      <tr><th>Référence du Dépôt</th><td style="color:#d97706;font-size:14.5px;">${deposit.reference}</td></tr>
+      <tr><th>Statut actuel du Traitement</th><td><span class="status-badge">⏳ ${deposit.statut.toUpperCase()}</span></td></tr>
+      <tr><th>Raison Sociale / Contribuable</th><td>${contribuable?.nomOuRaisonSociale || 'SOCIÉTÉ EXEMPLE SARL'}</td></tr>
+      <tr><th>Matricule Fiscal Déclarant</th><td>${contribuable?.matriculeFiscalComplet || deposit.matriculeFiscal}</td></tr>
+      <tr><th>Exercice Comptable</th><td>${deposit.exercice}</td></tr>
+      <tr><th>Nature & Type de Dépôt</th><td>${deposit.nature} — ${deposit.typeDepot}</td></tr>
+      <tr><th>Date et Heure de Transmission</th><td>${new Date(deposit.dateDepot).toLocaleString('fr-FR')}</td></tr>
+    </table>
+    <div class="footer">
+      Direction Générale des Impôts • République Tunisienne<br/>
+      Cette attestation certifie la bonne transmission des fichiers par le contribuable et leur mise en instance pour validation administrative.
+    </div>
+  </div>
+</body>
+</html>`;
+    return res.type('html').send(noticeHtml);
+  }
+
   const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1770,6 +1926,7 @@ app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/p
     .docs-table th, .docs-table td { padding: 8px 12px; border: 1px solid #cbd5e1; }
     .docs-table th { background: #f1f5f9; color: #334155; font-weight: 700; }
     .hash-box { background: #f8fafc; border: 1px dashed #94a3b8; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 11px; word-break: break-all; margin-top: 20px; }
+    .admin-seal { margin-top: 20px; border: 1px solid #c8e6c9; background: #f4fbf5; padding: 12px 16px; border-radius: 6px; font-size: 12.5px; color: #1e7e34; display: flex; justify-content: space-between; align-items: center; }
     .footer { text-align: center; margin-top: 30px; font-size: 11.5px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; }
     @media print { body { padding: 0; background: #fff; } .card { border: 1px solid #000; box-shadow: none; padding: 20px; } .no-print { display: none; } }
   </style>
@@ -1792,10 +1949,11 @@ app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/p
       <tr><th>Matricule Fiscal Déclarant</th><td>${contribuable?.matriculeFiscalComplet || deposit.matriculeFiscal}</td></tr>
       <tr><th>Exercice Comptable Déposé</th><td>${deposit.exercice}</td></tr>
       <tr><th>Date et Heure du Dépôt</th><td>${new Date(deposit.dateDepot).toLocaleString('fr-FR')} (Horodatage Certifié)</td></tr>
-      <tr><th>Statut du Traitement DGI</th><td><span style="color:#2e7d32;">✔ VALIDÉ ET ENREGISTRÉ</span></td></tr>
+      <tr><th>Validation Administrative DGI</th><td><strong style="color:#2e7d32;">✔ VALIDÉ PAR L'ADMINISTRATION FISCALE</strong> (${deposit.dateValidationAdmin ? new Date(deposit.dateValidationAdmin).toLocaleString('fr-FR') : new Date(deposit.dateDepot).toLocaleString('fr-FR')})</td></tr>
+      <tr><th>Validé et visé par</th><td>${deposit.validePar || 'Direction Générale des Impôts - Contrôle Fiscal'}</td></tr>
     </table>
 
-    <h4 style="font-size:13px; text-transform:uppercase; color:#334155; margin-bottom: 8px;">États Financiers Reçus et Archivés :</h4>
+    <h4 style="font-size:13px; text-transform:uppercase; color:#334155; margin-bottom: 8px;">États Financiers Reçus, Contrôlés et Archivés :</h4>
     <table class="docs-table">
       <thead><tr><th>Code</th><th>Libellé de l'État Financier</th><th>Fichier Déposé</th><th>Statut</th></tr></thead>
       <tbody>
@@ -1804,11 +1962,20 @@ app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/p
             <td><strong>${d.codeDocument}</strong></td>
             <td>${d.libelle}</td>
             <td>${d.nomFichier || d.codeDocument + '.xml'}</td>
-            <td style="color:#2e7d32;font-weight:600;">✔ Soumis conforme</td>
+            <td style="color:#2e7d32;font-weight:600;">✔ Validé conforme</td>
           </tr>
         `).join('')}
       </tbody>
     </table>
+
+    <div class="admin-seal">
+      <div>
+        <strong>VISA FISCAL & VISA DE CONTRÔLE DGI</strong><br/>
+        Validateur : ${deposit.validePar || 'Direction Générale des Impôts - Contrôle Fiscal'}<br/>
+        Statut : Certifié conforme aux normes XSD & Règles comptables de la République Tunisienne
+      </div>
+      <div style="font-size: 28px;">🏛️ ✔</div>
+    </div>
 
     <div class="hash-box">
       <strong>Empreinte Numérique Globale (SHA-256) :</strong><br/>
@@ -1817,7 +1984,7 @@ app.get(['/api/deposits/:reference/receipt', '/api/tracking/:reference/receipt/p
 
     <div class="footer">
       Document officiel émis électroniquement conformément à la réglementation fiscale en vigueur en République Tunisienne.<br/>
-      L'authenticité de ce document peut être vérifiée sur le portail fiscal officiel.
+      L'authenticité et la validité de ce récépissé peuvent être vérifiées auprès de la Direction Générale des Impôts.
     </div>
   </div>
 </body>
