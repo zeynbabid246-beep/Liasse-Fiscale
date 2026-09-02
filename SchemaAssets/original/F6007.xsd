@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:lf="http://www.impots.finances.gov.tn/liasse" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://www.impots.finances.gov.tn/liasse" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+	<xsd:include schemaLocation="Typescommuns.xsd"/>
+	<xsd:include schemaLocation="Entete.xsd"/>
+	<xsd:element name="F6007">
+		<xsd:annotation>
+			<xsd:documentation>Faits marquants de l'exercice</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="VersionDocument" type="xsd:string"/>
+				<xsd:element name="Entete" type="lf:T_Entete"/>
+				<xsd:element name="Details">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="F60070001" maxOccurs="2">
+								<xsd:annotation>
+									<xsd:documentation>Réunions ordinaires/Réunions Extraordinaires</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="F60071001">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+													<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+												</xsd:sequence>
+												<xsd:attribute name="Libelle" type="xsd:string" default="Organe"/>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="F60071002">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60073001" type="lf:T_Date"/>
+													<xsd:element name="F60073002" type="lf:T_Date"/>
+												</xsd:sequence>
+												<xsd:attribute name="Libelle" type="xsd:string" default="Date"/>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="F60071003">
+											<xsd:complexType>
+												<xsd:sequence maxOccurs="unbounded">
+													<xsd:element name="F60072003">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+																<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+															</xsd:sequence>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+												<xsd:attribute name="Resolution"/>
+												<xsd:attribute name="Libelle" default="Résolution"/>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="Reunion" use="required">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:ID">
+												<xsd:enumeration value="RE"/>
+												<xsd:enumeration value="RO"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:attribute>
+									<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="Libelle" default="Réunions ordinaires/Réunions Extraordinaires"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070002">
+								<xsd:annotation>
+									<xsd:documentation>Principaux contrats signés ou renouvelés</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence maxOccurs="unbounded">
+										<xsd:element name="Contrats" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+													<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+												</xsd:sequence>
+												<xsd:attribute name="Contrat" use="required">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:enumeration value="CS"/>
+															<xsd:enumeration value="CR"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:attribute>
+												<xsd:attribute name="Libelle" default="Principaux contrats signés ou renouvelés"/>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="Libelle" default="Principaux contrats signés ou renouvelés"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070003">
+								<xsd:annotation>
+									<xsd:documentation>Elements ayant effet sur la performance</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Performance" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+													<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="Libelle" default="Elements ayant effet sur la performance"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070004">
+								<xsd:annotation>
+									<xsd:documentation>Elements ayant effet sur la patrimoine</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Patrimoine" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+													<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+									<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070005">
+								<xsd:annotation>
+									<xsd:documentation>Difficultées rencontrées durant l'exercice</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Difficulte" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60071005" maxOccurs="3">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+																<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+															</xsd:sequence>
+															<xsd:attribute name="Difficulte" use="required">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:ID">
+																		<xsd:length value="2"/>
+																		<xsd:enumeration value="DC"/>
+																		<xsd:enumeration value="DF"/>
+																		<xsd:enumeration value="DT"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:attribute>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+												<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+												<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070006">
+								<xsd:annotation>
+									<xsd:documentation>Projets et perspectives</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Projet" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60071006" maxOccurs="3">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="F60073001" type="lf:T_NombrePositif15"/>
+																<xsd:element name="F60073002" type="lf:T_NombrePositif15"/>
+															</xsd:sequence>
+															<xsd:attribute name="Perspective" use="required">
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:ID">
+																		<xsd:length value="2"/>
+																		<xsd:enumeration value="PC"/>
+																		<xsd:enumeration value="PF"/>
+																		<xsd:enumeration value="PT"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:attribute>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+												<xsd:attribute name="F60073001" type="lf:T_NombrePositif15" use="required"/>
+												<xsd:attribute name="F60073002" type="lf:T_NombrePositif15" use="required"/>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="F60070007">
+								<xsd:annotation>
+									<xsd:documentation>Autres faits marquants de l'exercice</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Fait" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="F60071007" type="lf:T_NombrePositif15"/>
+													<xsd:element name="F60072007" type="lf:T_NombrePositif15"/>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
