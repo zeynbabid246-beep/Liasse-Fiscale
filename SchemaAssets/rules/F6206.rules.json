@@ -1,0 +1,855 @@
+{
+  "formCode": "F6206",
+  "generatedAt": "2026-09-02T19:31:32.847Z",
+  "rulesCount": 44,
+  "rules": [
+    {
+      "target": "F62060003",
+      "label": "PRV2 Produits de placements (Opérations brutes)",
+      "formulaRaw": "\"F62060004\" + \"F62060005\" + \"F62060006\" + \"F62060007\"",
+      "operands": [
+        {
+          "code": "F62060004",
+          "sign": "+"
+        },
+        {
+          "code": "F62060005",
+          "sign": "+"
+        },
+        {
+          "code": "F62060006",
+          "sign": "+"
+        },
+        {
+          "code": "F62060007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060008",
+      "label": "Total primes et produits de placement (Sous total 2) (Opérations brutes)",
+      "formulaRaw": "\"F62060001\" + \"F62060003\"",
+      "operands": [
+        {
+          "code": "F62060001",
+          "sign": "+"
+        },
+        {
+          "code": "F62060003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060011",
+      "label": "CHV1 Charge de sinistres (Opérations brutes)",
+      "formulaRaw": "\"F62060012\" + \"F62060013\"",
+      "operands": [
+        {
+          "code": "F62060012",
+          "sign": "+"
+        },
+        {
+          "code": "F62060013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060014",
+      "label": "Total produits sans charges sinistres (Sous total 3) (Opérations brutes)",
+      "formulaRaw": "\"F62060008\" + \"F62060009\" + \"F62060010\" - \"F62060011\"",
+      "operands": [
+        {
+          "code": "F62060008",
+          "sign": "+"
+        },
+        {
+          "code": "F62060009",
+          "sign": "+"
+        },
+        {
+          "code": "F62060010",
+          "sign": "+"
+        },
+        {
+          "code": "F62060011",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060015",
+      "label": "CHV2 Variation des autres provisions techniques (Opérations brutes)",
+      "formulaRaw": "\"F62060016\" + \"F62060017\" + \"F62060018\"",
+      "operands": [
+        {
+          "code": "F62060016",
+          "sign": "+"
+        },
+        {
+          "code": "F62060017",
+          "sign": "+"
+        },
+        {
+          "code": "F62060018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060019",
+      "label": "Sous total 4 (Opérations brutes)",
+      "formulaRaw": "\"F62060014\" + \"F62060015\"",
+      "operands": [
+        {
+          "code": "F62060014",
+          "sign": "+"
+        },
+        {
+          "code": "F62060015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060021",
+      "label": "CHV4 Frais d'exploitation (Opérations brutes)",
+      "formulaRaw": "\"F62060022\" + \"F62060023\" + \"F62060024\" - \"F62060025\"",
+      "operands": [
+        {
+          "code": "F62060022",
+          "sign": "+"
+        },
+        {
+          "code": "F62060023",
+          "sign": "+"
+        },
+        {
+          "code": "F62060024",
+          "sign": "+"
+        },
+        {
+          "code": "F62060025",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060026",
+      "label": "Sous total 5 (Opérations brutes)",
+      "formulaRaw": "\"F62060019\" + \"F62060020\" - \"F62060021\"",
+      "operands": [
+        {
+          "code": "F62060019",
+          "sign": "+"
+        },
+        {
+          "code": "F62060020",
+          "sign": "+"
+        },
+        {
+          "code": "F62060021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060028",
+      "label": "CHV9 Charges de placements (Opérations brutes)",
+      "formulaRaw": "\"F62060029\" + \"F62060030\" + \"F62060031\"",
+      "operands": [
+        {
+          "code": "F62060029",
+          "sign": "+"
+        },
+        {
+          "code": "F62060030",
+          "sign": "+"
+        },
+        {
+          "code": "F62060031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060032",
+      "label": "Sous total 6 (Opérations brutes)",
+      "formulaRaw": "-\"F62060027\" - \"F62060028\"",
+      "operands": [
+        {
+          "code": "F62060027",
+          "sign": "-"
+        },
+        {
+          "code": "F62060028",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62060035",
+      "label": "RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Opérations brutes)",
+      "formulaRaw": "-\"F62060033\" - \"F62060034\"",
+      "operands": [
+        {
+          "code": "F62060033",
+          "sign": "-"
+        },
+        {
+          "code": "F62060034",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061003",
+      "label": "PRV2 Produits de placements (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061004\" + \"F62061005\" + \"F62061006\" + \"F62061007\"",
+      "operands": [
+        {
+          "code": "F62061004",
+          "sign": "+"
+        },
+        {
+          "code": "F62061005",
+          "sign": "+"
+        },
+        {
+          "code": "F62061006",
+          "sign": "+"
+        },
+        {
+          "code": "F62061007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061008",
+      "label": "Total primes et produits de placement (Sous total 2) (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061001\" + \"F62061003\"",
+      "operands": [
+        {
+          "code": "F62061001",
+          "sign": "+"
+        },
+        {
+          "code": "F62061003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061011",
+      "label": "CHV1 Charge de sinistres (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061012\" + \"F62061013\"",
+      "operands": [
+        {
+          "code": "F62061012",
+          "sign": "+"
+        },
+        {
+          "code": "F62061013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061014",
+      "label": "Total produits sans charges sinistres (Sous total 3) (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061008\" + \"F62061009\" + \"F62061010\" - \"F62061011\"",
+      "operands": [
+        {
+          "code": "F62061008",
+          "sign": "+"
+        },
+        {
+          "code": "F62061009",
+          "sign": "+"
+        },
+        {
+          "code": "F62061010",
+          "sign": "+"
+        },
+        {
+          "code": "F62061011",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061015",
+      "label": "CHV2 Variation des autres provisions techniques (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061016\" + \"F62061017\" + \"F62061018\"",
+      "operands": [
+        {
+          "code": "F62061016",
+          "sign": "+"
+        },
+        {
+          "code": "F62061017",
+          "sign": "+"
+        },
+        {
+          "code": "F62061018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061019",
+      "label": "Sous total 4 (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061014\" + \"F62061015\"",
+      "operands": [
+        {
+          "code": "F62061014",
+          "sign": "+"
+        },
+        {
+          "code": "F62061015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061021",
+      "label": "CHV4 Frais d'exploitation (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061022\" + \"F62061023\" + \"F62061024\" - \"F62061025\"",
+      "operands": [
+        {
+          "code": "F62061022",
+          "sign": "+"
+        },
+        {
+          "code": "F62061023",
+          "sign": "+"
+        },
+        {
+          "code": "F62061024",
+          "sign": "+"
+        },
+        {
+          "code": "F62061025",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061026",
+      "label": "Sous total 5 (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061019\" + \"F62061020\" - \"F62061021\"",
+      "operands": [
+        {
+          "code": "F62061019",
+          "sign": "+"
+        },
+        {
+          "code": "F62061020",
+          "sign": "+"
+        },
+        {
+          "code": "F62061021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061028",
+      "label": "CHV9 Charges de placements (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62061029\" + \"F62061030\" + \"F62061031\"",
+      "operands": [
+        {
+          "code": "F62061029",
+          "sign": "+"
+        },
+        {
+          "code": "F62061030",
+          "sign": "+"
+        },
+        {
+          "code": "F62061031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061032",
+      "label": "Sous total 6 (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "-\"F62061027\" - \"F62061028\"",
+      "operands": [
+        {
+          "code": "F62061027",
+          "sign": "-"
+        },
+        {
+          "code": "F62061028",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62061035",
+      "label": "RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "-\"F62061033\" - \"F62061034\"",
+      "operands": [
+        {
+          "code": "F62061033",
+          "sign": "-"
+        },
+        {
+          "code": "F62061034",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062003",
+      "label": "PRV2 Produits de placements (Net Exercice)",
+      "formulaRaw": "\"F62062004\" + \"F62062005\" + \"F62062006\" + \"F62062007\"",
+      "operands": [
+        {
+          "code": "F62062004",
+          "sign": "+"
+        },
+        {
+          "code": "F62062005",
+          "sign": "+"
+        },
+        {
+          "code": "F62062006",
+          "sign": "+"
+        },
+        {
+          "code": "F62062007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062008",
+      "label": "Total primes et produits de placement (Sous total 2) (Net Exercice)",
+      "formulaRaw": "\"F62062001\" + \"F62062003\"",
+      "operands": [
+        {
+          "code": "F62062001",
+          "sign": "+"
+        },
+        {
+          "code": "F62062003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062011",
+      "label": "CHV1 Charge de sinistres (Net Exercice)",
+      "formulaRaw": "\"F62062012\" + \"F62062013\"",
+      "operands": [
+        {
+          "code": "F62062012",
+          "sign": "+"
+        },
+        {
+          "code": "F62062013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062014",
+      "label": "Total produits sans charges sinistres (Sous total 3) (Net Exercice)",
+      "formulaRaw": "\"F62062008\" + \"F62062009\" + \"F62062010\" - \"F62062011\"",
+      "operands": [
+        {
+          "code": "F62062008",
+          "sign": "+"
+        },
+        {
+          "code": "F62062009",
+          "sign": "+"
+        },
+        {
+          "code": "F62062010",
+          "sign": "+"
+        },
+        {
+          "code": "F62062011",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062015",
+      "label": "CHV2 Variation des autres provisions techniques (Net Exercice)",
+      "formulaRaw": "\"F62062016\" + \"F62062017\" + \"F62062018\"",
+      "operands": [
+        {
+          "code": "F62062016",
+          "sign": "+"
+        },
+        {
+          "code": "F62062017",
+          "sign": "+"
+        },
+        {
+          "code": "F62062018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062019",
+      "label": "Sous total 4 (Net Exercice)",
+      "formulaRaw": "\"F62062014\" + \"F62062015\"",
+      "operands": [
+        {
+          "code": "F62062014",
+          "sign": "+"
+        },
+        {
+          "code": "F62062015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062021",
+      "label": "CHV4 Frais d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F62062022\" + \"F62062023\" + \"F62062024\" - \"F62062025\"",
+      "operands": [
+        {
+          "code": "F62062022",
+          "sign": "+"
+        },
+        {
+          "code": "F62062023",
+          "sign": "+"
+        },
+        {
+          "code": "F62062024",
+          "sign": "+"
+        },
+        {
+          "code": "F62062025",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062026",
+      "label": "Sous total 5 (Net Exercice)",
+      "formulaRaw": "\"F62062019\" + \"F62062020\" - \"F62062021\"",
+      "operands": [
+        {
+          "code": "F62062019",
+          "sign": "+"
+        },
+        {
+          "code": "F62062020",
+          "sign": "+"
+        },
+        {
+          "code": "F62062021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062028",
+      "label": "CHV9 Charges de placements (Net Exercice)",
+      "formulaRaw": "\"F62062029\" + \"F62062030\" + \"F62062031\"",
+      "operands": [
+        {
+          "code": "F62062029",
+          "sign": "+"
+        },
+        {
+          "code": "F62062030",
+          "sign": "+"
+        },
+        {
+          "code": "F62062031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062032",
+      "label": "Sous total 6 (Net Exercice)",
+      "formulaRaw": "-\"F62062027\" - \"F62062028\"",
+      "operands": [
+        {
+          "code": "F62062027",
+          "sign": "-"
+        },
+        {
+          "code": "F62062028",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62062035",
+      "label": "RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice)",
+      "formulaRaw": "-\"F62062033\" - \"F62062034\"",
+      "operands": [
+        {
+          "code": "F62062033",
+          "sign": "-"
+        },
+        {
+          "code": "F62062034",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063003",
+      "label": "PRV2 Produits de placements (Net Exercice - 1). \"F62063004\" + \"F62063005\" + \"F62063006\" + \"F62063007\"",
+      "formulaRaw": "PRV2 Produits de placements (Net Exercice - 1). \"F62063004\" + \"F62063005\" + \"F62063006\" + \"F62063007\"",
+      "operands": [
+        {
+          "code": "F62063004",
+          "sign": "+"
+        },
+        {
+          "code": "F62063005",
+          "sign": "+"
+        },
+        {
+          "code": "F62063006",
+          "sign": "+"
+        },
+        {
+          "code": "F62063007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063008",
+      "label": "Total primes et produits de placement (Sous total 2) (Net Exercice - 1). \"F62063001\" + \"F62063003\"",
+      "formulaRaw": "Total primes et produits de placement (Sous total 2) (Net Exercice - 1). \"F62063001\" + \"F62063003\"",
+      "operands": [
+        {
+          "code": "F62063001",
+          "sign": "+"
+        },
+        {
+          "code": "F62063003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063011",
+      "label": "CHV1 Charge de sinistres (Net Exercice - 1). \"F62063012\" + \"F62063013\"",
+      "formulaRaw": "CHV1 Charge de sinistres (Net Exercice - 1). \"F62063012\" + \"F62063013\"",
+      "operands": [
+        {
+          "code": "F62063012",
+          "sign": "+"
+        },
+        {
+          "code": "F62063013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063014",
+      "label": "Total produits sans charges sinistres (Sous total 3) (Net Exercice - 1). \"F62063008\" + \"F62063009\" + \"F62063010\" - \"F62063011\"",
+      "formulaRaw": "Total produits sans charges sinistres (Sous total 3) (Net Exercice - 1). \"F62063008\" + \"F62063009\" + \"F62063010\" - \"F62063011\"",
+      "operands": [
+        {
+          "code": "F62063008",
+          "sign": "+"
+        },
+        {
+          "code": "F62063009",
+          "sign": "+"
+        },
+        {
+          "code": "F62063010",
+          "sign": "+"
+        },
+        {
+          "code": "F62063011",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063015",
+      "label": "CHV2 Variation des autres provisions techniques (Net Exercice - 1). \"F62063016\" + \"F62063017\" + \"F62063018\"",
+      "formulaRaw": "CHV2 Variation des autres provisions techniques (Net Exercice - 1). \"F62063016\" + \"F62063017\" + \"F62063018\"",
+      "operands": [
+        {
+          "code": "F62063016",
+          "sign": "+"
+        },
+        {
+          "code": "F62063017",
+          "sign": "+"
+        },
+        {
+          "code": "F62063018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063019",
+      "label": "Sous total 4 (Net Exercice - 1). \"F62063014\" + \"F62063015\"",
+      "formulaRaw": "Sous total 4 (Net Exercice - 1). \"F62063014\" + \"F62063015\"",
+      "operands": [
+        {
+          "code": "F62063014",
+          "sign": "+"
+        },
+        {
+          "code": "F62063015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063021",
+      "label": "CHV4 Frais d'exploitation (Net Exercice - 1). \"F62063022\" + \"F62063023\" + \"F62063024\" - \"F62063025\"",
+      "formulaRaw": "CHV4 Frais d'exploitation (Net Exercice - 1). \"F62063022\" + \"F62063023\" + \"F62063024\" - \"F62063025\"",
+      "operands": [
+        {
+          "code": "F62063022",
+          "sign": "+"
+        },
+        {
+          "code": "F62063023",
+          "sign": "+"
+        },
+        {
+          "code": "F62063024",
+          "sign": "+"
+        },
+        {
+          "code": "F62063025",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063026",
+      "label": "Sous total 5 (Net Exercice - 1). \"F62063019\" + \"F62063020\" - \"F62063021\"",
+      "formulaRaw": "Sous total 5 (Net Exercice - 1). \"F62063019\" + \"F62063020\" - \"F62063021\"",
+      "operands": [
+        {
+          "code": "F62063019",
+          "sign": "+"
+        },
+        {
+          "code": "F62063020",
+          "sign": "+"
+        },
+        {
+          "code": "F62063021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063028",
+      "label": "CHV9 Charges de placements (Net Exercice - 1). \"F62063029\" + \"F62063030\" + \"F62063031\"",
+      "formulaRaw": "CHV9 Charges de placements (Net Exercice - 1). \"F62063029\" + \"F62063030\" + \"F62063031\"",
+      "operands": [
+        {
+          "code": "F62063029",
+          "sign": "+"
+        },
+        {
+          "code": "F62063030",
+          "sign": "+"
+        },
+        {
+          "code": "F62063031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063032",
+      "label": "Sous total 6 (Net Exercice - 1). -\"F62063027\" - \"F62063028\"",
+      "formulaRaw": "Sous total 6 (Net Exercice - 1). -\"F62063027\" - \"F62063028\"",
+      "operands": [
+        {
+          "code": "F62063027",
+          "sign": "-"
+        },
+        {
+          "code": "F62063028",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62063035",
+      "label": "RTV Sous total (résultat technique de l'assurance et/ou de la réassurance vie) (Net Exercice - 1)",
+      "formulaRaw": "-\"F62063033\" - \"F62063034\"",
+      "operands": [
+        {
+          "code": "F62063033",
+          "sign": "-"
+        },
+        {
+          "code": "F62063034",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

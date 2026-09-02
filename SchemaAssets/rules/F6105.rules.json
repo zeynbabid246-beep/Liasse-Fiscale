@@ -1,0 +1,111 @@
+{
+  "formCode": "F6105",
+  "generatedAt": "2026-09-02T19:31:32.750Z",
+  "rulesCount": 6,
+  "rules": [
+    {
+      "target": "F61050001",
+      "label": "Total Passif Eventuels (Exercice)",
+      "formulaRaw": "\"F61050002\" + \"F61050003\" + \"F61050004\"",
+      "operands": [
+        {
+          "code": "F61050002",
+          "sign": "+"
+        },
+        {
+          "code": "F61050003",
+          "sign": "+"
+        },
+        {
+          "code": "F61050004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61050005",
+      "label": "Total engagements donn�s (Exercice)",
+      "formulaRaw": "\"F61050006\" + \"F61050007\"",
+      "operands": [
+        {
+          "code": "F61050006",
+          "sign": "+"
+        },
+        {
+          "code": "F61050007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61050008",
+      "label": "Total des engagements re�us (Exercice)",
+      "formulaRaw": "\"F61050009\" + \"F61050010\"",
+      "operands": [
+        {
+          "code": "F61050009",
+          "sign": "+"
+        },
+        {
+          "code": "F61050010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61051001",
+      "label": "Total Passif Eventuels (Exercice - 1). \"F61051002\" + \"F61051003\" + \"F61051004\"",
+      "formulaRaw": "Total Passif Eventuels (Exercice - 1). \"F61051002\" + \"F61051003\" + \"F61051004\"",
+      "operands": [
+        {
+          "code": "F61051002",
+          "sign": "+"
+        },
+        {
+          "code": "F61051003",
+          "sign": "+"
+        },
+        {
+          "code": "F61051004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61051005",
+      "label": "Total engagements donn�s (Exercice - 1)",
+      "formulaRaw": "\"F61051006\" + \"F61051007\"",
+      "operands": [
+        {
+          "code": "F61051006",
+          "sign": "+"
+        },
+        {
+          "code": "F61051007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61051008",
+      "label": "Total des engagements re�us (Exercice - 1)",
+      "formulaRaw": "\"F61051009\" + \"F61051010\"",
+      "operands": [
+        {
+          "code": "F61051009",
+          "sign": "+"
+        },
+        {
+          "code": "F61051010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

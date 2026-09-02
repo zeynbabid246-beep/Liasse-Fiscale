@@ -1,0 +1,359 @@
+{
+  "formCode": "F6204",
+  "generatedAt": "2026-09-02T19:31:32.831Z",
+  "rulesCount": 10,
+  "rules": [
+    {
+      "target": "F62040001",
+      "label": "Flux de trésorerie net provenant des activités d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F62040002\" - \"F62040003\" + \"F62040004\" - \"F62040005\" - \"F62040006\" - \"F62040007\" + \"F62040008\" + \"F62040009\" - \"F62040010\" - \"F62040011\" + \"F62040012\" + \"F62040013\" - \"F62040014\" + \"F62040015\" - \"F62040016\" - \"F62040017\" + \"F62040018\"",
+      "operands": [
+        {
+          "code": "F62040002",
+          "sign": "+"
+        },
+        {
+          "code": "F62040003",
+          "sign": "-"
+        },
+        {
+          "code": "F62040004",
+          "sign": "+"
+        },
+        {
+          "code": "F62040005",
+          "sign": "-"
+        },
+        {
+          "code": "F62040006",
+          "sign": "-"
+        },
+        {
+          "code": "F62040007",
+          "sign": "-"
+        },
+        {
+          "code": "F62040008",
+          "sign": "+"
+        },
+        {
+          "code": "F62040009",
+          "sign": "+"
+        },
+        {
+          "code": "F62040010",
+          "sign": "-"
+        },
+        {
+          "code": "F62040011",
+          "sign": "-"
+        },
+        {
+          "code": "F62040012",
+          "sign": "+"
+        },
+        {
+          "code": "F62040013",
+          "sign": "+"
+        },
+        {
+          "code": "F62040014",
+          "sign": "-"
+        },
+        {
+          "code": "F62040015",
+          "sign": "+"
+        },
+        {
+          "code": "F62040016",
+          "sign": "-"
+        },
+        {
+          "code": "F62040017",
+          "sign": "-"
+        },
+        {
+          "code": "F62040018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62040019",
+      "label": "Flux de trésorerie net provenant des activités d'investissement (Net Exercice)",
+      "formulaRaw": "-\"F62040020\" + \"F62040021\" - \"F62040022\" + \"F62040023\" - \"F62040024\" + \"F62040025\"",
+      "operands": [
+        {
+          "code": "F62040020",
+          "sign": "-"
+        },
+        {
+          "code": "F62040021",
+          "sign": "+"
+        },
+        {
+          "code": "F62040022",
+          "sign": "-"
+        },
+        {
+          "code": "F62040023",
+          "sign": "+"
+        },
+        {
+          "code": "F62040024",
+          "sign": "-"
+        },
+        {
+          "code": "F62040025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62040026",
+      "label": "Flux de trésorerie net provenant des activités de financement (Net Exercice)",
+      "formulaRaw": "\"F62040027\" + \"F62040028\" + \"F62040029\" - \"F62040030\" + \"F62040031\"",
+      "operands": [
+        {
+          "code": "F62040027",
+          "sign": "+"
+        },
+        {
+          "code": "F62040028",
+          "sign": "+"
+        },
+        {
+          "code": "F62040029",
+          "sign": "+"
+        },
+        {
+          "code": "F62040030",
+          "sign": "-"
+        },
+        {
+          "code": "F62040031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62040033",
+      "label": "Variations de trésorerie (Net Exercice)",
+      "formulaRaw": "\"F62040001\" + \"F62040019\" + \"F62040026\" + \"F62040032\"",
+      "operands": [
+        {
+          "code": "F62040001",
+          "sign": "+"
+        },
+        {
+          "code": "F62040019",
+          "sign": "+"
+        },
+        {
+          "code": "F62040026",
+          "sign": "+"
+        },
+        {
+          "code": "F62040032",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62040035",
+      "label": "trésorerie à la cloture de l'exercice (Net Exercice)",
+      "formulaRaw": "\"F62040033\" + \"F62040034\"",
+      "operands": [
+        {
+          "code": "F62040033",
+          "sign": "+"
+        },
+        {
+          "code": "F62040034",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62041001",
+      "label": "Flux de trésorerie net provenant des activités d'exploitation (Net Exercice - 1)",
+      "formulaRaw": "\"F62041002\" - \"F62041003\" + \"F62041004\" - \"F62041005\" - \"F62041006\" - \"F62041007\" + \"F62041008\" + \"F62041009\" - \"F62041010\" - \"F62041011\" + \"F62041012\" + \"F62041013\" - \"F62041014\" + \"F62041015\" - \"F62041016\" - \"F62041017\" + \"F62041018\"",
+      "operands": [
+        {
+          "code": "F62041002",
+          "sign": "+"
+        },
+        {
+          "code": "F62041003",
+          "sign": "-"
+        },
+        {
+          "code": "F62041004",
+          "sign": "+"
+        },
+        {
+          "code": "F62041005",
+          "sign": "-"
+        },
+        {
+          "code": "F62041006",
+          "sign": "-"
+        },
+        {
+          "code": "F62041007",
+          "sign": "-"
+        },
+        {
+          "code": "F62041008",
+          "sign": "+"
+        },
+        {
+          "code": "F62041009",
+          "sign": "+"
+        },
+        {
+          "code": "F62041010",
+          "sign": "-"
+        },
+        {
+          "code": "F62041011",
+          "sign": "-"
+        },
+        {
+          "code": "F62041012",
+          "sign": "+"
+        },
+        {
+          "code": "F62041013",
+          "sign": "+"
+        },
+        {
+          "code": "F62041014",
+          "sign": "-"
+        },
+        {
+          "code": "F62041015",
+          "sign": "+"
+        },
+        {
+          "code": "F62041016",
+          "sign": "-"
+        },
+        {
+          "code": "F62041017",
+          "sign": "-"
+        },
+        {
+          "code": "F62041018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62041019",
+      "label": "Flux de trésorerie net provenant des activités d'investissement (Net Exercice - 1)",
+      "formulaRaw": "-\"F62041020\" + \"F62041021\" - \"F62041022\" + \"F62041023\" - \"F62041024\" + \"F62041025\"",
+      "operands": [
+        {
+          "code": "F62041020",
+          "sign": "-"
+        },
+        {
+          "code": "F62041021",
+          "sign": "+"
+        },
+        {
+          "code": "F62041022",
+          "sign": "-"
+        },
+        {
+          "code": "F62041023",
+          "sign": "+"
+        },
+        {
+          "code": "F62041024",
+          "sign": "-"
+        },
+        {
+          "code": "F62041025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62041026",
+      "label": "Flux de trésorerie net provenant des activités de financement (Net Exercice - 1)",
+      "formulaRaw": "\"F62041027\" + \"F62041028\" + \"F62041029\" - \"F62041030\" + \"F62041031\"",
+      "operands": [
+        {
+          "code": "F62041027",
+          "sign": "+"
+        },
+        {
+          "code": "F62041028",
+          "sign": "+"
+        },
+        {
+          "code": "F62041029",
+          "sign": "+"
+        },
+        {
+          "code": "F62041030",
+          "sign": "-"
+        },
+        {
+          "code": "F62041031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62041033",
+      "label": "Variations de trésorerie (Net Exercice - 1)",
+      "formulaRaw": "\"F62041001\" + \"F62041019\" + \"F62041026\" + \"F62041032\"",
+      "operands": [
+        {
+          "code": "F62041001",
+          "sign": "+"
+        },
+        {
+          "code": "F62041019",
+          "sign": "+"
+        },
+        {
+          "code": "F62041026",
+          "sign": "+"
+        },
+        {
+          "code": "F62041032",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62041035",
+      "label": "trésorerie � la cloture de l'exercice (Net Exercice - 1)",
+      "formulaRaw": "\"F62041033\" + \"F62041034\"",
+      "operands": [
+        {
+          "code": "F62041033",
+          "sign": "+"
+        },
+        {
+          "code": "F62041034",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

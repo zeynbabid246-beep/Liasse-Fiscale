@@ -1,0 +1,311 @@
+{
+  "formCode": "F6403",
+  "generatedAt": "2026-09-02T19:31:32.867Z",
+  "rulesCount": 12,
+  "rules": [
+    {
+      "target": "F64030001",
+      "label": "PR 1 - Apports (Net Exercice). \"F64030002\" + \"F64030003\" + \"F64030004\" + \"F64030005\" + \"F64030006\"",
+      "formulaRaw": "PR 1 - Apports (Net Exercice). \"F64030002\" + \"F64030003\" + \"F64030004\" + \"F64030005\" + \"F64030006\"",
+      "operands": [
+        {
+          "code": "F64030002",
+          "sign": "+"
+        },
+        {
+          "code": "F64030003",
+          "sign": "+"
+        },
+        {
+          "code": "F64030004",
+          "sign": "+"
+        },
+        {
+          "code": "F64030005",
+          "sign": "+"
+        },
+        {
+          "code": "F64030006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64030008",
+      "label": "PR 3 - Revenus des microcrédits  (Net Exercice). \"F64030009\" + \"F64030010\"",
+      "formulaRaw": "PR 3 - Revenus des microcrédits  (Net Exercice). \"F64030009\" + \"F64030010\"",
+      "operands": [
+        {
+          "code": "F64030009",
+          "sign": "+"
+        },
+        {
+          "code": "F64030010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64030014",
+      "label": "Produits (Net Exercice)",
+      "formulaRaw": "\"F64030001\" + \"F64030007\" + \"F64030008\" + \"F64030011\" + \"F64030012\" + \"F64030013\"",
+      "operands": [
+        {
+          "code": "F64030001",
+          "sign": "+"
+        },
+        {
+          "code": "F64030007",
+          "sign": "+"
+        },
+        {
+          "code": "F64030008",
+          "sign": "+"
+        },
+        {
+          "code": "F64030011",
+          "sign": "+"
+        },
+        {
+          "code": "F64030012",
+          "sign": "+"
+        },
+        {
+          "code": "F64030013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64030015",
+      "label": "CH 1- Dons, subventions et services fournis  (Net Exercice). \"F64030016\" + \"F64030017\"",
+      "formulaRaw": "CH 1- Dons, subventions et services fournis  (Net Exercice). \"F64030016\" + \"F64030017\"",
+      "operands": [
+        {
+          "code": "F64030016",
+          "sign": "+"
+        },
+        {
+          "code": "F64030017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64030026",
+      "label": "Total charges (Net Exercice)",
+      "formulaRaw": "\"F64030015\" + \"\"F64030018\" + \"F64030019\" + \"F64030020\" + \"F64030021\" + \"F64030022\" + \"F64030023\" + \"F64030024\" + \"F64030025\"",
+      "operands": [
+        {
+          "code": "F64030015",
+          "sign": "+"
+        },
+        {
+          "code": "F64030018",
+          "sign": "+"
+        },
+        {
+          "code": "F64030019",
+          "sign": "+"
+        },
+        {
+          "code": "F64030020",
+          "sign": "+"
+        },
+        {
+          "code": "F64030021",
+          "sign": "+"
+        },
+        {
+          "code": "F64030022",
+          "sign": "+"
+        },
+        {
+          "code": "F64030023",
+          "sign": "+"
+        },
+        {
+          "code": "F64030024",
+          "sign": "+"
+        },
+        {
+          "code": "F64030025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64030027",
+      "label": "Excedent (déficit) des produits sur les charges (Net Exercice)",
+      "formulaRaw": "\"F64030014\" - \"F64030026\"",
+      "operands": [
+        {
+          "code": "F64030014",
+          "sign": "+"
+        },
+        {
+          "code": "F64030026",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031001",
+      "label": "PR 1 - Apports (Net Exercice - 1). \"F64031002\" + \"F64031003\" + \"F64031004\" + \"F64031005\" + \"F64031006\"",
+      "formulaRaw": "PR 1 - Apports (Net Exercice - 1). \"F64031002\" + \"F64031003\" + \"F64031004\" + \"F64031005\" + \"F64031006\"",
+      "operands": [
+        {
+          "code": "F64031002",
+          "sign": "+"
+        },
+        {
+          "code": "F64031003",
+          "sign": "+"
+        },
+        {
+          "code": "F64031004",
+          "sign": "+"
+        },
+        {
+          "code": "F64031005",
+          "sign": "+"
+        },
+        {
+          "code": "F64031006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031008",
+      "label": "PR 3 - Revenus des microcrédits  (Net Exercice - 1). \"F64031009\" + \"F64031010\"",
+      "formulaRaw": "PR 3 - Revenus des microcrédits  (Net Exercice - 1). \"F64031009\" + \"F64031010\"",
+      "operands": [
+        {
+          "code": "F64031009",
+          "sign": "+"
+        },
+        {
+          "code": "F64031010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031014",
+      "label": "Produits (Net Exercice - 1). \"F64031001\" + \"F64031007\" + \"F64031008\" + \"F64031011\" + \"F64031012\" + \"F64031013\"",
+      "formulaRaw": "Produits (Net Exercice - 1). \"F64031001\" + \"F64031007\" + \"F64031008\" + \"F64031011\" + \"F64031012\" + \"F64031013\"",
+      "operands": [
+        {
+          "code": "F64031001",
+          "sign": "+"
+        },
+        {
+          "code": "F64031007",
+          "sign": "+"
+        },
+        {
+          "code": "F64031008",
+          "sign": "+"
+        },
+        {
+          "code": "F64031011",
+          "sign": "+"
+        },
+        {
+          "code": "F64031012",
+          "sign": "+"
+        },
+        {
+          "code": "F64031013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031015",
+      "label": "CH 1- Dons, subventions et services fournis  (Net Exercice - 1). \"F64031016\" + \"F64031017\"",
+      "formulaRaw": "CH 1- Dons, subventions et services fournis  (Net Exercice - 1). \"F64031016\" + \"F64031017\"",
+      "operands": [
+        {
+          "code": "F64031016",
+          "sign": "+"
+        },
+        {
+          "code": "F64031017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031026",
+      "label": "Total charges (Net Exercice - 1). \"F64031015\" + \"\"F64031018\" + \"F64031019\" + \"F64031020\" + \"F64031021\" + \"F64031022\" + \"F64031023\" + \"F64031024\" + \"F64031025\"",
+      "formulaRaw": "Total charges (Net Exercice - 1). \"F64031015\" + \"\"F64031018\" + \"F64031019\" + \"F64031020\" + \"F64031021\" + \"F64031022\" + \"F64031023\" + \"F64031024\" + \"F64031025\"",
+      "operands": [
+        {
+          "code": "F64031015",
+          "sign": "+"
+        },
+        {
+          "code": "F64031018",
+          "sign": "+"
+        },
+        {
+          "code": "F64031019",
+          "sign": "+"
+        },
+        {
+          "code": "F64031020",
+          "sign": "+"
+        },
+        {
+          "code": "F64031021",
+          "sign": "+"
+        },
+        {
+          "code": "F64031022",
+          "sign": "+"
+        },
+        {
+          "code": "F64031023",
+          "sign": "+"
+        },
+        {
+          "code": "F64031024",
+          "sign": "+"
+        },
+        {
+          "code": "F64031025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F64031027",
+      "label": "Excedent (déficit) des produits sur les charges (Net Exercice - 1)",
+      "formulaRaw": "\"F64031014\" - \"F64031026\"",
+      "operands": [
+        {
+          "code": "F64031014",
+          "sign": "+"
+        },
+        {
+          "code": "F64031026",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "formCode": "F6303",
+  "generatedAt": "2026-09-02T19:31:32.854Z",
+  "rulesCount": 12,
+  "rules": [
+    {
+      "target": "F63030001",
+      "label": "PR 1 - Revenus du portefeuille titres  (Net Exercice). \"F63030002\" + \"F63030003\" + \"F63030004\"",
+      "formulaRaw": "PR 1 - Revenus du portefeuille titres  (Net Exercice). \"F63030002\" + \"F63030003\" + \"F63030004\"",
+      "operands": [
+        {
+          "code": "F63030002",
+          "sign": "+"
+        },
+        {
+          "code": "F63030003",
+          "sign": "+"
+        },
+        {
+          "code": "F63030004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63030006",
+      "label": "Total des revenus des placements (Net Exercice)",
+      "formulaRaw": "\"F63030001\" + \"F63030005\"",
+      "operands": [
+        {
+          "code": "F63030001",
+          "sign": "+"
+        },
+        {
+          "code": "F63030005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63030008",
+      "label": "Revenu net des placements (Net Exercice)",
+      "formulaRaw": "\"F63030006\" - \"F63030007\"",
+      "operands": [
+        {
+          "code": "F63030006",
+          "sign": "+"
+        },
+        {
+          "code": "F63030007",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63030011",
+      "label": "résultat d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F63030008\" + \"F63030009\" - \"F63030010\"",
+      "operands": [
+        {
+          "code": "F63030008",
+          "sign": "+"
+        },
+        {
+          "code": "F63030009",
+          "sign": "+"
+        },
+        {
+          "code": "F63030010",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63030013",
+      "label": "Sommes distribuables de l'exercice (Net Exercice)",
+      "formulaRaw": "\"F63030011\" + \"F63030012\"",
+      "operands": [
+        {
+          "code": "F63030011",
+          "sign": "+"
+        },
+        {
+          "code": "F63030012",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63030018",
+      "label": "résultat net de l'exercice (Net Exercice)",
+      "formulaRaw": "\"F63030013\" + \"F63030014\"",
+      "operands": [
+        {
+          "code": "F63030013",
+          "sign": "+"
+        },
+        {
+          "code": "F63030014",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031001",
+      "label": "PR 1 - Revenus du portefeuille titres  (Net Exercice - 1). \"F63031002\" + \"F63031003\" + \"F63031004\"",
+      "formulaRaw": "PR 1 - Revenus du portefeuille titres  (Net Exercice - 1). \"F63031002\" + \"F63031003\" + \"F63031004\"",
+      "operands": [
+        {
+          "code": "F63031002",
+          "sign": "+"
+        },
+        {
+          "code": "F63031003",
+          "sign": "+"
+        },
+        {
+          "code": "F63031004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031006",
+      "label": "Total des revenus des placements (Net Exercice - 1). \"F63031001\" + \"F63031005\"",
+      "formulaRaw": "Total des revenus des placements (Net Exercice - 1). \"F63031001\" + \"F63031005\"",
+      "operands": [
+        {
+          "code": "F63031001",
+          "sign": "+"
+        },
+        {
+          "code": "F63031005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031008",
+      "label": "Revenu net des placements (Net Exercice - 1). \"F63031006\" - \"F63031007\"",
+      "formulaRaw": "Revenu net des placements (Net Exercice - 1). \"F63031006\" - \"F63031007\"",
+      "operands": [
+        {
+          "code": "F63031006",
+          "sign": "+"
+        },
+        {
+          "code": "F63031007",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031011",
+      "label": "résultat d'exploitation (Net Exercice - 1)",
+      "formulaRaw": "\"F63031008\" + \"F63031009\" - \"F63031010\"",
+      "operands": [
+        {
+          "code": "F63031008",
+          "sign": "+"
+        },
+        {
+          "code": "F63031009",
+          "sign": "+"
+        },
+        {
+          "code": "F63031010",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031013",
+      "label": "Sommes distribuables de l'exercice (Net Exercice - 1). \"F63031011\" + \"F63031012\"",
+      "formulaRaw": "Sommes distribuables de l'exercice (Net Exercice - 1). \"F63031011\" + \"F63031012\"",
+      "operands": [
+        {
+          "code": "F63031011",
+          "sign": "+"
+        },
+        {
+          "code": "F63031012",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63031018",
+      "label": "résultat net de l'exercice (Net Exercice - 1)",
+      "formulaRaw": "\"F63031013\" + \"F63031014\"",
+      "operands": [
+        {
+          "code": "F63031013",
+          "sign": "+"
+        },
+        {
+          "code": "F63031014",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

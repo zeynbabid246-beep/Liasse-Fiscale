@@ -1,0 +1,183 @@
+{
+  "formCode": "F6004-MODELE-AUT",
+  "generatedAt": "2026-09-02T19:31:32.611Z",
+  "rulesCount": 7,
+  "rules": [
+    {
+      "target": "F60040001",
+      "label": "Flux de Trésorerie provenant de (affectés à) l'Exploitation  (Net Exercice)",
+      "formulaRaw": "F60040002+F60040003+F60040004+F60040005+F60040006+F60040007+F60040008+F60040009+F60040010",
+      "operands": [
+        {
+          "code": "F60040002",
+          "sign": "+"
+        },
+        {
+          "code": "F60040003",
+          "sign": "+"
+        },
+        {
+          "code": "F60040004",
+          "sign": "+"
+        },
+        {
+          "code": "F60040005",
+          "sign": "+"
+        },
+        {
+          "code": "F60040006",
+          "sign": "+"
+        },
+        {
+          "code": "F60040007",
+          "sign": "+"
+        },
+        {
+          "code": "F60040008",
+          "sign": "+"
+        },
+        {
+          "code": "F60040009",
+          "sign": "+"
+        },
+        {
+          "code": "F60040010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040004",
+      "label": "Variation des stocks (Net Exercice) F60011037 - F60010037",
+      "formulaRaw": "Variation des stocks (Net Exercice) F60011037 - F60010037",
+      "operands": [
+        {
+          "code": "F60011037",
+          "sign": "+"
+        },
+        {
+          "code": "F60010037",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040006",
+      "label": "Variation des autres actifs (Net Exercice)F60011050-F60010050",
+      "formulaRaw": "Variation des autres actifs (Net Exercice)F60011050-F60010050",
+      "operands": [
+        {
+          "code": "F60011050",
+          "sign": "+"
+        },
+        {
+          "code": "F60010050",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040007",
+      "label": "Variation des fournisseurs et autres dettes (Net Exercice)F60020032+F60020038-F60021032-F60021038",
+      "formulaRaw": "Variation des fournisseurs et autres dettes (Net Exercice)F60020032+F60020038-F60021032-F60021038",
+      "operands": [
+        {
+          "code": "F60020032",
+          "sign": "+"
+        },
+        {
+          "code": "F60020038",
+          "sign": "+"
+        },
+        {
+          "code": "F60021032",
+          "sign": "-"
+        },
+        {
+          "code": "F60021038",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040008",
+      "label": "Ajustement plus au moins values de cession (Net Exercice)F60030073-F60030070",
+      "formulaRaw": "Ajustement plus au moins values de cession (Net Exercice)F60030073-F60030070",
+      "operands": [
+        {
+          "code": "F60030073",
+          "sign": "+"
+        },
+        {
+          "code": "F60030070",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041001",
+      "label": "Flux de Trésorerie provenant de (affectés à) l'Exploitation  (Net Exercice - 1)",
+      "formulaRaw": "F60041002+F60041003+F60041004+F60041005+F60041006+F60041007+F60041008+F60041009+F60041010",
+      "operands": [
+        {
+          "code": "F60041002",
+          "sign": "+"
+        },
+        {
+          "code": "F60041003",
+          "sign": "+"
+        },
+        {
+          "code": "F60041004",
+          "sign": "+"
+        },
+        {
+          "code": "F60041005",
+          "sign": "+"
+        },
+        {
+          "code": "F60041006",
+          "sign": "+"
+        },
+        {
+          "code": "F60041007",
+          "sign": "+"
+        },
+        {
+          "code": "F60041008",
+          "sign": "+"
+        },
+        {
+          "code": "F60041009",
+          "sign": "+"
+        },
+        {
+          "code": "F60041010",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041008",
+      "label": "Ajustement plus au moins values de cession (Net Exercice - 1) F60031073-F60031070",
+      "formulaRaw": "Ajustement plus au moins values de cession (Net Exercice - 1) F60031073-F60031070",
+      "operands": [
+        {
+          "code": "F60031073",
+          "sign": "+"
+        },
+        {
+          "code": "F60031070",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

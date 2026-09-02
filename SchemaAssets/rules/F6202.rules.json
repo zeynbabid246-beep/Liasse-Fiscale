@@ -1,0 +1,551 @@
+{
+  "formCode": "F6202",
+  "generatedAt": "2026-09-02T19:31:32.821Z",
+  "rulesCount": 22,
+  "rules": [
+    {
+      "target": "F62020001",
+      "label": "Capitaux propres (Net Exercice)",
+      "formulaRaw": "\"F62020002\" + \"F62020003\" + \"F62020004\" + \"F62020005\" + \"F62020006\" + \"F62020007\"",
+      "operands": [
+        {
+          "code": "F62020002",
+          "sign": "+"
+        },
+        {
+          "code": "F62020003",
+          "sign": "+"
+        },
+        {
+          "code": "F62020004",
+          "sign": "+"
+        },
+        {
+          "code": "F62020005",
+          "sign": "+"
+        },
+        {
+          "code": "F62020006",
+          "sign": "+"
+        },
+        {
+          "code": "F62020007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020008",
+      "label": "Total passifs (Net Exercice)",
+      "formulaRaw": "\"F62020009\" + \"F62020014\" + \"F62020018\" + \"F62020028\" + \"F62020029\" + \"F62020030\" + \"F62020041\"",
+      "operands": [
+        {
+          "code": "F62020009",
+          "sign": "+"
+        },
+        {
+          "code": "F62020014",
+          "sign": "+"
+        },
+        {
+          "code": "F62020018",
+          "sign": "+"
+        },
+        {
+          "code": "F62020028",
+          "sign": "+"
+        },
+        {
+          "code": "F62020029",
+          "sign": "+"
+        },
+        {
+          "code": "F62020030",
+          "sign": "+"
+        },
+        {
+          "code": "F62020041",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020009",
+      "label": "PA1 Autres passifs financiers (Net Exercice)",
+      "formulaRaw": "\"F62020010\" + \"F62020011\" + \"F62020012\" + \"F62020013\"",
+      "operands": [
+        {
+          "code": "F62020010",
+          "sign": "+"
+        },
+        {
+          "code": "F62020011",
+          "sign": "+"
+        },
+        {
+          "code": "F62020012",
+          "sign": "+"
+        },
+        {
+          "code": "F62020013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020014",
+      "label": "PA2 Provisions pour autres risques et charges (Net Exercice)",
+      "formulaRaw": "\"F62020015\" + \"F62020016\" + \"F62020017\"",
+      "operands": [
+        {
+          "code": "F62020015",
+          "sign": "+"
+        },
+        {
+          "code": "F62020016",
+          "sign": "+"
+        },
+        {
+          "code": "F62020017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020018",
+      "label": "PA3 Provisions techniques brutes (Net Exercice)",
+      "formulaRaw": "\"F62020019\" + \"F62020020\" + \"F62020021\" + \"F62020022\" + \"F62020023\" + \"F62020024\" + \"F62020025\" + \"F62020026\" + \"F62020027\"",
+      "operands": [
+        {
+          "code": "F62020019",
+          "sign": "+"
+        },
+        {
+          "code": "F62020020",
+          "sign": "+"
+        },
+        {
+          "code": "F62020021",
+          "sign": "+"
+        },
+        {
+          "code": "F62020022",
+          "sign": "+"
+        },
+        {
+          "code": "F62020023",
+          "sign": "+"
+        },
+        {
+          "code": "F62020024",
+          "sign": "+"
+        },
+        {
+          "code": "F62020025",
+          "sign": "+"
+        },
+        {
+          "code": "F62020026",
+          "sign": "+"
+        },
+        {
+          "code": "F62020027",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020030",
+      "label": "PA6 Autres dettes (Net Exercice)",
+      "formulaRaw": "\"F62020031\" + \"F62020032\" + \"F62020035\" + \"F62020040\"",
+      "operands": [
+        {
+          "code": "F62020031",
+          "sign": "+"
+        },
+        {
+          "code": "F62020032",
+          "sign": "+"
+        },
+        {
+          "code": "F62020035",
+          "sign": "+"
+        },
+        {
+          "code": "F62020040",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020032",
+      "label": "PA62 Dettes n�es d'op�rations de r�assurance (Net Exercice)",
+      "formulaRaw": "\"F62020033\" + \"F62020034\"",
+      "operands": [
+        {
+          "code": "F62020033",
+          "sign": "+"
+        },
+        {
+          "code": "F62020034",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020035",
+      "label": "PA63 Autres dettes (Net Exercice)",
+      "formulaRaw": "\"F62020036\" + \"F62020037\" + \"F62020038\" + \"F62020039\"",
+      "operands": [
+        {
+          "code": "F62020036",
+          "sign": "+"
+        },
+        {
+          "code": "F62020037",
+          "sign": "+"
+        },
+        {
+          "code": "F62020038",
+          "sign": "+"
+        },
+        {
+          "code": "F62020039",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020041",
+      "label": "PA7 Autres passifs (Net Exercice)",
+      "formulaRaw": "\"F62020042\" + \"F62020046\"",
+      "operands": [
+        {
+          "code": "F62020042",
+          "sign": "+"
+        },
+        {
+          "code": "F62020046",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020042",
+      "label": "PA71 Comptes de r�gularisation Passif (Net Exercice)",
+      "formulaRaw": "\"F62020043\" + \"F62020044\" + \"F62020045\"",
+      "operands": [
+        {
+          "code": "F62020043",
+          "sign": "+"
+        },
+        {
+          "code": "F62020044",
+          "sign": "+"
+        },
+        {
+          "code": "F62020045",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62020047",
+      "label": "Total des capitaux propres et passifs (Net Exercice)",
+      "formulaRaw": "\"F62020001\" + \"F62020008\"",
+      "operands": [
+        {
+          "code": "F62020001",
+          "sign": "+"
+        },
+        {
+          "code": "F62020008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021001",
+      "label": "Capitaux propres (Net Exercice - 1). \"F62021002\" + \"F62021003\" + \"F62021004\" + \"F62021005\" + \"F62021006\" + \"F62021007\"",
+      "formulaRaw": "Capitaux propres (Net Exercice - 1). \"F62021002\" + \"F62021003\" + \"F62021004\" + \"F62021005\" + \"F62021006\" + \"F62021007\"",
+      "operands": [
+        {
+          "code": "F62021002",
+          "sign": "+"
+        },
+        {
+          "code": "F62021003",
+          "sign": "+"
+        },
+        {
+          "code": "F62021004",
+          "sign": "+"
+        },
+        {
+          "code": "F62021005",
+          "sign": "+"
+        },
+        {
+          "code": "F62021006",
+          "sign": "+"
+        },
+        {
+          "code": "F62021007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021008",
+      "label": "Total passifs (Net Exercice - 1). \"F62021009\" + \"F62021014\" + \"F62021018\" + \"F62021028\" + \"F62021029\" + \"F62021030\" + \"F62021041\"",
+      "formulaRaw": "Total passifs (Net Exercice - 1). \"F62021009\" + \"F62021014\" + \"F62021018\" + \"F62021028\" + \"F62021029\" + \"F62021030\" + \"F62021041\"",
+      "operands": [
+        {
+          "code": "F62021009",
+          "sign": "+"
+        },
+        {
+          "code": "F62021014",
+          "sign": "+"
+        },
+        {
+          "code": "F62021018",
+          "sign": "+"
+        },
+        {
+          "code": "F62021028",
+          "sign": "+"
+        },
+        {
+          "code": "F62021029",
+          "sign": "+"
+        },
+        {
+          "code": "F62021030",
+          "sign": "+"
+        },
+        {
+          "code": "F62021041",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021009",
+      "label": "PA1 Autres passifs financiers (Net Exercice - 1). \"F62021010\" + \"F62021011\" + \"F62021012\" + \"F62021013\"",
+      "formulaRaw": "PA1 Autres passifs financiers (Net Exercice - 1). \"F62021010\" + \"F62021011\" + \"F62021012\" + \"F62021013\"",
+      "operands": [
+        {
+          "code": "F62021010",
+          "sign": "+"
+        },
+        {
+          "code": "F62021011",
+          "sign": "+"
+        },
+        {
+          "code": "F62021012",
+          "sign": "+"
+        },
+        {
+          "code": "F62021013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021014",
+      "label": "PA2 Provisions pour autres risques et charges (Net Exercice - 1). \"F62021015\" + \"F62021016\" + \"F62021017\"",
+      "formulaRaw": "PA2 Provisions pour autres risques et charges (Net Exercice - 1). \"F62021015\" + \"F62021016\" + \"F62021017\"",
+      "operands": [
+        {
+          "code": "F62021015",
+          "sign": "+"
+        },
+        {
+          "code": "F62021016",
+          "sign": "+"
+        },
+        {
+          "code": "F62021017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021018",
+      "label": "PA3 Provisions techniques brutes (Net Exercice - 1). \"F62021019\" + \"F62021020\" + \"F62021021\" + \"F62021022\" + \"F62021023\" + \"F62021024\" + \"F62021025\" + \"F62021026\" + \"F62021027\"",
+      "formulaRaw": "PA3 Provisions techniques brutes (Net Exercice - 1). \"F62021019\" + \"F62021020\" + \"F62021021\" + \"F62021022\" + \"F62021023\" + \"F62021024\" + \"F62021025\" + \"F62021026\" + \"F62021027\"",
+      "operands": [
+        {
+          "code": "F62021019",
+          "sign": "+"
+        },
+        {
+          "code": "F62021020",
+          "sign": "+"
+        },
+        {
+          "code": "F62021021",
+          "sign": "+"
+        },
+        {
+          "code": "F62021022",
+          "sign": "+"
+        },
+        {
+          "code": "F62021023",
+          "sign": "+"
+        },
+        {
+          "code": "F62021024",
+          "sign": "+"
+        },
+        {
+          "code": "F62021025",
+          "sign": "+"
+        },
+        {
+          "code": "F62021026",
+          "sign": "+"
+        },
+        {
+          "code": "F62021027",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021030",
+      "label": "PA6 Autres dettes (Net Exercice - 1). \"F62021031\" + \"F62021032\" + \"F62021035\" + \"F62021040\"",
+      "formulaRaw": "PA6 Autres dettes (Net Exercice - 1). \"F62021031\" + \"F62021032\" + \"F62021035\" + \"F62021040\"",
+      "operands": [
+        {
+          "code": "F62021031",
+          "sign": "+"
+        },
+        {
+          "code": "F62021032",
+          "sign": "+"
+        },
+        {
+          "code": "F62021035",
+          "sign": "+"
+        },
+        {
+          "code": "F62021040",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021032",
+      "label": "PA62 Dettes n�es d'op�rations de r�assurance (Net Exercice - 1)",
+      "formulaRaw": "\"F62021033\" + \"F62021034\"",
+      "operands": [
+        {
+          "code": "F62021033",
+          "sign": "+"
+        },
+        {
+          "code": "F62021034",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021035",
+      "label": "PA63 Autres dettes (Net Exercice - 1). \"F62021036\" + \"F62021037\" + \"F62021038\" + \"F62021039\"",
+      "formulaRaw": "PA63 Autres dettes (Net Exercice - 1). \"F62021036\" + \"F62021037\" + \"F62021038\" + \"F62021039\"",
+      "operands": [
+        {
+          "code": "F62021036",
+          "sign": "+"
+        },
+        {
+          "code": "F62021037",
+          "sign": "+"
+        },
+        {
+          "code": "F62021038",
+          "sign": "+"
+        },
+        {
+          "code": "F62021039",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021041",
+      "label": "PA7 Autres passifs (Net Exercice - 1). \"F62021042\" + \"F62021046\"",
+      "formulaRaw": "PA7 Autres passifs (Net Exercice - 1). \"F62021042\" + \"F62021046\"",
+      "operands": [
+        {
+          "code": "F62021042",
+          "sign": "+"
+        },
+        {
+          "code": "F62021046",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021042",
+      "label": "PA71 Comptes de r�gularisation Passif (Net Exercice - 1)",
+      "formulaRaw": "\"F62021043\" + \"F62021044\" + \"F62021045\"",
+      "operands": [
+        {
+          "code": "F62021043",
+          "sign": "+"
+        },
+        {
+          "code": "F62021044",
+          "sign": "+"
+        },
+        {
+          "code": "F62021045",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62021047",
+      "label": "Total des capitaux propres et passifs (Net Exercice - 1). \"F62021001\" + \"F62021008\"",
+      "formulaRaw": "Total des capitaux propres et passifs (Net Exercice - 1). \"F62021001\" + \"F62021008\"",
+      "operands": [
+        {
+          "code": "F62021001",
+          "sign": "+"
+        },
+        {
+          "code": "F62021008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

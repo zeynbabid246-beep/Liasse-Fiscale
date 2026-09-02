@@ -1,0 +1,339 @@
+{
+  "formCode": "F6304",
+  "generatedAt": "2026-09-02T19:31:32.858Z",
+  "rulesCount": 17,
+  "rules": [
+    {
+      "target": "F63040001",
+      "label": "Variation de l'actif net (Net Exercice)",
+      "formulaRaw": "\"F63040002\" + \"F63040007\" + \"F63040008\"",
+      "operands": [
+        {
+          "code": "F63040002",
+          "sign": "+"
+        },
+        {
+          "code": "F63040007",
+          "sign": "+"
+        },
+        {
+          "code": "F63040008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040002",
+      "label": "AN1 - Variation de l'actif net (Résultant des operations d'exploitation) (Net Exercice). \"F63040003\" + \"F63040004\" + \"F63040005\" + \"F63040006\"",
+      "formulaRaw": "AN1 - Variation de l'actif net (Résultant des operations d'exploitation) (Net Exercice). \"F63040003\" + \"F63040004\" + \"F63040005\" + \"F63040006\"",
+      "operands": [
+        {
+          "code": "F63040003",
+          "sign": "+"
+        },
+        {
+          "code": "F63040004",
+          "sign": "+"
+        },
+        {
+          "code": "F63040005",
+          "sign": "+"
+        },
+        {
+          "code": "F63040006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040008",
+      "label": "AN 3 - Transactions sur le capital (Net Exercice). \"F63040009\" + \"F63040014\"",
+      "formulaRaw": "AN 3 - Transactions sur le capital (Net Exercice). \"F63040009\" + \"F63040014\"",
+      "operands": [
+        {
+          "code": "F63040009",
+          "sign": "+"
+        },
+        {
+          "code": "F63040014",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040009",
+      "label": "a- Souscriptions  (Net Exercice). \"F63040010\" + \"F63040011\" + \"F63040012\" + \"F63040013\"",
+      "formulaRaw": "a- Souscriptions  (Net Exercice). \"F63040010\" + \"F63040011\" + \"F63040012\" + \"F63040013\"",
+      "operands": [
+        {
+          "code": "F63040010",
+          "sign": "+"
+        },
+        {
+          "code": "F63040011",
+          "sign": "+"
+        },
+        {
+          "code": "F63040012",
+          "sign": "+"
+        },
+        {
+          "code": "F63040013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040014",
+      "label": "b- Rachats  (Net Exercice). \"F63040015\" + \"F63040016\" + \"F63040017\" + \"F63040018\"",
+      "formulaRaw": "b- Rachats  (Net Exercice). \"F63040015\" + \"F63040016\" + \"F63040017\" + \"F63040018\"",
+      "operands": [
+        {
+          "code": "F63040015",
+          "sign": "+"
+        },
+        {
+          "code": "F63040016",
+          "sign": "+"
+        },
+        {
+          "code": "F63040017",
+          "sign": "+"
+        },
+        {
+          "code": "F63040018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040019",
+      "label": "Valeur liquidative (Net Exercice)",
+      "formulaRaw": "\"F63040020\" + \"F63040023\"",
+      "operands": [
+        {
+          "code": "F63040020",
+          "sign": "+"
+        },
+        {
+          "code": "F63040023",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040020",
+      "label": "AN 4 - Actif net (Net Exercice). \"F63040021\" + \"F63040022\"",
+      "formulaRaw": "AN 4 - Actif net (Net Exercice). \"F63040021\" + \"F63040022\"",
+      "operands": [
+        {
+          "code": "F63040021",
+          "sign": "+"
+        },
+        {
+          "code": "F63040022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040023",
+      "label": "AN 5 - Nombre d'actions (ou de parts)  (Net Exercice). \"F63040024\" + \"F63040025\"",
+      "formulaRaw": "AN 5 - Nombre d'actions (ou de parts)  (Net Exercice). \"F63040024\" + \"F63040025\"",
+      "operands": [
+        {
+          "code": "F63040024",
+          "sign": "+"
+        },
+        {
+          "code": "F63040025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63040026",
+      "label": "AN 6 - Taux de rendement annuel (Net Exercice). (\"F63040019\" + \"F63041019\") / \"F63041019\"",
+      "formulaRaw": "AN 6 - Taux de rendement annuel (Net Exercice). (\"F63040019\" + \"F63041019\") / \"F63041019\"",
+      "operands": [
+        {
+          "code": "F63040019",
+          "sign": "+"
+        },
+        {
+          "code": "F63041019",
+          "sign": "+"
+        },
+        {
+          "code": "F63041019",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041001",
+      "label": "Variation de l'actif net (Net Exercice - 1). \"F63041002\" + \"F63041007\" + \"F63041008\"",
+      "formulaRaw": "Variation de l'actif net (Net Exercice - 1). \"F63041002\" + \"F63041007\" + \"F63041008\"",
+      "operands": [
+        {
+          "code": "F63041002",
+          "sign": "+"
+        },
+        {
+          "code": "F63041007",
+          "sign": "+"
+        },
+        {
+          "code": "F63041008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041002",
+      "label": "AN1 - Variation de l'actif net (Résultant des operations d'exploitation) (Net Exercice - 1). \"F63041003\" + \"F63041004\" + \"F63041005\" + \"F63041006\"",
+      "formulaRaw": "AN1 - Variation de l'actif net (Résultant des operations d'exploitation) (Net Exercice - 1). \"F63041003\" + \"F63041004\" + \"F63041005\" + \"F63041006\"",
+      "operands": [
+        {
+          "code": "F63041003",
+          "sign": "+"
+        },
+        {
+          "code": "F63041004",
+          "sign": "+"
+        },
+        {
+          "code": "F63041005",
+          "sign": "+"
+        },
+        {
+          "code": "F63041006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041008",
+      "label": "AN 3 - Transactions sur le capital (Net Exercice - 1). \"F63041009\" + \"F63041014\"",
+      "formulaRaw": "AN 3 - Transactions sur le capital (Net Exercice - 1). \"F63041009\" + \"F63041014\"",
+      "operands": [
+        {
+          "code": "F63041009",
+          "sign": "+"
+        },
+        {
+          "code": "F63041014",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041009",
+      "label": "a- Souscriptions  (Net Exercice - 1). \"F63041010\" + \"F63041011\" + \"F63041012\" + \"F63041013\"",
+      "formulaRaw": "a- Souscriptions  (Net Exercice - 1). \"F63041010\" + \"F63041011\" + \"F63041012\" + \"F63041013\"",
+      "operands": [
+        {
+          "code": "F63041010",
+          "sign": "+"
+        },
+        {
+          "code": "F63041011",
+          "sign": "+"
+        },
+        {
+          "code": "F63041012",
+          "sign": "+"
+        },
+        {
+          "code": "F63041013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041014",
+      "label": "b- Rachats  (Net Exercice - 1). \"F63041015\" + \"F63041016\" + \"F63041017\" + \"F63041018\"",
+      "formulaRaw": "b- Rachats  (Net Exercice - 1). \"F63041015\" + \"F63041016\" + \"F63041017\" + \"F63041018\"",
+      "operands": [
+        {
+          "code": "F63041015",
+          "sign": "+"
+        },
+        {
+          "code": "F63041016",
+          "sign": "+"
+        },
+        {
+          "code": "F63041017",
+          "sign": "+"
+        },
+        {
+          "code": "F63041018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041019",
+      "label": "Valeur liquidative (Net Exercice - 1). \"F63041020\" + \"F63041023\"",
+      "formulaRaw": "Valeur liquidative (Net Exercice - 1). \"F63041020\" + \"F63041023\"",
+      "operands": [
+        {
+          "code": "F63041020",
+          "sign": "+"
+        },
+        {
+          "code": "F63041023",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041020",
+      "label": "AN 4 - Actif net (Net Exercice - 1). \"F63041021\" + \"F63041022\"",
+      "formulaRaw": "AN 4 - Actif net (Net Exercice - 1). \"F63041021\" + \"F63041022\"",
+      "operands": [
+        {
+          "code": "F63041021",
+          "sign": "+"
+        },
+        {
+          "code": "F63041022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63041023",
+      "label": "AN 5 - Nombre d'actions (ou de parts)  (Net Exercice - 1). \"F63041024\" + \"F63041025\"",
+      "formulaRaw": "AN 5 - Nombre d'actions (ou de parts)  (Net Exercice - 1). \"F63041024\" + \"F63041025\"",
+      "operands": [
+        {
+          "code": "F63041024",
+          "sign": "+"
+        },
+        {
+          "code": "F63041025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

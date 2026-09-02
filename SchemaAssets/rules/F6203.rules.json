@@ -1,0 +1,327 @@
+{
+  "formCode": "F6203",
+  "generatedAt": "2026-09-02T19:31:32.825Z",
+  "rulesCount": 16,
+  "rules": [
+    {
+      "target": "F62030003",
+      "label": "PRNT1 Produits des placements (assurance et/ou réassurance non vie) (Net Exercice)",
+      "formulaRaw": "\"F62030004\" + \"F62030005\" + \"F62030006\" + \"F62030007\"",
+      "operands": [
+        {
+          "code": "F62030004",
+          "sign": "+"
+        },
+        {
+          "code": "F62030005",
+          "sign": "+"
+        },
+        {
+          "code": "F62030006",
+          "sign": "+"
+        },
+        {
+          "code": "F62030007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030008",
+      "label": "Sous total 1 (Net Exercice)",
+      "formulaRaw": "\"F62030001\" + \"F62030002\" + \"F62030003\"",
+      "operands": [
+        {
+          "code": "F62030001",
+          "sign": "+"
+        },
+        {
+          "code": "F62030002",
+          "sign": "+"
+        },
+        {
+          "code": "F62030003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030010",
+      "label": "CHNT1 Charges des placements (assurance et/ou réassurance non vie) (Net Exercice)",
+      "formulaRaw": "\"F62030011\" + \"F62030012\" + \"F62030013\"",
+      "operands": [
+        {
+          "code": "F62030011",
+          "sign": "+"
+        },
+        {
+          "code": "F62030012",
+          "sign": "+"
+        },
+        {
+          "code": "F62030013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030014",
+      "label": "Sous total 2 (Net Exercice)",
+      "formulaRaw": "\"F62030008\" + \"F62030009\" - \"F62030010\"",
+      "operands": [
+        {
+          "code": "F62030008",
+          "sign": "+"
+        },
+        {
+          "code": "F62030009",
+          "sign": "+"
+        },
+        {
+          "code": "F62030010",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030019",
+      "label": "Résultat provenant des activités ordinaires après Impôts (Net Exercice)",
+      "formulaRaw": "\"F62030014\" - \"F62030015\" + \"F62030016\" - \"F62030017\" - \"F62030018\"",
+      "operands": [
+        {
+          "code": "F62030014",
+          "sign": "+"
+        },
+        {
+          "code": "F62030015",
+          "sign": "-"
+        },
+        {
+          "code": "F62030016",
+          "sign": "+"
+        },
+        {
+          "code": "F62030017",
+          "sign": "-"
+        },
+        {
+          "code": "F62030018",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030022",
+      "label": "Résultat extraordinaire (Net Exercice)",
+      "formulaRaw": "\"F62030020\" - \"F62030021\"",
+      "operands": [
+        {
+          "code": "F62030020",
+          "sign": "+"
+        },
+        {
+          "code": "F62030021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030023",
+      "label": "Résultat net de l'exercice (Net Exercice)",
+      "formulaRaw": "\"F62030019\" + \"F62030022\"",
+      "operands": [
+        {
+          "code": "F62030019",
+          "sign": "+"
+        },
+        {
+          "code": "F62030022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62030025",
+      "label": "Résultat net de l'exercice après modifications comptables (Net Exercice)",
+      "formulaRaw": "\"F62030023\" + \"F62030024\"",
+      "operands": [
+        {
+          "code": "F62030023",
+          "sign": "+"
+        },
+        {
+          "code": "F62030024",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031003",
+      "label": "PRNT1 Produits des placements (assurance et/ou réassurance non vie) (Net Exercice - 1)",
+      "formulaRaw": "\"F62031004\" + \"F62031005\" + \"F62031006\" + \"F62031007\"",
+      "operands": [
+        {
+          "code": "F62031004",
+          "sign": "+"
+        },
+        {
+          "code": "F62031005",
+          "sign": "+"
+        },
+        {
+          "code": "F62031006",
+          "sign": "+"
+        },
+        {
+          "code": "F62031007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031008",
+      "label": "Sous total 1 (Net Exercice - 1). \"F62031001\" + \"F62031002\" + \"F62031003\"",
+      "formulaRaw": "Sous total 1 (Net Exercice - 1). \"F62031001\" + \"F62031002\" + \"F62031003\"",
+      "operands": [
+        {
+          "code": "F62031001",
+          "sign": "+"
+        },
+        {
+          "code": "F62031002",
+          "sign": "+"
+        },
+        {
+          "code": "F62031003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031010",
+      "label": "CHNT1 Charges des placements (assurance et/ou réassurance non vie) (Net Exercice - 1)",
+      "formulaRaw": "\"F62031011\" + \"F62031012\" + \"F62031013\"",
+      "operands": [
+        {
+          "code": "F62031011",
+          "sign": "+"
+        },
+        {
+          "code": "F62031012",
+          "sign": "+"
+        },
+        {
+          "code": "F62031013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031014",
+      "label": "Sous total 2 (Net Exercice - 1). \"F62031008\" + \"F62031009\" - \"F62031010\"",
+      "formulaRaw": "Sous total 2 (Net Exercice - 1). \"F62031008\" + \"F62031009\" - \"F62031010\"",
+      "operands": [
+        {
+          "code": "F62031008",
+          "sign": "+"
+        },
+        {
+          "code": "F62031009",
+          "sign": "+"
+        },
+        {
+          "code": "F62031010",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031019",
+      "label": "Résultat provenant des activités ordinaires après Impôts (Net Exercice - 1)",
+      "formulaRaw": "\"F62031014\" - \"F62031015\" + \"F62031016\" - \"F62031017\" - \"F62031018\"",
+      "operands": [
+        {
+          "code": "F62031014",
+          "sign": "+"
+        },
+        {
+          "code": "F62031015",
+          "sign": "-"
+        },
+        {
+          "code": "F62031016",
+          "sign": "+"
+        },
+        {
+          "code": "F62031017",
+          "sign": "-"
+        },
+        {
+          "code": "F62031018",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031022",
+      "label": "Résultat extraordinaire (Net Exercice - 1)",
+      "formulaRaw": "\"F62031020\" - \"F62031021\"",
+      "operands": [
+        {
+          "code": "F62031020",
+          "sign": "+"
+        },
+        {
+          "code": "F62031021",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031023",
+      "label": "Résultat net de l'exercice (Net Exercice - 1)",
+      "formulaRaw": "\"F62031019\" + \"F62031022\"",
+      "operands": [
+        {
+          "code": "F62031019",
+          "sign": "+"
+        },
+        {
+          "code": "F62031022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62031025",
+      "label": "Résultat net de l'exercice après modifications comptables (Net Exercice - 1)",
+      "formulaRaw": "\"F62031023\" + \"F62031024\"",
+      "operands": [
+        {
+          "code": "F62031023",
+          "sign": "+"
+        },
+        {
+          "code": "F62031024",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

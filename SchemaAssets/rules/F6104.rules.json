@@ -1,0 +1,263 @@
+{
+  "formCode": "F6104",
+  "generatedAt": "2026-09-02T19:31:32.747Z",
+  "rulesCount": 10,
+  "rules": [
+    {
+      "target": "F61040001",
+      "label": "Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice)",
+      "formulaRaw": "\"F61040002\" - \"F61040003\" + \"F61040004\"  + \"F61040005\" + \"F61040006\" - \"F61040007\" + \"F61040008\" - \"F61040009\"",
+      "operands": [
+        {
+          "code": "F61040002",
+          "sign": "+"
+        },
+        {
+          "code": "F61040003",
+          "sign": "-"
+        },
+        {
+          "code": "F61040004",
+          "sign": "+"
+        },
+        {
+          "code": "F61040005",
+          "sign": "+"
+        },
+        {
+          "code": "F61040006",
+          "sign": "+"
+        },
+        {
+          "code": "F61040007",
+          "sign": "-"
+        },
+        {
+          "code": "F61040008",
+          "sign": "+"
+        },
+        {
+          "code": "F61040009",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61040010",
+      "label": "Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice)",
+      "formulaRaw": "\"F61040011\" + \"F61040012\" + \"F61040013\"",
+      "operands": [
+        {
+          "code": "F61040011",
+          "sign": "+"
+        },
+        {
+          "code": "F61040012",
+          "sign": "+"
+        },
+        {
+          "code": "F61040013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61040014",
+      "label": "Flux de tr�sorerie net provenant des activit�s de financement (Exercice)",
+      "formulaRaw": "\"F61040015\" + \"F61040016\" - \"F61040017\" + \"F61040018\" - \"F61040019\"",
+      "operands": [
+        {
+          "code": "F61040015",
+          "sign": "+"
+        },
+        {
+          "code": "F61040016",
+          "sign": "+"
+        },
+        {
+          "code": "F61040017",
+          "sign": "-"
+        },
+        {
+          "code": "F61040018",
+          "sign": "+"
+        },
+        {
+          "code": "F61040019",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61040021",
+      "label": "Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'exercice  (Exercice)",
+      "formulaRaw": "\"F61040001\" + \"F61040010\" + \"F61040014\" + \"F61040020\"",
+      "operands": [
+        {
+          "code": "F61040001",
+          "sign": "+"
+        },
+        {
+          "code": "F61040010",
+          "sign": "+"
+        },
+        {
+          "code": "F61040014",
+          "sign": "+"
+        },
+        {
+          "code": "F61040020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61040023",
+      "label": "Liquidit�s et equivalents de liquidit�s en fin d'exercice (Exercice)",
+      "formulaRaw": "\"F61040021\" + \"F61040022\"",
+      "operands": [
+        {
+          "code": "F61040021",
+          "sign": "+"
+        },
+        {
+          "code": "F61040022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61041001",
+      "label": "Flux de tr�sorerie net provenant des activit�s d'exploitation (Exercice - 1)",
+      "formulaRaw": "\"F61041002\" - \"F61041003\" + \"F61041004\"  + \"F61041005\" + \"F61041006\" - \"F61041007\" + \"F61041008\" - \"F61041009\"",
+      "operands": [
+        {
+          "code": "F61041002",
+          "sign": "+"
+        },
+        {
+          "code": "F61041003",
+          "sign": "-"
+        },
+        {
+          "code": "F61041004",
+          "sign": "+"
+        },
+        {
+          "code": "F61041005",
+          "sign": "+"
+        },
+        {
+          "code": "F61041006",
+          "sign": "+"
+        },
+        {
+          "code": "F61041007",
+          "sign": "-"
+        },
+        {
+          "code": "F61041008",
+          "sign": "+"
+        },
+        {
+          "code": "F61041009",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61041010",
+      "label": "Flux de tr�sorerie net provenant des activit�s d'investissement (Exercice - 1)",
+      "formulaRaw": "\"F61041011\" + \"F61041012\" + \"F61041013\"",
+      "operands": [
+        {
+          "code": "F61041011",
+          "sign": "+"
+        },
+        {
+          "code": "F61041012",
+          "sign": "+"
+        },
+        {
+          "code": "F61041013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61041014",
+      "label": "Flux de tr�sorerie net provenant des activit�s de financement (Exercice - 1)",
+      "formulaRaw": "\"F61041015\" + \"F61041016\" - \"F61041017\" + \"F61041018\" - \"F61041019\"",
+      "operands": [
+        {
+          "code": "F61041015",
+          "sign": "+"
+        },
+        {
+          "code": "F61041016",
+          "sign": "+"
+        },
+        {
+          "code": "F61041017",
+          "sign": "-"
+        },
+        {
+          "code": "F61041018",
+          "sign": "+"
+        },
+        {
+          "code": "F61041019",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61041021",
+      "label": "Variation nette des liquidit�s et �quivalents de liquidit�s au cours de l'Exercice - 1  (Exercice - 1)",
+      "formulaRaw": "\"F61041001\" + \"F61041010\" + \"F61041014\" + \"F61041020\"",
+      "operands": [
+        {
+          "code": "F61041001",
+          "sign": "+"
+        },
+        {
+          "code": "F61041010",
+          "sign": "+"
+        },
+        {
+          "code": "F61041014",
+          "sign": "+"
+        },
+        {
+          "code": "F61041020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61041023",
+      "label": "Liquidit�s et equivalents de liquidit�s en fin d'Exercice - 1 (Exercice - 1)",
+      "formulaRaw": "\"F61041021\" + \"F61041022\"",
+      "operands": [
+        {
+          "code": "F61041021",
+          "sign": "+"
+        },
+        {
+          "code": "F61041022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

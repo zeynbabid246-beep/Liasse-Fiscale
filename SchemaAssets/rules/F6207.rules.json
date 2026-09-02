@@ -1,0 +1,55 @@
+{
+  "formCode": "F6207",
+  "generatedAt": "2026-09-02T19:31:32.848Z",
+  "rulesCount": 2,
+  "rules": [
+    {
+      "target": "F62070002",
+      "label": "HB2 Engagements donnés (Net Exercice)",
+      "formulaRaw": "\"F62070003\" + \"F62070004\" + \"F62070005\" + \"F62070006\"",
+      "operands": [
+        {
+          "code": "F62070003",
+          "sign": "+"
+        },
+        {
+          "code": "F62070004",
+          "sign": "+"
+        },
+        {
+          "code": "F62070005",
+          "sign": "+"
+        },
+        {
+          "code": "F62070006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62071002",
+      "label": "HB2 Engagements donnés (Net Exercice - 1)",
+      "formulaRaw": "\"F62071003\" + \"F62071004\" + \"F62071005\" + \"F62071006\"",
+      "operands": [
+        {
+          "code": "F62071003",
+          "sign": "+"
+        },
+        {
+          "code": "F62071004",
+          "sign": "+"
+        },
+        {
+          "code": "F62071005",
+          "sign": "+"
+        },
+        {
+          "code": "F62071006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

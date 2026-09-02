@@ -1,0 +1,1095 @@
+{
+  "formCode": "F6003",
+  "generatedAt": "2026-09-02T19:31:32.604Z",
+  "rulesCount": 48,
+  "rules": [
+    {
+      "target": "F60030001",
+      "label": "Produits d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F60030002\" + \"F60030014\" + \"F60030015\"",
+      "operands": [
+        {
+          "code": "F60030002",
+          "sign": "+"
+        },
+        {
+          "code": "F60030014",
+          "sign": "+"
+        },
+        {
+          "code": "F60030015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030002",
+      "label": "Revenus (Net Exercice)",
+      "formulaRaw": "\"F60030003\" + \"F60030006\"",
+      "operands": [
+        {
+          "code": "F60030003",
+          "sign": "+"
+        },
+        {
+          "code": "F60030006",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030003",
+      "label": "Ventes nettes des marchandises (Net Exercice)",
+      "formulaRaw": "\"60030004\" - \"60030005\"",
+      "operands": [
+        {
+          "code": "F60030004",
+          "sign": "+"
+        },
+        {
+          "code": "F60030005",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030006",
+      "label": "Ventes nettes de la production (Net Exercice)",
+      "formulaRaw": "\"F60030007\" + \"F60030008\" + \"F60030009\" + \"F60030010\" + \"F60030011\" + \"F60030012\" - \"F60030013\"",
+      "operands": [
+        {
+          "code": "F60030007",
+          "sign": "+"
+        },
+        {
+          "code": "F60030008",
+          "sign": "+"
+        },
+        {
+          "code": "F60030009",
+          "sign": "+"
+        },
+        {
+          "code": "F60030010",
+          "sign": "+"
+        },
+        {
+          "code": "F60030011",
+          "sign": "+"
+        },
+        {
+          "code": "F60030012",
+          "sign": "+"
+        },
+        {
+          "code": "F60030013",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030015",
+      "label": "Autres produits d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F60030016\" + \"F60030017\" + \"F60030018\" + \"F60030019\"",
+      "operands": [
+        {
+          "code": "F60030016",
+          "sign": "+"
+        },
+        {
+          "code": "F60030017",
+          "sign": "+"
+        },
+        {
+          "code": "F60030018",
+          "sign": "+"
+        },
+        {
+          "code": "F60030019",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030020",
+      "label": "Charges d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F60030021\" + \"F60030025\" + \"F60030029\" + \"F60030036\" + \"F60030046\" + \"F60030053\"",
+      "operands": [
+        {
+          "code": "F60030021",
+          "sign": "+"
+        },
+        {
+          "code": "F60030025",
+          "sign": "+"
+        },
+        {
+          "code": "F60030029",
+          "sign": "+"
+        },
+        {
+          "code": "F60030036",
+          "sign": "+"
+        },
+        {
+          "code": "F60030046",
+          "sign": "+"
+        },
+        {
+          "code": "F60030053",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030021",
+      "label": "Variation stocks produits finis et encours (Net Exercice)",
+      "formulaRaw": "\"F60030022\" + \"F60030023\" + \"F60030024\"",
+      "operands": [
+        {
+          "code": "F60030022",
+          "sign": "+"
+        },
+        {
+          "code": "F60030023",
+          "sign": "+"
+        },
+        {
+          "code": "F60030024",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030025",
+      "label": "Achats de marchandises consommées (Net Exercice)",
+      "formulaRaw": "60030026 - \"60030027\" + \"60030028\"",
+      "operands": [
+        {
+          "code": "F60030026",
+          "sign": "+"
+        },
+        {
+          "code": "F60030027",
+          "sign": "-"
+        },
+        {
+          "code": "F60030028",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030029",
+      "label": "Achats d'approvisionnements consommés (Net Exercice)",
+      "formulaRaw": "\"F60030030\" + \"F60030031\" - \"60030032\" - \"60030033\" + \"F60030034\" + \"F60030035\"",
+      "operands": [
+        {
+          "code": "F60030030",
+          "sign": "+"
+        },
+        {
+          "code": "F60030031",
+          "sign": "+"
+        },
+        {
+          "code": "F60030032",
+          "sign": "-"
+        },
+        {
+          "code": "F60030033",
+          "sign": "-"
+        },
+        {
+          "code": "F60030034",
+          "sign": "+"
+        },
+        {
+          "code": "F60030035",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030036",
+      "label": "Charges de personnel (Net Exercice)",
+      "formulaRaw": "\"F60030037\" + \"F60030038\" + \"F60030039\" + \"F60030040\" + \"F60030041\" + \"F60030042\" + \"F60030043\" + \"F60030044\" + \"F60030045\"",
+      "operands": [
+        {
+          "code": "F60030037",
+          "sign": "+"
+        },
+        {
+          "code": "F60030038",
+          "sign": "+"
+        },
+        {
+          "code": "F60030039",
+          "sign": "+"
+        },
+        {
+          "code": "F60030040",
+          "sign": "+"
+        },
+        {
+          "code": "F60030041",
+          "sign": "+"
+        },
+        {
+          "code": "F60030042",
+          "sign": "+"
+        },
+        {
+          "code": "F60030043",
+          "sign": "+"
+        },
+        {
+          "code": "F60030044",
+          "sign": "+"
+        },
+        {
+          "code": "F60030045",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030046",
+      "label": "Dotations aux amortissements et aux provisions (Net Exercice)",
+      "formulaRaw": "\"F60030047\" + \"F60030048\" + \"F60030049\" + \"F60030050\" + \"F60030051\" + \"F60030052\"",
+      "operands": [
+        {
+          "code": "F60030047",
+          "sign": "+"
+        },
+        {
+          "code": "F60030048",
+          "sign": "+"
+        },
+        {
+          "code": "F60030049",
+          "sign": "+"
+        },
+        {
+          "code": "F60030050",
+          "sign": "+"
+        },
+        {
+          "code": "F60030051",
+          "sign": "+"
+        },
+        {
+          "code": "F60030052",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030053",
+      "label": "Autres charges d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F60030054\" + \"F60030055\" + \"F60030056\" + \"F60030057\" + \"F60030058\" + \"F60030059\" + \"F60030060\"",
+      "operands": [
+        {
+          "code": "F60030054",
+          "sign": "+"
+        },
+        {
+          "code": "F60030055",
+          "sign": "+"
+        },
+        {
+          "code": "F60030056",
+          "sign": "+"
+        },
+        {
+          "code": "F60030057",
+          "sign": "+"
+        },
+        {
+          "code": "F60030058",
+          "sign": "+"
+        },
+        {
+          "code": "F60030059",
+          "sign": "+"
+        },
+        {
+          "code": "F60030060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030061",
+      "label": "Resultat d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F60030001\" - \"F60030020\"",
+      "operands": [
+        {
+          "code": "F60030001",
+          "sign": "+"
+        },
+        {
+          "code": "F60030020",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030062",
+      "label": "Charges financières nettes (Net Exercice)",
+      "formulaRaw": "\"F60030063\" + \"F60030064\"",
+      "operands": [
+        {
+          "code": "F60030063",
+          "sign": "+"
+        },
+        {
+          "code": "F60030064",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030065",
+      "label": "Produits des placements (Net Exercice)",
+      "formulaRaw": "\"F60030066\" + \"F60030067\" + \"F60030068\"",
+      "operands": [
+        {
+          "code": "F60030066",
+          "sign": "+"
+        },
+        {
+          "code": "F60030067",
+          "sign": "+"
+        },
+        {
+          "code": "F60030068",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030069",
+      "label": "Autres gains ordinaires (Net Exercice)",
+      "formulaRaw": "\"F60030070\" + \"F60030071\"",
+      "operands": [
+        {
+          "code": "F60030070",
+          "sign": "+"
+        },
+        {
+          "code": "F60030071",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030072",
+      "label": "Autres pertes ordinanires (Net Exercice)",
+      "formulaRaw": "\"F60030073\" + \"F60030074\" + \"F60030075\"",
+      "operands": [
+        {
+          "code": "F60030073",
+          "sign": "+"
+        },
+        {
+          "code": "F60030074",
+          "sign": "+"
+        },
+        {
+          "code": "F60030075",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030076",
+      "label": "Résultat des Activités Ordinaires avant Impôt (Net Exercice)",
+      "formulaRaw": "\"F60030061\" - \"F60030062\" + \"F60030065\" + \"F60030069\" - \"F60030072\"",
+      "operands": [
+        {
+          "code": "F60030061",
+          "sign": "+"
+        },
+        {
+          "code": "F60030062",
+          "sign": "-"
+        },
+        {
+          "code": "F60030065",
+          "sign": "+"
+        },
+        {
+          "code": "F60030069",
+          "sign": "+"
+        },
+        {
+          "code": "F60030072",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030077",
+      "label": "Impôt sur les bénéfices (Net Exercice)",
+      "formulaRaw": "\"F60030078\" + \"F60030079\"",
+      "operands": [
+        {
+          "code": "F60030078",
+          "sign": "+"
+        },
+        {
+          "code": "F60030079",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030080",
+      "label": "Résultat des Activités Ordinaires apr�s Impôt (Net Exercice)",
+      "formulaRaw": "\"F60030076\"-\"F60030077\"",
+      "operands": [
+        {
+          "code": "F60030076",
+          "sign": "+"
+        },
+        {
+          "code": "F60030077",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030081",
+      "label": "Elements extraordinanires (Gains/pertes) (Net Exercice)",
+      "formulaRaw": "\"F60030082\" - \"F60030083\"",
+      "operands": [
+        {
+          "code": "F60030082",
+          "sign": "+"
+        },
+        {
+          "code": "F60030083",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030084",
+      "label": "Résultat net de l'exercice (Net Exercice)",
+      "formulaRaw": "\"F60030080\" + \"F60030081\"",
+      "operands": [
+        {
+          "code": "F60030080",
+          "sign": "+"
+        },
+        {
+          "code": "F60030081",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030085",
+      "label": "Effets des modif. Comptables (net d'Impôt) (Net Exercice)",
+      "formulaRaw": "\"F60030086\" - \"F60030087\"",
+      "operands": [
+        {
+          "code": "F60030086",
+          "sign": "+"
+        },
+        {
+          "code": "F60030087",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030089",
+      "label": "Resultat apres modifications comptables (Net Exercice)",
+      "formulaRaw": "\"F60030084\" + \"F60030085\" + \"F60030088\"",
+      "operands": [
+        {
+          "code": "F60030084",
+          "sign": "+"
+        },
+        {
+          "code": "F60030085",
+          "sign": "+"
+        },
+        {
+          "code": "F60030088",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030090",
+      "label": "Produits d'exploitation (Net Exercice - 1). \"F60030091\" + \"F60030103\" + \"F60030104\"",
+      "formulaRaw": "Produits d'exploitation (Net Exercice - 1). \"F60030091\" + \"F60030103\" + \"F60030104\"",
+      "operands": [
+        {
+          "code": "F60030091",
+          "sign": "+"
+        },
+        {
+          "code": "F60030103",
+          "sign": "+"
+        },
+        {
+          "code": "F60030104",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030091",
+      "label": "Revenus (Net Exercice - 1). \"F60030092\" + \"F60030095\"",
+      "formulaRaw": "Revenus (Net Exercice - 1). \"F60030092\" + \"F60030095\"",
+      "operands": [
+        {
+          "code": "F60030092",
+          "sign": "+"
+        },
+        {
+          "code": "F60030095",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030092",
+      "label": "Ventes nettes des marchandises (Net Exercice - 1). \"F60030093\" - \"F60030094\"",
+      "formulaRaw": "Ventes nettes des marchandises (Net Exercice - 1). \"F60030093\" - \"F60030094\"",
+      "operands": [
+        {
+          "code": "F60030093",
+          "sign": "+"
+        },
+        {
+          "code": "F60030094",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030095",
+      "label": "Ventes nettes de la production (Net Exercice - 1). \"F60030096\" + \"F60030097\" + \"F60030098\" + \"F60030099\" + \"F60030100\" + \"F60030101\"\" - \"F60030102\"",
+      "formulaRaw": "Ventes nettes de la production (Net Exercice - 1). \"F60030096\" + \"F60030097\" + \"F60030098\" + \"F60030099\" + \"F60030100\" + \"F60030101\"\" - \"F60030102\"",
+      "operands": [
+        {
+          "code": "F60030096",
+          "sign": "+"
+        },
+        {
+          "code": "F60030097",
+          "sign": "+"
+        },
+        {
+          "code": "F60030098",
+          "sign": "+"
+        },
+        {
+          "code": "F60030099",
+          "sign": "+"
+        },
+        {
+          "code": "F60030100",
+          "sign": "+"
+        },
+        {
+          "code": "F60030101",
+          "sign": "+"
+        },
+        {
+          "code": "F60030102",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030104",
+      "label": "Autres produits d'exploitation (Net Exercice - 1). \"F60030105\" + \"F60030106\" + \"F60030107\" + \"F60030108\"",
+      "formulaRaw": "Autres produits d'exploitation (Net Exercice - 1). \"F60030105\" + \"F60030106\" + \"F60030107\" + \"F60030108\"",
+      "operands": [
+        {
+          "code": "F60030105",
+          "sign": "+"
+        },
+        {
+          "code": "F60030106",
+          "sign": "+"
+        },
+        {
+          "code": "F60030107",
+          "sign": "+"
+        },
+        {
+          "code": "F60030108",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030109",
+      "label": "Charges d'exploitation (Net Exercice - 1). \"F60030110\" + \"F60030114\"+\"F60030118\" + \"F60030125\" + \"F60030135\" + \"F60030142\"",
+      "formulaRaw": "Charges d'exploitation (Net Exercice - 1). \"F60030110\" + \"F60030114\"+\"F60030118\" + \"F60030125\" + \"F60030135\" + \"F60030142\"",
+      "operands": [
+        {
+          "code": "F60030110",
+          "sign": "+"
+        },
+        {
+          "code": "F60030114",
+          "sign": "+"
+        },
+        {
+          "code": "F60030118",
+          "sign": "+"
+        },
+        {
+          "code": "F60030125",
+          "sign": "+"
+        },
+        {
+          "code": "F60030135",
+          "sign": "+"
+        },
+        {
+          "code": "F60030142",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030110",
+      "label": "Variation stocks produits finis et encours (Net Exercice - 1). \"F60030111\" + \"F60030112\" + \"F60030113\"",
+      "formulaRaw": "Variation stocks produits finis et encours (Net Exercice - 1). \"F60030111\" + \"F60030112\" + \"F60030113\"",
+      "operands": [
+        {
+          "code": "F60030111",
+          "sign": "+"
+        },
+        {
+          "code": "F60030112",
+          "sign": "+"
+        },
+        {
+          "code": "F60030113",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030114",
+      "label": "Achats de marchandises consommées (Net Exercice - 1)",
+      "formulaRaw": "\"F60030115\" - \"F60030116\" + \"F60030117\"",
+      "operands": [
+        {
+          "code": "F60030115",
+          "sign": "+"
+        },
+        {
+          "code": "F60030116",
+          "sign": "-"
+        },
+        {
+          "code": "F60030117",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030118",
+      "label": "Achats d'approvisionnements consommés (Net Exercice - 1)",
+      "formulaRaw": "\"F60030119\" + \"F60030120\" - \"F60030121\" - \"F60030122\" + \"F60030123\" + \"F60030124\"",
+      "operands": [
+        {
+          "code": "F60030119",
+          "sign": "+"
+        },
+        {
+          "code": "F60030120",
+          "sign": "+"
+        },
+        {
+          "code": "F60030121",
+          "sign": "-"
+        },
+        {
+          "code": "F60030122",
+          "sign": "-"
+        },
+        {
+          "code": "F60030123",
+          "sign": "+"
+        },
+        {
+          "code": "F60030124",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030125",
+      "label": "Charges de personnel (Net Exercice - 1). \"F60030126\" + \"F60030127\" + \"F60030128\" + \"F60030129\" + \"F60030130\" + \"F60030131\" + \"F60030132\" + \"F60030133\" + \"F60030134\"",
+      "formulaRaw": "Charges de personnel (Net Exercice - 1). \"F60030126\" + \"F60030127\" + \"F60030128\" + \"F60030129\" + \"F60030130\" + \"F60030131\" + \"F60030132\" + \"F60030133\" + \"F60030134\"",
+      "operands": [
+        {
+          "code": "F60030126",
+          "sign": "+"
+        },
+        {
+          "code": "F60030127",
+          "sign": "+"
+        },
+        {
+          "code": "F60030128",
+          "sign": "+"
+        },
+        {
+          "code": "F60030129",
+          "sign": "+"
+        },
+        {
+          "code": "F60030130",
+          "sign": "+"
+        },
+        {
+          "code": "F60030131",
+          "sign": "+"
+        },
+        {
+          "code": "F60030132",
+          "sign": "+"
+        },
+        {
+          "code": "F60030133",
+          "sign": "+"
+        },
+        {
+          "code": "F60030134",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030135",
+      "label": "Dotations aux amortissements et aux provisions (Net Exercice - 1). \"F60030136\" + \"F60030137\" + \"F60030138\" + \"F60030139\" + \"F60030140\" + \"F60030141\"",
+      "formulaRaw": "Dotations aux amortissements et aux provisions (Net Exercice - 1). \"F60030136\" + \"F60030137\" + \"F60030138\" + \"F60030139\" + \"F60030140\" + \"F60030141\"",
+      "operands": [
+        {
+          "code": "F60030136",
+          "sign": "+"
+        },
+        {
+          "code": "F60030137",
+          "sign": "+"
+        },
+        {
+          "code": "F60030138",
+          "sign": "+"
+        },
+        {
+          "code": "F60030139",
+          "sign": "+"
+        },
+        {
+          "code": "F60030140",
+          "sign": "+"
+        },
+        {
+          "code": "F60030141",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030142",
+      "label": "Autres charges d'exploitation (Net Exercice - 1). \"F60030143\" + \"F60030144\" + \"F60030145\" + \"F60030146\" + \"F60030147\" + \"F60030148\" + \"F60030149\"",
+      "formulaRaw": "Autres charges d'exploitation (Net Exercice - 1). \"F60030143\" + \"F60030144\" + \"F60030145\" + \"F60030146\" + \"F60030147\" + \"F60030148\" + \"F60030149\"",
+      "operands": [
+        {
+          "code": "F60030143",
+          "sign": "+"
+        },
+        {
+          "code": "F60030144",
+          "sign": "+"
+        },
+        {
+          "code": "F60030145",
+          "sign": "+"
+        },
+        {
+          "code": "F60030146",
+          "sign": "+"
+        },
+        {
+          "code": "F60030147",
+          "sign": "+"
+        },
+        {
+          "code": "F60030148",
+          "sign": "+"
+        },
+        {
+          "code": "F60030149",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030150",
+      "label": "Resultat d'exploitation (Net Exercice - 1). \"F60030090\" - \"F60030109\"",
+      "formulaRaw": "Resultat d'exploitation (Net Exercice - 1). \"F60030090\" - \"F60030109\"",
+      "operands": [
+        {
+          "code": "F60030090",
+          "sign": "+"
+        },
+        {
+          "code": "F60030109",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030151",
+      "label": "Charges financières nettes (Net Exercice - 1)",
+      "formulaRaw": "\"F60030152\" + \"F60030153\"",
+      "operands": [
+        {
+          "code": "F60030152",
+          "sign": "+"
+        },
+        {
+          "code": "F60030153",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030154",
+      "label": "Produits des placements (Net Exercice - 1). \"F60030155\" + \"F60030156\" + \"F60030157\"",
+      "formulaRaw": "Produits des placements (Net Exercice - 1). \"F60030155\" + \"F60030156\" + \"F60030157\"",
+      "operands": [
+        {
+          "code": "F60030155",
+          "sign": "+"
+        },
+        {
+          "code": "F60030156",
+          "sign": "+"
+        },
+        {
+          "code": "F60030157",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030158",
+      "label": "Autres gains ordinaires (Net Exercice - 1). \"F60030159\" + \"F60030160\"",
+      "formulaRaw": "Autres gains ordinaires (Net Exercice - 1). \"F60030159\" + \"F60030160\"",
+      "operands": [
+        {
+          "code": "F60030159",
+          "sign": "+"
+        },
+        {
+          "code": "F60030160",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030161",
+      "label": "Autres pertes ordinanires (Net Exercice - 1). \"F60030162\" + \"F60030163\" + \"F60030164\"",
+      "formulaRaw": "Autres pertes ordinanires (Net Exercice - 1). \"F60030162\" + \"F60030163\" + \"F60030164\"",
+      "operands": [
+        {
+          "code": "F60030162",
+          "sign": "+"
+        },
+        {
+          "code": "F60030163",
+          "sign": "+"
+        },
+        {
+          "code": "F60030164",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030165",
+      "label": "Résultat des Activités Ordinaires avant Impôt (Net Exercice - 1)",
+      "formulaRaw": "\"F60030150\" - \"F60030151\" + \"F60030154\" + \"F60030158\" - \"F60030161\"",
+      "operands": [
+        {
+          "code": "F60030150",
+          "sign": "+"
+        },
+        {
+          "code": "F60030151",
+          "sign": "-"
+        },
+        {
+          "code": "F60030154",
+          "sign": "+"
+        },
+        {
+          "code": "F60030158",
+          "sign": "+"
+        },
+        {
+          "code": "F60030161",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030166",
+      "label": "Impôt sur les bénéfices (Net Exercice - 1)",
+      "formulaRaw": "\"F60030167\" + \"F60030168\"",
+      "operands": [
+        {
+          "code": "F60030167",
+          "sign": "+"
+        },
+        {
+          "code": "F60030168",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030169",
+      "label": "Résultat des Activités Ordinaires aprés Impôt (Net Exercice - 1)",
+      "formulaRaw": "\"F60030165\" - \"F60030166\"",
+      "operands": [
+        {
+          "code": "F60030165",
+          "sign": "+"
+        },
+        {
+          "code": "F60030166",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030170",
+      "label": "Elements extraordinanires (Gains/pertes) (Net Exercice - 1)",
+      "formulaRaw": "\"F60030171\" - \"F60030172\"",
+      "operands": [
+        {
+          "code": "F60030171",
+          "sign": "+"
+        },
+        {
+          "code": "F60030172",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030173",
+      "label": "Résultat net de l'exercice (Net Exercice - 1)",
+      "formulaRaw": "\"F60030169\" - \"F60030170\"",
+      "operands": [
+        {
+          "code": "F60030169",
+          "sign": "+"
+        },
+        {
+          "code": "F60030170",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030174",
+      "label": "Effets des modif. Comptables (net d'Impôt) (Net Exercice - 1)",
+      "formulaRaw": "\"F60030175\" - \"F60030176\"",
+      "operands": [
+        {
+          "code": "F60030175",
+          "sign": "+"
+        },
+        {
+          "code": "F60030176",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60030178",
+      "label": "Resultat apres modifications comptables (Net Exercice - 1). \"F60030173\" + \"F60030174\" + \"F60030177\"",
+      "formulaRaw": "Resultat apres modifications comptables (Net Exercice - 1). \"F60030173\" + \"F60030174\" + \"F60030177\"",
+      "operands": [
+        {
+          "code": "F60030173",
+          "sign": "+"
+        },
+        {
+          "code": "F60030174",
+          "sign": "+"
+        },
+        {
+          "code": "F60030177",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "formCode": "F6103",
+  "generatedAt": "2026-09-02T19:31:32.743Z",
+  "rulesCount": 14,
+  "rules": [
+    {
+      "target": "F61030001",
+      "label": "Produits d'exploitation bancaire (Exercice)",
+      "formulaRaw": "\"F61030002\" + \"F61030003\" + \"F61030004\" + \"F61030005\"",
+      "operands": [
+        {
+          "code": "F61030002",
+          "sign": "+"
+        },
+        {
+          "code": "F61030003",
+          "sign": "+"
+        },
+        {
+          "code": "F61030004",
+          "sign": "+"
+        },
+        {
+          "code": "F61030005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030006",
+      "label": "Charges d'exploitation bancaire (Exercice)",
+      "formulaRaw": "\"F61030007\" + \"F61030008\" + \"F61030009\"",
+      "operands": [
+        {
+          "code": "F61030007",
+          "sign": "+"
+        },
+        {
+          "code": "F61030008",
+          "sign": "+"
+        },
+        {
+          "code": "F61030009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030010",
+      "label": "Produit net bancaire (Exercice)",
+      "formulaRaw": "\"F61030001\" - \"F61030006\"",
+      "operands": [
+        {
+          "code": "F61030001",
+          "sign": "+"
+        },
+        {
+          "code": "F61030006",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030017",
+      "label": "Resultat d'exploitation (Exercice)",
+      "formulaRaw": "\"F61030010\" - \"F61030011\" - \"F61030012\" + \"F61030013\" - \"F61030014\" - \"F61030015\" - \"F61030016\"",
+      "operands": [
+        {
+          "code": "F61030010",
+          "sign": "+"
+        },
+        {
+          "code": "F61030011",
+          "sign": "-"
+        },
+        {
+          "code": "F61030012",
+          "sign": "-"
+        },
+        {
+          "code": "F61030013",
+          "sign": "+"
+        },
+        {
+          "code": "F61030014",
+          "sign": "-"
+        },
+        {
+          "code": "F61030015",
+          "sign": "-"
+        },
+        {
+          "code": "F61030016",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030020",
+      "label": "Résultat des activités ordinaires (Exercice)",
+      "formulaRaw": "\"F61030017\" + \"F61030018\" - \"F61030019\"",
+      "operands": [
+        {
+          "code": "F61030017",
+          "sign": "+"
+        },
+        {
+          "code": "F61030018",
+          "sign": "+"
+        },
+        {
+          "code": "F61030019",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030022",
+      "label": "Resultat net de l'exercice (Exercice)",
+      "formulaRaw": "\"F61030020\" + \"F61030021\"",
+      "operands": [
+        {
+          "code": "F61030020",
+          "sign": "+"
+        },
+        {
+          "code": "F61030021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61030024",
+      "label": "Resultat apres modifications comptables (Exercice)",
+      "formulaRaw": "\"F61030022\" + \"F61030023\"",
+      "operands": [
+        {
+          "code": "F61030022",
+          "sign": "+"
+        },
+        {
+          "code": "F61030023",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031001",
+      "label": "Produits d'exploitation bancaire (Exercice - 1). \"F61031002\" + \"F61031003\" + \"F61031004\" + \"F61031005\"",
+      "formulaRaw": "Produits d'exploitation bancaire (Exercice - 1). \"F61031002\" + \"F61031003\" + \"F61031004\" + \"F61031005\"",
+      "operands": [
+        {
+          "code": "F61031002",
+          "sign": "+"
+        },
+        {
+          "code": "F61031003",
+          "sign": "+"
+        },
+        {
+          "code": "F61031004",
+          "sign": "+"
+        },
+        {
+          "code": "F61031005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031006",
+      "label": "Charges d'exploitation bancaire (Exercice - 1). \"F61031007\" + \"F61031008\" + \"F61031009\"",
+      "formulaRaw": "Charges d'exploitation bancaire (Exercice - 1). \"F61031007\" + \"F61031008\" + \"F61031009\"",
+      "operands": [
+        {
+          "code": "F61031007",
+          "sign": "+"
+        },
+        {
+          "code": "F61031008",
+          "sign": "+"
+        },
+        {
+          "code": "F61031009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031010",
+      "label": "Produit net bancaire (Exercice - 1). \"F61031001\" - \"F61031006\"",
+      "formulaRaw": "Produit net bancaire (Exercice - 1). \"F61031001\" - \"F61031006\"",
+      "operands": [
+        {
+          "code": "F61031001",
+          "sign": "+"
+        },
+        {
+          "code": "F61031006",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031017",
+      "label": "Resultat d'exploitation (Exercice - 1). \"F61031010\" - \"F61031011\" - \"F61031012\" + \"F61031013\" - \"F61031014\" - \"F61031015\" - \"F61031016\"",
+      "formulaRaw": "Resultat d'exploitation (Exercice - 1). \"F61031010\" - \"F61031011\" - \"F61031012\" + \"F61031013\" - \"F61031014\" - \"F61031015\" - \"F61031016\"",
+      "operands": [
+        {
+          "code": "F61031010",
+          "sign": "+"
+        },
+        {
+          "code": "F61031011",
+          "sign": "-"
+        },
+        {
+          "code": "F61031012",
+          "sign": "-"
+        },
+        {
+          "code": "F61031013",
+          "sign": "+"
+        },
+        {
+          "code": "F61031014",
+          "sign": "-"
+        },
+        {
+          "code": "F61031015",
+          "sign": "-"
+        },
+        {
+          "code": "F61031016",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031020",
+      "label": "Résultat des activités ordinaires (Exercice - 1)",
+      "formulaRaw": "\"F61031017\" + \"F61031018\" - \"F61031019\"",
+      "operands": [
+        {
+          "code": "F61031017",
+          "sign": "+"
+        },
+        {
+          "code": "F61031018",
+          "sign": "+"
+        },
+        {
+          "code": "F61031019",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031022",
+      "label": "Resultat net de l'Exercice - 1 (Exercice - 1). \"F61031020\" + \"F61031021\"",
+      "formulaRaw": "Resultat net de l'Exercice - 1 (Exercice - 1). \"F61031020\" + \"F61031021\"",
+      "operands": [
+        {
+          "code": "F61031020",
+          "sign": "+"
+        },
+        {
+          "code": "F61031021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61031024",
+      "label": "Resultat apres modifications comptables (Exercice - 1). \"F61031022\" + \"F61031023\"",
+      "formulaRaw": "Resultat apres modifications comptables (Exercice - 1). \"F61031022\" + \"F61031023\"",
+      "operands": [
+        {
+          "code": "F61031022",
+          "sign": "+"
+        },
+        {
+          "code": "F61031023",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

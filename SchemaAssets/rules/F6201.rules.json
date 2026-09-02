@@ -1,0 +1,1399 @@
+{
+  "formCode": "F6201",
+  "generatedAt": "2026-09-02T19:31:32.813Z",
+  "rulesCount": 56,
+  "rules": [
+    {
+      "target": "F62010001",
+      "label": "AC1 Actifs incorporels  (Brut)",
+      "formulaRaw": "\"F62010002\" + \"F62010003\" + \"F62010004\" + \"F62010005\"",
+      "operands": [
+        {
+          "code": "F62010002",
+          "sign": "+"
+        },
+        {
+          "code": "F62010003",
+          "sign": "+"
+        },
+        {
+          "code": "F62010004",
+          "sign": "+"
+        },
+        {
+          "code": "F62010005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010006",
+      "label": "AC2 Actifs corporels d'exploitation (Brut)",
+      "formulaRaw": "\"F62010007\" + \"F62010008\" + \"F62010009\"",
+      "operands": [
+        {
+          "code": "F62010007",
+          "sign": "+"
+        },
+        {
+          "code": "F62010008",
+          "sign": "+"
+        },
+        {
+          "code": "F62010009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010010",
+      "label": "AC3 Placements (Brut)",
+      "formulaRaw": "\"F62010011\" + \"F62010014\" + \"F62010019\" + \"F62010026\"",
+      "operands": [
+        {
+          "code": "F62010011",
+          "sign": "+"
+        },
+        {
+          "code": "F62010014",
+          "sign": "+"
+        },
+        {
+          "code": "F62010019",
+          "sign": "+"
+        },
+        {
+          "code": "F62010026",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010011",
+      "label": "AC31 Terrains et constructions (Brut)",
+      "formulaRaw": "\"F62010012\" + \"F62010013\"",
+      "operands": [
+        {
+          "code": "F62010012",
+          "sign": "+"
+        },
+        {
+          "code": "F62010013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010014",
+      "label": "AC32 Placements dans les entreprises li�es et participations (Brut)",
+      "formulaRaw": "\"F62010015\" + \"F62010016\" + \"F62010017\" + \"F62010018\"",
+      "operands": [
+        {
+          "code": "F62010015",
+          "sign": "+"
+        },
+        {
+          "code": "F62010016",
+          "sign": "+"
+        },
+        {
+          "code": "F62010017",
+          "sign": "+"
+        },
+        {
+          "code": "F62010018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010019",
+      "label": "AC33 Autres placements financiers (Brut)",
+      "formulaRaw": "\"F62010020\" + \"F62010021\" + \"F62010022\" + \"F62010023\" + \"F62010024\" + \"F62010025\"",
+      "operands": [
+        {
+          "code": "F62010020",
+          "sign": "+"
+        },
+        {
+          "code": "F62010021",
+          "sign": "+"
+        },
+        {
+          "code": "F62010022",
+          "sign": "+"
+        },
+        {
+          "code": "F62010023",
+          "sign": "+"
+        },
+        {
+          "code": "F62010024",
+          "sign": "+"
+        },
+        {
+          "code": "F62010025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010028",
+      "label": "AC5 Part des r�assureurs dans les provisions techniques (Brut)",
+      "formulaRaw": "\"F62010029\" + \"F62010030\" + \"F62010031\" + \"F62010032\" + \"F62010033\" + \"F62010034\" + \"F62010035\" + \"F62010036\" + \"F62010037\"",
+      "operands": [
+        {
+          "code": "F62010029",
+          "sign": "+"
+        },
+        {
+          "code": "F62010030",
+          "sign": "+"
+        },
+        {
+          "code": "F62010031",
+          "sign": "+"
+        },
+        {
+          "code": "F62010032",
+          "sign": "+"
+        },
+        {
+          "code": "F62010033",
+          "sign": "+"
+        },
+        {
+          "code": "F62010034",
+          "sign": "+"
+        },
+        {
+          "code": "F62010035",
+          "sign": "+"
+        },
+        {
+          "code": "F62010036",
+          "sign": "+"
+        },
+        {
+          "code": "F62010037",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010039",
+      "label": "AC6 Creances (Brut)",
+      "formulaRaw": "\"F62010040\" + \"F62010044\" + \"F62010045\" + \"F62010049\"",
+      "operands": [
+        {
+          "code": "F62010040",
+          "sign": "+"
+        },
+        {
+          "code": "F62010044",
+          "sign": "+"
+        },
+        {
+          "code": "F62010045",
+          "sign": "+"
+        },
+        {
+          "code": "F62010049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010040",
+      "label": "AC61 Cr�ances n�es d'op�rations d'assurance directe (Brut)",
+      "formulaRaw": "\"F62010041\" + \"F62010042\" + \"F62010043\"",
+      "operands": [
+        {
+          "code": "F62010041",
+          "sign": "+"
+        },
+        {
+          "code": "F62010042",
+          "sign": "+"
+        },
+        {
+          "code": "F62010043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010045",
+      "label": "AC63 Autres cr�ances (Brut)",
+      "formulaRaw": "\"F62010046\" + \"F62010047\" + \"F62010048\"",
+      "operands": [
+        {
+          "code": "F62010046",
+          "sign": "+"
+        },
+        {
+          "code": "F62010047",
+          "sign": "+"
+        },
+        {
+          "code": "F62010048",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010050",
+      "label": "AC7 Autres �l�ments d'actif (Brut)",
+      "formulaRaw": "\"F62010051\" + \"F62010052\" + \"F62010055\" + \"F62010059\" + \"F62010060\"",
+      "operands": [
+        {
+          "code": "F62010051",
+          "sign": "+"
+        },
+        {
+          "code": "F62010052",
+          "sign": "+"
+        },
+        {
+          "code": "F62010055",
+          "sign": "+"
+        },
+        {
+          "code": "F62010059",
+          "sign": "+"
+        },
+        {
+          "code": "F62010060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010052",
+      "label": "AC72 Charges report�es (Brut)",
+      "formulaRaw": "\"F62010053\" + \"F62010054\"",
+      "operands": [
+        {
+          "code": "F62010053",
+          "sign": "+"
+        },
+        {
+          "code": "F62010054",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010055",
+      "label": "AC73 Comptes de r�gularisation Actif (Brut)",
+      "formulaRaw": "\"F62010056\" + \"F62010057\" + \"F62010058\"",
+      "operands": [
+        {
+          "code": "F62010056",
+          "sign": "+"
+        },
+        {
+          "code": "F62010057",
+          "sign": "+"
+        },
+        {
+          "code": "F62010058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62010061",
+      "label": "Total actif (Brut)",
+      "formulaRaw": "\"F62010001\" + \"F62010006\" + \"F62010010\" + \"F62010027\" + \"F62010028\" + \"F62010039\" + \"F62010050\"",
+      "operands": [
+        {
+          "code": "F62010001",
+          "sign": "+"
+        },
+        {
+          "code": "F62010006",
+          "sign": "+"
+        },
+        {
+          "code": "F62010010",
+          "sign": "+"
+        },
+        {
+          "code": "F62010027",
+          "sign": "+"
+        },
+        {
+          "code": "F62010028",
+          "sign": "+"
+        },
+        {
+          "code": "F62010039",
+          "sign": "+"
+        },
+        {
+          "code": "F62010050",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011001",
+      "label": "AC1 Actifs incorporels  (amortissement/Provision)",
+      "formulaRaw": "\"F62011002\" + \"F62011003\" + \"F62011004\" + \"F62011005\"",
+      "operands": [
+        {
+          "code": "F62011002",
+          "sign": "+"
+        },
+        {
+          "code": "F62011003",
+          "sign": "+"
+        },
+        {
+          "code": "F62011004",
+          "sign": "+"
+        },
+        {
+          "code": "F62011005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011006",
+      "label": "AC2 Actifs corporels d'exploitation (amortissement/Provision)",
+      "formulaRaw": "\"F62011007\" + \"F62011008\" + \"F62011009\"",
+      "operands": [
+        {
+          "code": "F62011007",
+          "sign": "+"
+        },
+        {
+          "code": "F62011008",
+          "sign": "+"
+        },
+        {
+          "code": "F62011009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011010",
+      "label": "AC3 Placements (amortissement/Provision)",
+      "formulaRaw": "\"F62011011\" + \"F62011014\" + \"F62011019\" + \"F62011026\"",
+      "operands": [
+        {
+          "code": "F62011011",
+          "sign": "+"
+        },
+        {
+          "code": "F62011014",
+          "sign": "+"
+        },
+        {
+          "code": "F62011019",
+          "sign": "+"
+        },
+        {
+          "code": "F62011026",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011011",
+      "label": "AC31 Terrains et constructions (amortissement/Provision)",
+      "formulaRaw": "\"F62011012\" + \"F62011013\"",
+      "operands": [
+        {
+          "code": "F62011012",
+          "sign": "+"
+        },
+        {
+          "code": "F62011013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011014",
+      "label": "AC32 Placements dans les entreprises li�es et participations (amortissement/Provision)",
+      "formulaRaw": "\"F62011015\" + \"F62011016\" + \"F62011017\" + \"F62011018\"",
+      "operands": [
+        {
+          "code": "F62011015",
+          "sign": "+"
+        },
+        {
+          "code": "F62011016",
+          "sign": "+"
+        },
+        {
+          "code": "F62011017",
+          "sign": "+"
+        },
+        {
+          "code": "F62011018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011019",
+      "label": "AC33 Autres placements financiers (amortissement/Provision)",
+      "formulaRaw": "\"F62011020\" + \"F62011021\" + \"F62011022\" + \"F62011023\" + \"F62011024\" + \"F62011025\"",
+      "operands": [
+        {
+          "code": "F62011020",
+          "sign": "+"
+        },
+        {
+          "code": "F62011021",
+          "sign": "+"
+        },
+        {
+          "code": "F62011022",
+          "sign": "+"
+        },
+        {
+          "code": "F62011023",
+          "sign": "+"
+        },
+        {
+          "code": "F62011024",
+          "sign": "+"
+        },
+        {
+          "code": "F62011025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011028",
+      "label": "AC5 Part des r�assureurs dans les provisions techniques (amortissement/Provision)",
+      "formulaRaw": "\"F62011029\" + \"F62011030\" + \"F62011031\" + \"F62011032\" + \"F62011033\" + \"F62011034\" + \"F62011035\" + \"F62011036\" + \"F62011037\"",
+      "operands": [
+        {
+          "code": "F62011029",
+          "sign": "+"
+        },
+        {
+          "code": "F62011030",
+          "sign": "+"
+        },
+        {
+          "code": "F62011031",
+          "sign": "+"
+        },
+        {
+          "code": "F62011032",
+          "sign": "+"
+        },
+        {
+          "code": "F62011033",
+          "sign": "+"
+        },
+        {
+          "code": "F62011034",
+          "sign": "+"
+        },
+        {
+          "code": "F62011035",
+          "sign": "+"
+        },
+        {
+          "code": "F62011036",
+          "sign": "+"
+        },
+        {
+          "code": "F62011037",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011039",
+      "label": "AC6 Creances (amortissement/Provision)",
+      "formulaRaw": "\"F62011040\" + \"F62011044\" + \"F62011045\" + \"F62011049\"",
+      "operands": [
+        {
+          "code": "F62011040",
+          "sign": "+"
+        },
+        {
+          "code": "F62011044",
+          "sign": "+"
+        },
+        {
+          "code": "F62011045",
+          "sign": "+"
+        },
+        {
+          "code": "F62011049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011040",
+      "label": "AC61 Cr�ances n�es d'op�rations d'assurance directe (amortissement/Provision)",
+      "formulaRaw": "\"F62011041\" + \"F62011042\" + \"F62011043\"",
+      "operands": [
+        {
+          "code": "F62011041",
+          "sign": "+"
+        },
+        {
+          "code": "F62011042",
+          "sign": "+"
+        },
+        {
+          "code": "F62011043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011045",
+      "label": "AC63 Autres cr�ances (amortissement/Provision)",
+      "formulaRaw": "\"F62011046\" + \"F62011047\" + \"F62011048\"",
+      "operands": [
+        {
+          "code": "F62011046",
+          "sign": "+"
+        },
+        {
+          "code": "F62011047",
+          "sign": "+"
+        },
+        {
+          "code": "F62011048",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011050",
+      "label": "AC7 Autres �l�ments d'actif (amortissement/Provision)",
+      "formulaRaw": "\"F62011051\" + \"F62011052\" + \"F62011055\" + \"F62011059\" + \"F62011060\"",
+      "operands": [
+        {
+          "code": "F62011051",
+          "sign": "+"
+        },
+        {
+          "code": "F62011052",
+          "sign": "+"
+        },
+        {
+          "code": "F62011055",
+          "sign": "+"
+        },
+        {
+          "code": "F62011059",
+          "sign": "+"
+        },
+        {
+          "code": "F62011060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011052",
+      "label": "AC72 Charges report�es (amortissement/Provision)",
+      "formulaRaw": "\"F62011053\" + \"F62011054\"",
+      "operands": [
+        {
+          "code": "F62011053",
+          "sign": "+"
+        },
+        {
+          "code": "F62011054",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011055",
+      "label": "AC73 Comptes de r�gularisation Actif (amortissement/Provision)",
+      "formulaRaw": "\"F62011056\" + \"F62011057\" + \"F62011058\"",
+      "operands": [
+        {
+          "code": "F62011056",
+          "sign": "+"
+        },
+        {
+          "code": "F62011057",
+          "sign": "+"
+        },
+        {
+          "code": "F62011058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62011061",
+      "label": "Total actif (amortissement/Provision)",
+      "formulaRaw": "\"F62011001\" + \"F62011006\" + \"F62011010\" + \"F62011027\" + \"F62011028\" + \"F62011039\" + \"F62011050\"",
+      "operands": [
+        {
+          "code": "F62011001",
+          "sign": "+"
+        },
+        {
+          "code": "F62011006",
+          "sign": "+"
+        },
+        {
+          "code": "F62011010",
+          "sign": "+"
+        },
+        {
+          "code": "F62011027",
+          "sign": "+"
+        },
+        {
+          "code": "F62011028",
+          "sign": "+"
+        },
+        {
+          "code": "F62011039",
+          "sign": "+"
+        },
+        {
+          "code": "F62011050",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012001",
+      "label": "AC1 Actifs incorporels  (Net)",
+      "formulaRaw": "\"F62012002\" + \"F62012003\" + \"F62012004\" + \"F62012005\"",
+      "operands": [
+        {
+          "code": "F62012002",
+          "sign": "+"
+        },
+        {
+          "code": "F62012003",
+          "sign": "+"
+        },
+        {
+          "code": "F62012004",
+          "sign": "+"
+        },
+        {
+          "code": "F62012005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012006",
+      "label": "AC2 Actifs corporels d'exploitation (Net)",
+      "formulaRaw": "\"F62012007\" + \"F62012008\" + \"F62012009\"",
+      "operands": [
+        {
+          "code": "F62012007",
+          "sign": "+"
+        },
+        {
+          "code": "F62012008",
+          "sign": "+"
+        },
+        {
+          "code": "F62012009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012010",
+      "label": "AC3 Placements (Net)",
+      "formulaRaw": "\"F62012011\" + \"F62012014\" + \"F62012019\" + \"F62012026\"",
+      "operands": [
+        {
+          "code": "F62012011",
+          "sign": "+"
+        },
+        {
+          "code": "F62012014",
+          "sign": "+"
+        },
+        {
+          "code": "F62012019",
+          "sign": "+"
+        },
+        {
+          "code": "F62012026",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012011",
+      "label": "AC31 Terrains et constructions (Net)",
+      "formulaRaw": "\"F62012012\" + \"F62012013\"",
+      "operands": [
+        {
+          "code": "F62012012",
+          "sign": "+"
+        },
+        {
+          "code": "F62012013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012014",
+      "label": "AC32 Placements dans les entreprises li�es et participations (Net)",
+      "formulaRaw": "\"F62012015\" + \"F62012016\" + \"F62012017\" + \"F62012018\"",
+      "operands": [
+        {
+          "code": "F62012015",
+          "sign": "+"
+        },
+        {
+          "code": "F62012016",
+          "sign": "+"
+        },
+        {
+          "code": "F62012017",
+          "sign": "+"
+        },
+        {
+          "code": "F62012018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012019",
+      "label": "AC33 Autres placements financiers (Net)",
+      "formulaRaw": "\"F62012020\" + \"F62012021\" + \"F62012022\" + \"F62012023\" + \"F62012024\" + \"F62012025\"",
+      "operands": [
+        {
+          "code": "F62012020",
+          "sign": "+"
+        },
+        {
+          "code": "F62012021",
+          "sign": "+"
+        },
+        {
+          "code": "F62012022",
+          "sign": "+"
+        },
+        {
+          "code": "F62012023",
+          "sign": "+"
+        },
+        {
+          "code": "F62012024",
+          "sign": "+"
+        },
+        {
+          "code": "F62012025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012028",
+      "label": "AC5 Part des r�assureurs dans les provisions techniques (Net)",
+      "formulaRaw": "\"F62012029\" + \"F62012030\" + \"F62012031\" + \"F62012032\" + \"F62012033\" + \"F62012034\" + \"F62012035\" + \"F62012036\" + \"F62012037\"",
+      "operands": [
+        {
+          "code": "F62012029",
+          "sign": "+"
+        },
+        {
+          "code": "F62012030",
+          "sign": "+"
+        },
+        {
+          "code": "F62012031",
+          "sign": "+"
+        },
+        {
+          "code": "F62012032",
+          "sign": "+"
+        },
+        {
+          "code": "F62012033",
+          "sign": "+"
+        },
+        {
+          "code": "F62012034",
+          "sign": "+"
+        },
+        {
+          "code": "F62012035",
+          "sign": "+"
+        },
+        {
+          "code": "F62012036",
+          "sign": "+"
+        },
+        {
+          "code": "F62012037",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012039",
+      "label": "AC6 Creances (Net)",
+      "formulaRaw": "\"F62012040\" + \"F62012044\" + \"F62012045\" + \"F62012049\"",
+      "operands": [
+        {
+          "code": "F62012040",
+          "sign": "+"
+        },
+        {
+          "code": "F62012044",
+          "sign": "+"
+        },
+        {
+          "code": "F62012045",
+          "sign": "+"
+        },
+        {
+          "code": "F62012049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012040",
+      "label": "AC61 Cr�ances n�es d'op�rations d'assurance directe (Net)",
+      "formulaRaw": "\"F62012041\" + \"F62012042\" + \"F62012043\"",
+      "operands": [
+        {
+          "code": "F62012041",
+          "sign": "+"
+        },
+        {
+          "code": "F62012042",
+          "sign": "+"
+        },
+        {
+          "code": "F62012043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012045",
+      "label": "AC63 Autres cr�ances (Net)",
+      "formulaRaw": "\"F62012046\" + \"F62012047\" + \"F62012048\"",
+      "operands": [
+        {
+          "code": "F62012046",
+          "sign": "+"
+        },
+        {
+          "code": "F62012047",
+          "sign": "+"
+        },
+        {
+          "code": "F62012048",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012050",
+      "label": "AC7 Autres �l�ments d'actif (Net)",
+      "formulaRaw": "\"F62012051\" + \"F62012052\" + \"F62012055\" + \"F62012059\" + \"F62012060\"",
+      "operands": [
+        {
+          "code": "F62012051",
+          "sign": "+"
+        },
+        {
+          "code": "F62012052",
+          "sign": "+"
+        },
+        {
+          "code": "F62012055",
+          "sign": "+"
+        },
+        {
+          "code": "F62012059",
+          "sign": "+"
+        },
+        {
+          "code": "F62012060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012052",
+      "label": "AC72 Charges report�es (Net)",
+      "formulaRaw": "\"F62012053\" + \"F62012054\"",
+      "operands": [
+        {
+          "code": "F62012053",
+          "sign": "+"
+        },
+        {
+          "code": "F62012054",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012055",
+      "label": "AC73 Comptes de r�gularisation Actif (Net)",
+      "formulaRaw": "\"F62012056\" + \"F62012057\" + \"F62012058\"",
+      "operands": [
+        {
+          "code": "F62012056",
+          "sign": "+"
+        },
+        {
+          "code": "F62012057",
+          "sign": "+"
+        },
+        {
+          "code": "F62012058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62012061",
+      "label": "Total actif (Net)",
+      "formulaRaw": "\"F62012001\" + \"F62012006\" + \"F62012010\" + \"F62012027\" + \"F62012028\" + \"F62012039\" + \"F62012050\"",
+      "operands": [
+        {
+          "code": "F62012001",
+          "sign": "+"
+        },
+        {
+          "code": "F62012006",
+          "sign": "+"
+        },
+        {
+          "code": "F62012010",
+          "sign": "+"
+        },
+        {
+          "code": "F62012027",
+          "sign": "+"
+        },
+        {
+          "code": "F62012028",
+          "sign": "+"
+        },
+        {
+          "code": "F62012039",
+          "sign": "+"
+        },
+        {
+          "code": "F62012050",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013001",
+      "label": "AC1 Actifs incorporels  (Net N-1). \"F62013002\" + \"F62013003\" + \"F62013004\" + \"F62013005\"",
+      "formulaRaw": "AC1 Actifs incorporels  (Net N-1). \"F62013002\" + \"F62013003\" + \"F62013004\" + \"F62013005\"",
+      "operands": [
+        {
+          "code": "F62013002",
+          "sign": "+"
+        },
+        {
+          "code": "F62013003",
+          "sign": "+"
+        },
+        {
+          "code": "F62013004",
+          "sign": "+"
+        },
+        {
+          "code": "F62013005",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013006",
+      "label": "AC2 Actifs corporels d'exploitation (Net N-1). \"F62013007\" + \"F62013008\" + \"F62013009\"",
+      "formulaRaw": "AC2 Actifs corporels d'exploitation (Net N-1). \"F62013007\" + \"F62013008\" + \"F62013009\"",
+      "operands": [
+        {
+          "code": "F62013007",
+          "sign": "+"
+        },
+        {
+          "code": "F62013008",
+          "sign": "+"
+        },
+        {
+          "code": "F62013009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013010",
+      "label": "AC3 Placements (Net N-1). \"F62013011\" + \"F62013014\" + \"F62013019\" + \"F62013026\"",
+      "formulaRaw": "AC3 Placements (Net N-1). \"F62013011\" + \"F62013014\" + \"F62013019\" + \"F62013026\"",
+      "operands": [
+        {
+          "code": "F62013011",
+          "sign": "+"
+        },
+        {
+          "code": "F62013014",
+          "sign": "+"
+        },
+        {
+          "code": "F62013019",
+          "sign": "+"
+        },
+        {
+          "code": "F62013026",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013011",
+      "label": "AC31 Terrains et constructions (Net N-1). \"F62013012\" + \"F62013013\"",
+      "formulaRaw": "AC31 Terrains et constructions (Net N-1). \"F62013012\" + \"F62013013\"",
+      "operands": [
+        {
+          "code": "F62013012",
+          "sign": "+"
+        },
+        {
+          "code": "F62013013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013014",
+      "label": "AC32 Placements dans les entreprises li�es et participations (Net N-1)",
+      "formulaRaw": "\"F62013015\" + \"F62013016\" + \"F62013017\" + \"F62013018\"",
+      "operands": [
+        {
+          "code": "F62013015",
+          "sign": "+"
+        },
+        {
+          "code": "F62013016",
+          "sign": "+"
+        },
+        {
+          "code": "F62013017",
+          "sign": "+"
+        },
+        {
+          "code": "F62013018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013019",
+      "label": "AC33 Autres placements financiers (Net N-1). \"F62013020\" + \"F62013021\" + \"F62013022\" + \"F62013023\" + \"F62013024\" + \"F62013025\"",
+      "formulaRaw": "AC33 Autres placements financiers (Net N-1). \"F62013020\" + \"F62013021\" + \"F62013022\" + \"F62013023\" + \"F62013024\" + \"F62013025\"",
+      "operands": [
+        {
+          "code": "F62013020",
+          "sign": "+"
+        },
+        {
+          "code": "F62013021",
+          "sign": "+"
+        },
+        {
+          "code": "F62013022",
+          "sign": "+"
+        },
+        {
+          "code": "F62013023",
+          "sign": "+"
+        },
+        {
+          "code": "F62013024",
+          "sign": "+"
+        },
+        {
+          "code": "F62013025",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013028",
+      "label": "AC5 Part des r�assureurs dans les provisions techniques (Net N-1)",
+      "formulaRaw": "\"F62013029\" + \"F62013030\" + \"F62013031\" + \"F62013032\" + \"F62013033\" + \"F62013034\" + \"F62013035\" + \"F62013036\" + \"F62013037\"",
+      "operands": [
+        {
+          "code": "F62013029",
+          "sign": "+"
+        },
+        {
+          "code": "F62013030",
+          "sign": "+"
+        },
+        {
+          "code": "F62013031",
+          "sign": "+"
+        },
+        {
+          "code": "F62013032",
+          "sign": "+"
+        },
+        {
+          "code": "F62013033",
+          "sign": "+"
+        },
+        {
+          "code": "F62013034",
+          "sign": "+"
+        },
+        {
+          "code": "F62013035",
+          "sign": "+"
+        },
+        {
+          "code": "F62013036",
+          "sign": "+"
+        },
+        {
+          "code": "F62013037",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013039",
+      "label": "AC6 Creances (Net N-1). \"F62013040\" + \"F62013044\" + \"F62013045\" + \"F62013049\"",
+      "formulaRaw": "AC6 Creances (Net N-1). \"F62013040\" + \"F62013044\" + \"F62013045\" + \"F62013049\"",
+      "operands": [
+        {
+          "code": "F62013040",
+          "sign": "+"
+        },
+        {
+          "code": "F62013044",
+          "sign": "+"
+        },
+        {
+          "code": "F62013045",
+          "sign": "+"
+        },
+        {
+          "code": "F62013049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013040",
+      "label": "AC61 Cr�ances n�es d'op�rations d'assurance directe (Net N-1)",
+      "formulaRaw": "\"F62013041\" + \"F62013042\" + \"F62013043\"",
+      "operands": [
+        {
+          "code": "F62013041",
+          "sign": "+"
+        },
+        {
+          "code": "F62013042",
+          "sign": "+"
+        },
+        {
+          "code": "F62013043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013045",
+      "label": "AC63 Autres cr�ances (Net N-1)",
+      "formulaRaw": "\"F62013046\" + \"F62013047\" + \"F62013048\"",
+      "operands": [
+        {
+          "code": "F62013046",
+          "sign": "+"
+        },
+        {
+          "code": "F62013047",
+          "sign": "+"
+        },
+        {
+          "code": "F62013048",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013050",
+      "label": "AC7 Autres �l�ments d'actif (Net N-1)",
+      "formulaRaw": "\"F62013051\" + \"F62013052\" + \"F62013055\" + \"F62013059\" + \"F62013060\"",
+      "operands": [
+        {
+          "code": "F62013051",
+          "sign": "+"
+        },
+        {
+          "code": "F62013052",
+          "sign": "+"
+        },
+        {
+          "code": "F62013055",
+          "sign": "+"
+        },
+        {
+          "code": "F62013059",
+          "sign": "+"
+        },
+        {
+          "code": "F62013060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013052",
+      "label": "AC72 Charges report�es (Net N-1)",
+      "formulaRaw": "\"F62013053\" + \"F62013054\"",
+      "operands": [
+        {
+          "code": "F62013053",
+          "sign": "+"
+        },
+        {
+          "code": "F62013054",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013055",
+      "label": "AC73 Comptes de r�gularisation Actif (Net N-1)",
+      "formulaRaw": "\"F62013056\" + \"F62013057\" + \"F62013058\"",
+      "operands": [
+        {
+          "code": "F62013056",
+          "sign": "+"
+        },
+        {
+          "code": "F62013057",
+          "sign": "+"
+        },
+        {
+          "code": "F62013058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62013061",
+      "label": "Total actif (Net N-1). \"F62013001\" + \"F62013006\" + \"F62013010\" + \"F62013027\" + \"F62013028\" + \"F62013039\" + \"F62013050\"",
+      "formulaRaw": "Total actif (Net N-1). \"F62013001\" + \"F62013006\" + \"F62013010\" + \"F62013027\" + \"F62013028\" + \"F62013039\" + \"F62013050\"",
+      "operands": [
+        {
+          "code": "F62013001",
+          "sign": "+"
+        },
+        {
+          "code": "F62013006",
+          "sign": "+"
+        },
+        {
+          "code": "F62013010",
+          "sign": "+"
+        },
+        {
+          "code": "F62013027",
+          "sign": "+"
+        },
+        {
+          "code": "F62013028",
+          "sign": "+"
+        },
+        {
+          "code": "F62013039",
+          "sign": "+"
+        },
+        {
+          "code": "F62013050",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

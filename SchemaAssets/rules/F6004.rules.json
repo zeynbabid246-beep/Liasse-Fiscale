@@ -1,0 +1,1191 @@
+{
+  "formCode": "F6004",
+  "generatedAt": "2026-09-02T19:31:32.658Z",
+  "rulesCount": 34,
+  "rules": [
+    {
+      "target": "F60040001",
+      "label": "Flux de Trésorerie liés à l'Exploitation (Net Exercice)",
+      "formulaRaw": "\"F60040002\" - \"F60040012\" - \"F60040023\" - \"F60040032\" - \"F60040045\"",
+      "operands": [
+        {
+          "code": "F60040002",
+          "sign": "+"
+        },
+        {
+          "code": "F60040012",
+          "sign": "-"
+        },
+        {
+          "code": "F60040023",
+          "sign": "-"
+        },
+        {
+          "code": "F60040032",
+          "sign": "-"
+        },
+        {
+          "code": "F60040045",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040002",
+      "label": "Encaissements reçus des clients (Net Exercice)",
+      "formulaRaw": "\"F60040003\" - \"F60040004\" + \"F60040005\" + \"F60040006\" - \"F60040007\" + \"F60040008\" - \"F60040009\" - \"F60040010\" +\"F60040011\"",
+      "operands": [
+        {
+          "code": "F60040003",
+          "sign": "+"
+        },
+        {
+          "code": "F60040004",
+          "sign": "-"
+        },
+        {
+          "code": "F60040005",
+          "sign": "+"
+        },
+        {
+          "code": "F60040006",
+          "sign": "+"
+        },
+        {
+          "code": "F60040007",
+          "sign": "-"
+        },
+        {
+          "code": "F60040008",
+          "sign": "+"
+        },
+        {
+          "code": "F60040009",
+          "sign": "-"
+        },
+        {
+          "code": "F60040010",
+          "sign": "-"
+        },
+        {
+          "code": "F60040011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040012",
+      "label": "Sommes versees aux fournisseurs (d'exploitation) (Net Exercice)",
+      "formulaRaw": "\"F60040013\" - \"F60040014\" + \"F60040015\" + \"F60040016\" + \"F60040017\" - \"F60040018\" + \"F60040019\" - \"F60040020\" + \"F60040021\" - \"F60040022\"",
+      "operands": [
+        {
+          "code": "F60040013",
+          "sign": "+"
+        },
+        {
+          "code": "F60040014",
+          "sign": "-"
+        },
+        {
+          "code": "F60040015",
+          "sign": "+"
+        },
+        {
+          "code": "F60040016",
+          "sign": "+"
+        },
+        {
+          "code": "F60040017",
+          "sign": "+"
+        },
+        {
+          "code": "F60040018",
+          "sign": "-"
+        },
+        {
+          "code": "F60040019",
+          "sign": "+"
+        },
+        {
+          "code": "F60040020",
+          "sign": "-"
+        },
+        {
+          "code": "F60040021",
+          "sign": "+"
+        },
+        {
+          "code": "F60040022",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040023",
+      "label": "Sommes versees au personnel (Net Exercice)",
+      "formulaRaw": "\"F60040024\" - \"F60040025\" + \"F60040026\" + \"F60040027\" + \"\" - \"F60040028\" - \"F60040029\" + \"F60040030\" + \"F60040031\"",
+      "operands": [
+        {
+          "code": "F60040024",
+          "sign": "+"
+        },
+        {
+          "code": "F60040025",
+          "sign": "-"
+        },
+        {
+          "code": "F60040026",
+          "sign": "+"
+        },
+        {
+          "code": "F60040027",
+          "sign": "+"
+        },
+        {
+          "code": "F60040028",
+          "sign": "-"
+        },
+        {
+          "code": "F60040029",
+          "sign": "-"
+        },
+        {
+          "code": "F60040030",
+          "sign": "+"
+        },
+        {
+          "code": "F60040031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040032",
+      "label": "Interets payes (Net Exercice)",
+      "formulaRaw": "\"F60040033\" - \"F60040034\" + \"F60040035\" + \"F60040036\" + \"F60040037\" - \"F60040038\" - \"F60040039\" - \"F60040040\" + \"F60040041\" - \"F60040042\" + \"F60040043\" - \"F60040044\"",
+      "operands": [
+        {
+          "code": "F60040033",
+          "sign": "+"
+        },
+        {
+          "code": "F60040034",
+          "sign": "-"
+        },
+        {
+          "code": "F60040035",
+          "sign": "+"
+        },
+        {
+          "code": "F60040036",
+          "sign": "+"
+        },
+        {
+          "code": "F60040037",
+          "sign": "+"
+        },
+        {
+          "code": "F60040038",
+          "sign": "-"
+        },
+        {
+          "code": "F60040039",
+          "sign": "-"
+        },
+        {
+          "code": "F60040040",
+          "sign": "-"
+        },
+        {
+          "code": "F60040041",
+          "sign": "+"
+        },
+        {
+          "code": "F60040042",
+          "sign": "-"
+        },
+        {
+          "code": "F60040043",
+          "sign": "+"
+        },
+        {
+          "code": "F60040044",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040045",
+      "label": "Impots et taxes payes (Net Exercice)",
+      "formulaRaw": "\"F60040046\" - \"F60040047\" - \"F60040048\" + \"F60040049\" + \"F60040050\" + \"F60040051\" - \"F60040052\" + \"F60040053\" + \"F60040054\" - \"F60040055\" + \"F60040056\" + \"F60040057\"",
+      "operands": [
+        {
+          "code": "F60040046",
+          "sign": "+"
+        },
+        {
+          "code": "F60040047",
+          "sign": "-"
+        },
+        {
+          "code": "F60040048",
+          "sign": "-"
+        },
+        {
+          "code": "F60040049",
+          "sign": "+"
+        },
+        {
+          "code": "F60040050",
+          "sign": "+"
+        },
+        {
+          "code": "F60040051",
+          "sign": "+"
+        },
+        {
+          "code": "F60040052",
+          "sign": "-"
+        },
+        {
+          "code": "F60040053",
+          "sign": "+"
+        },
+        {
+          "code": "F60040054",
+          "sign": "+"
+        },
+        {
+          "code": "F60040055",
+          "sign": "-"
+        },
+        {
+          "code": "F60040056",
+          "sign": "+"
+        },
+        {
+          "code": "F60040057",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040058",
+      "label": "Flux de tresorerie lies aux activites d'investissement (Net Exercice)",
+      "formulaRaw": "-F60040059\" + \"F60040066\" - \"F60040080\" + \"F60040084\"",
+      "operands": [
+        {
+          "code": "F60040059",
+          "sign": "-"
+        },
+        {
+          "code": "F60040066",
+          "sign": "+"
+        },
+        {
+          "code": "F60040080",
+          "sign": "-"
+        },
+        {
+          "code": "F60040084",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040059",
+      "label": "Decaissements lies aux immo. Corporelles et incorporelles (Net Exercice)",
+      "formulaRaw": "\"F60040060\" + \"F60040061\" + \"F60040062\" + \"F60040063\" - \"F60040064\" - \"F60040065\"",
+      "operands": [
+        {
+          "code": "F60040060",
+          "sign": "+"
+        },
+        {
+          "code": "F60040061",
+          "sign": "+"
+        },
+        {
+          "code": "F60040062",
+          "sign": "+"
+        },
+        {
+          "code": "F60040063",
+          "sign": "+"
+        },
+        {
+          "code": "F60040064",
+          "sign": "-"
+        },
+        {
+          "code": "F60040065",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040066",
+      "label": "Encaissements lies aux immo. Corporelles et incorporelles (Net Exercice)",
+      "formulaRaw": "\"F60040067\" + \"F60040068\" - \"F60040069\" - \"F60040070\" + \"F60040071\" - \"F60040072\" - \"F60040073\" + \"F60040074\" - \"F60040075\" - \"F60040076\" + \"F60040077\" + \"F60040078\" - \"F60040079\"",
+      "operands": [
+        {
+          "code": "F60040067",
+          "sign": "+"
+        },
+        {
+          "code": "F60040068",
+          "sign": "+"
+        },
+        {
+          "code": "F60040069",
+          "sign": "-"
+        },
+        {
+          "code": "F60040070",
+          "sign": "-"
+        },
+        {
+          "code": "F60040071",
+          "sign": "+"
+        },
+        {
+          "code": "F60040072",
+          "sign": "-"
+        },
+        {
+          "code": "F60040073",
+          "sign": "-"
+        },
+        {
+          "code": "F60040074",
+          "sign": "+"
+        },
+        {
+          "code": "F60040075",
+          "sign": "-"
+        },
+        {
+          "code": "F60040076",
+          "sign": "-"
+        },
+        {
+          "code": "F60040077",
+          "sign": "+"
+        },
+        {
+          "code": "F60040078",
+          "sign": "+"
+        },
+        {
+          "code": "F60040079",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040080",
+      "label": "Decaissements lies aux immobilisations financieres (Net Exercice)",
+      "formulaRaw": "\"F60040081\" + \"F60040082\" - \"F60040083\"",
+      "operands": [
+        {
+          "code": "F60040081",
+          "sign": "+"
+        },
+        {
+          "code": "F60040082",
+          "sign": "+"
+        },
+        {
+          "code": "F60040083",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040084",
+      "label": "Encaissements lies aux immobilisations financieres (Net Exercice)",
+      "formulaRaw": "\"F60040085\" + \"F60040086\" + \"F60040087\" - \"F60040088\"",
+      "operands": [
+        {
+          "code": "F60040085",
+          "sign": "+"
+        },
+        {
+          "code": "F60040086",
+          "sign": "+"
+        },
+        {
+          "code": "F60040087",
+          "sign": "+"
+        },
+        {
+          "code": "F60040088",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040089",
+      "label": "Flux de tresorerie lies aux activites de financement (Net Exercice)",
+      "formulaRaw": "\"F60040090\" - \"F60040097\" + \"F60040103\" - \"F60040108\"",
+      "operands": [
+        {
+          "code": "F60040090",
+          "sign": "+"
+        },
+        {
+          "code": "F60040097",
+          "sign": "-"
+        },
+        {
+          "code": "F60040103",
+          "sign": "+"
+        },
+        {
+          "code": "F60040108",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040090",
+      "label": "Encaissements suite a l'emission d'actions (Net Exercice)",
+      "formulaRaw": "\"F60040091\" + \"F60040092\" - \"F60040093\" - \"F60040094\" - \"F60040095\" + \"F60040096\"",
+      "operands": [
+        {
+          "code": "F60040091",
+          "sign": "+"
+        },
+        {
+          "code": "F60040092",
+          "sign": "+"
+        },
+        {
+          "code": "F60040093",
+          "sign": "-"
+        },
+        {
+          "code": "F60040094",
+          "sign": "-"
+        },
+        {
+          "code": "F60040095",
+          "sign": "-"
+        },
+        {
+          "code": "F60040096",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040097",
+      "label": "Dividendes at autres distributions (Net Exercice)",
+      "formulaRaw": "\"F60040098\" + \"F60040099\" + \"F60040100\" + \"F60040101\" - \"F60040102\"",
+      "operands": [
+        {
+          "code": "F60040098",
+          "sign": "+"
+        },
+        {
+          "code": "F60040099",
+          "sign": "+"
+        },
+        {
+          "code": "F60040100",
+          "sign": "+"
+        },
+        {
+          "code": "F60040101",
+          "sign": "+"
+        },
+        {
+          "code": "F60040102",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040103",
+      "label": "Encaissements/remboursements d'emprunts (Net Exercice)",
+      "formulaRaw": "\"F60040104\" + \"F60040105\" - \"F60040106\" - \"F60040107\"",
+      "operands": [
+        {
+          "code": "F60040104",
+          "sign": "+"
+        },
+        {
+          "code": "F60040105",
+          "sign": "+"
+        },
+        {
+          "code": "F60040106",
+          "sign": "-"
+        },
+        {
+          "code": "F60040107",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040108",
+      "label": "Decaissements/remboursements de prets et des placements (Net Exercice)",
+      "formulaRaw": "\"F60040109\" + \"F60040110\" - \"F60040111\" - \"F60040112\"",
+      "operands": [
+        {
+          "code": "F60040109",
+          "sign": "+"
+        },
+        {
+          "code": "F60040110",
+          "sign": "+"
+        },
+        {
+          "code": "F60040111",
+          "sign": "-"
+        },
+        {
+          "code": "F60040112",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60040115",
+      "label": "Variation de Tresorerie (Net Exercice)",
+      "formulaRaw": "\"F60040001\" + \"F60040058\" + \"F60040089\" + \"F60040113\" + \"F60040114\"",
+      "operands": [
+        {
+          "code": "F60040001",
+          "sign": "+"
+        },
+        {
+          "code": "F60040058",
+          "sign": "+"
+        },
+        {
+          "code": "F60040089",
+          "sign": "+"
+        },
+        {
+          "code": "F60040113",
+          "sign": "+"
+        },
+        {
+          "code": "F60040114",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041001",
+      "label": "Flux de tresorerie lies a l'exploitation (Net Exercice - 1). \"F60041002\" - \"F60041012\" - \"F60041023\" - \"F60041032\" - \"F60041045\"",
+      "formulaRaw": "Flux de tresorerie lies a l'exploitation (Net Exercice - 1). \"F60041002\" - \"F60041012\" - \"F60041023\" - \"F60041032\" - \"F60041045\"",
+      "operands": [
+        {
+          "code": "F60041002",
+          "sign": "+"
+        },
+        {
+          "code": "F60041012",
+          "sign": "-"
+        },
+        {
+          "code": "F60041023",
+          "sign": "-"
+        },
+        {
+          "code": "F60041032",
+          "sign": "-"
+        },
+        {
+          "code": "F60041045",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041002",
+      "label": "Encaissements reçus des clients (Net Exercice - 1)",
+      "formulaRaw": "\"F60041003\" - \"F60041004\" + \"F60041005\" + \"F60041006\" - \"F60041007\" + \"F60041008\" - \"F60041009\" - \"F60041010\" +\"F60041011\"",
+      "operands": [
+        {
+          "code": "F60041003",
+          "sign": "+"
+        },
+        {
+          "code": "F60041004",
+          "sign": "-"
+        },
+        {
+          "code": "F60041005",
+          "sign": "+"
+        },
+        {
+          "code": "F60041006",
+          "sign": "+"
+        },
+        {
+          "code": "F60041007",
+          "sign": "-"
+        },
+        {
+          "code": "F60041008",
+          "sign": "+"
+        },
+        {
+          "code": "F60041009",
+          "sign": "-"
+        },
+        {
+          "code": "F60041010",
+          "sign": "-"
+        },
+        {
+          "code": "F60041011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041012",
+      "label": "Sommes versees aux fournisseurs (d'exploitation) (Net Exercice - 1). \"F60041013\" - \"F60041014\" + \"F60041015\" + \"F60041016\" + \"F60041017\" - \"F60041018\" + \"F60041019\" - \"F60041020\" + \"F60041021\" - \"F60041022\"",
+      "formulaRaw": "Sommes versees aux fournisseurs (d'exploitation) (Net Exercice - 1). \"F60041013\" - \"F60041014\" + \"F60041015\" + \"F60041016\" + \"F60041017\" - \"F60041018\" + \"F60041019\" - \"F60041020\" + \"F60041021\" - \"F60041022\"",
+      "operands": [
+        {
+          "code": "F60041013",
+          "sign": "+"
+        },
+        {
+          "code": "F60041014",
+          "sign": "-"
+        },
+        {
+          "code": "F60041015",
+          "sign": "+"
+        },
+        {
+          "code": "F60041016",
+          "sign": "+"
+        },
+        {
+          "code": "F60041017",
+          "sign": "+"
+        },
+        {
+          "code": "F60041018",
+          "sign": "-"
+        },
+        {
+          "code": "F60041019",
+          "sign": "+"
+        },
+        {
+          "code": "F60041020",
+          "sign": "-"
+        },
+        {
+          "code": "F60041021",
+          "sign": "+"
+        },
+        {
+          "code": "F60041022",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041023",
+      "label": "Sommes versees au personnel (Net Exercice - 1). \"F60041024\" - \"F60041025\" + \"F60041026\" + \"F60041027\" + \"\" - \"F60041028\" - \"F60041029\" + \"F60041030\" + \"F60041031\"",
+      "formulaRaw": "Sommes versees au personnel (Net Exercice - 1). \"F60041024\" - \"F60041025\" + \"F60041026\" + \"F60041027\" + \"\" - \"F60041028\" - \"F60041029\" + \"F60041030\" + \"F60041031\"",
+      "operands": [
+        {
+          "code": "F60041024",
+          "sign": "+"
+        },
+        {
+          "code": "F60041025",
+          "sign": "-"
+        },
+        {
+          "code": "F60041026",
+          "sign": "+"
+        },
+        {
+          "code": "F60041027",
+          "sign": "+"
+        },
+        {
+          "code": "F60041028",
+          "sign": "-"
+        },
+        {
+          "code": "F60041029",
+          "sign": "-"
+        },
+        {
+          "code": "F60041030",
+          "sign": "+"
+        },
+        {
+          "code": "F60041031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041032",
+      "label": "Interets payes (Net Exercice - 1). \"F60041033\" - \"F60041034\" + \"F60041035\" + \"F60041036\" + \"F60041037\" - \"F60041038\" - \"F60041039\" - \"F60041040\" + \"F60041041\" - \"F60041042\" + \"F60041043\" - \"F60041044\"",
+      "formulaRaw": "Interets payes (Net Exercice - 1). \"F60041033\" - \"F60041034\" + \"F60041035\" + \"F60041036\" + \"F60041037\" - \"F60041038\" - \"F60041039\" - \"F60041040\" + \"F60041041\" - \"F60041042\" + \"F60041043\" - \"F60041044\"",
+      "operands": [
+        {
+          "code": "F60041033",
+          "sign": "+"
+        },
+        {
+          "code": "F60041034",
+          "sign": "-"
+        },
+        {
+          "code": "F60041035",
+          "sign": "+"
+        },
+        {
+          "code": "F60041036",
+          "sign": "+"
+        },
+        {
+          "code": "F60041037",
+          "sign": "+"
+        },
+        {
+          "code": "F60041038",
+          "sign": "-"
+        },
+        {
+          "code": "F60041039",
+          "sign": "-"
+        },
+        {
+          "code": "F60041040",
+          "sign": "-"
+        },
+        {
+          "code": "F60041041",
+          "sign": "+"
+        },
+        {
+          "code": "F60041042",
+          "sign": "-"
+        },
+        {
+          "code": "F60041043",
+          "sign": "+"
+        },
+        {
+          "code": "F60041044",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041045",
+      "label": "Impots et taxes payes (Net Exercice - 1). \"F60041046\" - \"F60041047\" - \"F60041048\" + \"F60041049\" + \"F60041050\" + \"F60041051\" - \"F60041052\" + \"F60041053\" + \"F60041054\" - \"F60041055\" + \"F60041056\" + \"F60041057\"",
+      "formulaRaw": "Impots et taxes payes (Net Exercice - 1). \"F60041046\" - \"F60041047\" - \"F60041048\" + \"F60041049\" + \"F60041050\" + \"F60041051\" - \"F60041052\" + \"F60041053\" + \"F60041054\" - \"F60041055\" + \"F60041056\" + \"F60041057\"",
+      "operands": [
+        {
+          "code": "F60041046",
+          "sign": "+"
+        },
+        {
+          "code": "F60041047",
+          "sign": "-"
+        },
+        {
+          "code": "F60041048",
+          "sign": "-"
+        },
+        {
+          "code": "F60041049",
+          "sign": "+"
+        },
+        {
+          "code": "F60041050",
+          "sign": "+"
+        },
+        {
+          "code": "F60041051",
+          "sign": "+"
+        },
+        {
+          "code": "F60041052",
+          "sign": "-"
+        },
+        {
+          "code": "F60041053",
+          "sign": "+"
+        },
+        {
+          "code": "F60041054",
+          "sign": "+"
+        },
+        {
+          "code": "F60041055",
+          "sign": "-"
+        },
+        {
+          "code": "F60041056",
+          "sign": "+"
+        },
+        {
+          "code": "F60041057",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041058",
+      "label": "Flux de tresorerie lies aux activites d'investissement (Net Exercice - 1). -F60041059\" + \"F60041066\" - \"F60041080\" + \"F60041084\"",
+      "formulaRaw": "Flux de tresorerie lies aux activites d'investissement (Net Exercice - 1). -F60041059\" + \"F60041066\" - \"F60041080\" + \"F60041084\"",
+      "operands": [
+        {
+          "code": "F60041059",
+          "sign": "-"
+        },
+        {
+          "code": "F60041066",
+          "sign": "+"
+        },
+        {
+          "code": "F60041080",
+          "sign": "-"
+        },
+        {
+          "code": "F60041084",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041059",
+      "label": "Decaissements lies aux immo",
+      "formulaRaw": "Corporelles et incorporelles (Net Exercice - 1). \"F60041060\" + \"F60041061\" + \"F60041062\" + \"F60041063\" - \"F60041064\" - \"F60041065\"",
+      "operands": [
+        {
+          "code": "F60041060",
+          "sign": "+"
+        },
+        {
+          "code": "F60041061",
+          "sign": "+"
+        },
+        {
+          "code": "F60041062",
+          "sign": "+"
+        },
+        {
+          "code": "F60041063",
+          "sign": "+"
+        },
+        {
+          "code": "F60041064",
+          "sign": "-"
+        },
+        {
+          "code": "F60041065",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041066",
+      "label": "Encaissements lies aux immo",
+      "formulaRaw": "Corporelles et incorporelles (Net Exercice - 1). \"F60041067\" + \"F60041068\" - \"F60041069\" - \"F60041070\" + \"F60041071\" - \"F60041072\" - \"F60041073\" + \"F60041074\" - \"F60041075\" - \"F60041076\" + \"F60041077\" + \"F60041078\" - \"F60041079\"",
+      "operands": [
+        {
+          "code": "F60041067",
+          "sign": "+"
+        },
+        {
+          "code": "F60041068",
+          "sign": "+"
+        },
+        {
+          "code": "F60041069",
+          "sign": "-"
+        },
+        {
+          "code": "F60041070",
+          "sign": "-"
+        },
+        {
+          "code": "F60041071",
+          "sign": "+"
+        },
+        {
+          "code": "F60041072",
+          "sign": "-"
+        },
+        {
+          "code": "F60041073",
+          "sign": "-"
+        },
+        {
+          "code": "F60041074",
+          "sign": "+"
+        },
+        {
+          "code": "F60041075",
+          "sign": "-"
+        },
+        {
+          "code": "F60041076",
+          "sign": "-"
+        },
+        {
+          "code": "F60041077",
+          "sign": "+"
+        },
+        {
+          "code": "F60041078",
+          "sign": "+"
+        },
+        {
+          "code": "F60041079",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041080",
+      "label": "Decaissements lies aux immobilisations financieres (Net Exercice - 1). \"F60041081\" + \"F60041082\" - \"F60041083\"",
+      "formulaRaw": "Decaissements lies aux immobilisations financieres (Net Exercice - 1). \"F60041081\" + \"F60041082\" - \"F60041083\"",
+      "operands": [
+        {
+          "code": "F60041081",
+          "sign": "+"
+        },
+        {
+          "code": "F60041082",
+          "sign": "+"
+        },
+        {
+          "code": "F60041083",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041084",
+      "label": "Encaissements lies aux immobilisations financieres (Net Exercice - 1). \"F60041085\" + \"F60041086\" + \"F60041087\" - \"F60041088\"",
+      "formulaRaw": "Encaissements lies aux immobilisations financieres (Net Exercice - 1). \"F60041085\" + \"F60041086\" + \"F60041087\" - \"F60041088\"",
+      "operands": [
+        {
+          "code": "F60041085",
+          "sign": "+"
+        },
+        {
+          "code": "F60041086",
+          "sign": "+"
+        },
+        {
+          "code": "F60041087",
+          "sign": "+"
+        },
+        {
+          "code": "F60041088",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041089",
+      "label": "Flux de tresorerie lies aux activites de financement (Net Exercice - 1). \"F60041090\" - \"F60041097\" + \"F60041103\" - \"F60041108\"",
+      "formulaRaw": "Flux de tresorerie lies aux activites de financement (Net Exercice - 1). \"F60041090\" - \"F60041097\" + \"F60041103\" - \"F60041108\"",
+      "operands": [
+        {
+          "code": "F60041090",
+          "sign": "+"
+        },
+        {
+          "code": "F60041097",
+          "sign": "-"
+        },
+        {
+          "code": "F60041103",
+          "sign": "+"
+        },
+        {
+          "code": "F60041108",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041090",
+      "label": "Encaissements suite a l'emission d'actions (Net Exercice - 1). \"F60041091\" + \"F60041092\" - \"F60041093\" - \"F60041094\" - \"F60041095\" + \"F60041096\"",
+      "formulaRaw": "Encaissements suite a l'emission d'actions (Net Exercice - 1). \"F60041091\" + \"F60041092\" - \"F60041093\" - \"F60041094\" - \"F60041095\" + \"F60041096\"",
+      "operands": [
+        {
+          "code": "F60041091",
+          "sign": "+"
+        },
+        {
+          "code": "F60041092",
+          "sign": "+"
+        },
+        {
+          "code": "F60041093",
+          "sign": "-"
+        },
+        {
+          "code": "F60041094",
+          "sign": "-"
+        },
+        {
+          "code": "F60041095",
+          "sign": "-"
+        },
+        {
+          "code": "F60041096",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041097",
+      "label": "Dividendes at autres distributions (Net Exercice - 1). \"F60041098\" + \"F60041099\" + \"F60041100\" + \"F60041101\" - \"F60041102\"",
+      "formulaRaw": "Dividendes at autres distributions (Net Exercice - 1). \"F60041098\" + \"F60041099\" + \"F60041100\" + \"F60041101\" - \"F60041102\"",
+      "operands": [
+        {
+          "code": "F60041098",
+          "sign": "+"
+        },
+        {
+          "code": "F60041099",
+          "sign": "+"
+        },
+        {
+          "code": "F60041100",
+          "sign": "+"
+        },
+        {
+          "code": "F60041101",
+          "sign": "+"
+        },
+        {
+          "code": "F60041102",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041103",
+      "label": "Encaissements/remboursements d'emprunts (Net Exercice - 1)",
+      "formulaRaw": "\"F60041104\" + \"F60041105\" - \"F60041106\" - \"F60041107\"",
+      "operands": [
+        {
+          "code": "F60041104",
+          "sign": "+"
+        },
+        {
+          "code": "F60041105",
+          "sign": "+"
+        },
+        {
+          "code": "F60041106",
+          "sign": "-"
+        },
+        {
+          "code": "F60041107",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041108",
+      "label": "Decaissements/remboursements de prets et des placements (Net Exercice - 1)",
+      "formulaRaw": "\"F60041109\" + \"F60041110\" - \"F60041111\" - \"F60041112\"",
+      "operands": [
+        {
+          "code": "F60041109",
+          "sign": "+"
+        },
+        {
+          "code": "F60041110",
+          "sign": "+"
+        },
+        {
+          "code": "F60041111",
+          "sign": "-"
+        },
+        {
+          "code": "F60041112",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60041115",
+      "label": "Variation de Tresorerie (Net Exercice - 1). \"F60041001\" + \"F60041058\" + \"F60041089\" + \"F60041113\" + \"F60041114\"",
+      "formulaRaw": "Variation de Tresorerie (Net Exercice - 1). \"F60041001\" + \"F60041058\" + \"F60041089\" + \"F60041113\" + \"F60041114\"",
+      "operands": [
+        {
+          "code": "F60041001",
+          "sign": "+"
+        },
+        {
+          "code": "F60041058",
+          "sign": "+"
+        },
+        {
+          "code": "F60041089",
+          "sign": "+"
+        },
+        {
+          "code": "F60041113",
+          "sign": "+"
+        },
+        {
+          "code": "F60041114",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

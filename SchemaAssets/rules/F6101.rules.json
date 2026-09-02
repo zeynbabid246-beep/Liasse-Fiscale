@@ -1,0 +1,231 @@
+{
+  "formCode": "F6101",
+  "generatedAt": "2026-09-02T19:31:32.738Z",
+  "rulesCount": 8,
+  "rules": [
+    {
+      "target": "F61010008",
+      "label": "Total des actifs (Exercice)",
+      "formulaRaw": "\"F61010001\" + \"F61010002\" + \"F61010003\" + \"F61010004\" + \"F61010005\" + \"F61010006\" + \"F61010007\"",
+      "operands": [
+        {
+          "code": "F61010001",
+          "sign": "+"
+        },
+        {
+          "code": "F61010002",
+          "sign": "+"
+        },
+        {
+          "code": "F61010003",
+          "sign": "+"
+        },
+        {
+          "code": "F61010004",
+          "sign": "+"
+        },
+        {
+          "code": "F61010005",
+          "sign": "+"
+        },
+        {
+          "code": "F61010006",
+          "sign": "+"
+        },
+        {
+          "code": "F61010007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61010014",
+      "label": "Total des passifs (Exercice)",
+      "formulaRaw": "\"F61010009\" + \"F61010010\" + \"F61010011\" + \"F61010012\" + \"F61010013\"",
+      "operands": [
+        {
+          "code": "F61010009",
+          "sign": "+"
+        },
+        {
+          "code": "F61010010",
+          "sign": "+"
+        },
+        {
+          "code": "F61010011",
+          "sign": "+"
+        },
+        {
+          "code": "F61010012",
+          "sign": "+"
+        },
+        {
+          "code": "F61010013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61010021",
+      "label": "Total des capitaux propres (Exercice)",
+      "formulaRaw": "\"F61010015\" + \"F61010016\" + \"F61010017\" + \"F61010018\" + \"F61010019\" + \"F61010020\"",
+      "operands": [
+        {
+          "code": "F61010015",
+          "sign": "+"
+        },
+        {
+          "code": "F61010016",
+          "sign": "+"
+        },
+        {
+          "code": "F61010017",
+          "sign": "+"
+        },
+        {
+          "code": "F61010018",
+          "sign": "+"
+        },
+        {
+          "code": "F61010019",
+          "sign": "+"
+        },
+        {
+          "code": "F61010020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61010022",
+      "label": "Total des capitaux propres et passifs (Exercice)",
+      "formulaRaw": "\"F61010014\" + \"F61010021\"",
+      "operands": [
+        {
+          "code": "F61010014",
+          "sign": "+"
+        },
+        {
+          "code": "F61010021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61011008",
+      "label": "Total des actifs (Exercice - 1). \"F61011001\" + \"F61011002\" + \"F61011003\" + \"F61011004\" + \"F61011005\" + \"F61011006\" + \"F61011007\"",
+      "formulaRaw": "Total des actifs (Exercice - 1). \"F61011001\" + \"F61011002\" + \"F61011003\" + \"F61011004\" + \"F61011005\" + \"F61011006\" + \"F61011007\"",
+      "operands": [
+        {
+          "code": "F61011001",
+          "sign": "+"
+        },
+        {
+          "code": "F61011002",
+          "sign": "+"
+        },
+        {
+          "code": "F61011003",
+          "sign": "+"
+        },
+        {
+          "code": "F61011004",
+          "sign": "+"
+        },
+        {
+          "code": "F61011005",
+          "sign": "+"
+        },
+        {
+          "code": "F61011006",
+          "sign": "+"
+        },
+        {
+          "code": "F61011007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61011014",
+      "label": "Total des passifs (Exercice - 1). \"F61011009\" + \"F61011010\" + \"F61011011\" + \"F61011012\" + \"F61011013\"",
+      "formulaRaw": "Total des passifs (Exercice - 1). \"F61011009\" + \"F61011010\" + \"F61011011\" + \"F61011012\" + \"F61011013\"",
+      "operands": [
+        {
+          "code": "F61011009",
+          "sign": "+"
+        },
+        {
+          "code": "F61011010",
+          "sign": "+"
+        },
+        {
+          "code": "F61011011",
+          "sign": "+"
+        },
+        {
+          "code": "F61011012",
+          "sign": "+"
+        },
+        {
+          "code": "F61011013",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61011021",
+      "label": "Total des capitaux propres (Exercice - 1). \"F61011015\" + \"F61011016\" + \"F61011017\" + \"F61011018\" + \"F61011019\" + \"F61011020\"",
+      "formulaRaw": "Total des capitaux propres (Exercice - 1). \"F61011015\" + \"F61011016\" + \"F61011017\" + \"F61011018\" + \"F61011019\" + \"F61011020\"",
+      "operands": [
+        {
+          "code": "F61011015",
+          "sign": "+"
+        },
+        {
+          "code": "F61011016",
+          "sign": "+"
+        },
+        {
+          "code": "F61011017",
+          "sign": "+"
+        },
+        {
+          "code": "F61011018",
+          "sign": "+"
+        },
+        {
+          "code": "F61011019",
+          "sign": "+"
+        },
+        {
+          "code": "F61011020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F61011022",
+      "label": "Total des capitaux propres et passifs (Exercice - 1). \"F61011014\" + \"F61011021\"",
+      "formulaRaw": "Total des capitaux propres et passifs (Exercice - 1). \"F61011014\" + \"F61011021\"",
+      "operands": [
+        {
+          "code": "F61011014",
+          "sign": "+"
+        },
+        {
+          "code": "F61011021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

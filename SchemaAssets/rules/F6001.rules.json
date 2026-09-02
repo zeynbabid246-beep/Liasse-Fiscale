@@ -1,0 +1,1503 @@
+{
+  "formCode": "F6001",
+  "generatedAt": "2026-09-02T19:31:32.528Z",
+  "rulesCount": 52,
+  "rules": [
+    {
+      "target": "F60010001",
+      "label": "Actifs non courants (Brut)",
+      "formulaRaw": "\"F60010002\" + \"F60010031\"",
+      "operands": [
+        {
+          "code": "F60010002",
+          "sign": "+"
+        },
+        {
+          "code": "F60010031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010002",
+      "label": "Actifs immobilises (Brut)",
+      "formulaRaw": "\"F60010003\" + \"F60010012\" + \"F60010021\"",
+      "operands": [
+        {
+          "code": "F60010003",
+          "sign": "+"
+        },
+        {
+          "code": "F60010012",
+          "sign": "+"
+        },
+        {
+          "code": "F60010021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010003",
+      "label": "Immobilisations Incorporelles (Brut)",
+      "formulaRaw": "\"F60010004\" + \"F60010005\" + \"F60010006\" + \"F60010007\" + \"F60010008\" + \"F60010009\" + \"F60010010\" + \"F60010011\"",
+      "operands": [
+        {
+          "code": "F60010004",
+          "sign": "+"
+        },
+        {
+          "code": "F60010005",
+          "sign": "+"
+        },
+        {
+          "code": "F60010006",
+          "sign": "+"
+        },
+        {
+          "code": "F60010007",
+          "sign": "+"
+        },
+        {
+          "code": "F60010008",
+          "sign": "+"
+        },
+        {
+          "code": "F60010009",
+          "sign": "+"
+        },
+        {
+          "code": "F60010010",
+          "sign": "+"
+        },
+        {
+          "code": "F60010011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010012",
+      "label": "Immobilisations corporelles (Brut)",
+      "formulaRaw": "\"F60010013\" + \"F60010014\" + \"F60010015\" + \"F60010016\" + \"F60010017\" + \"F60010018\" + \"F60010019\" + \"F60010020\"",
+      "operands": [
+        {
+          "code": "F60010013",
+          "sign": "+"
+        },
+        {
+          "code": "F60010014",
+          "sign": "+"
+        },
+        {
+          "code": "F60010015",
+          "sign": "+"
+        },
+        {
+          "code": "F60010016",
+          "sign": "+"
+        },
+        {
+          "code": "F60010017",
+          "sign": "+"
+        },
+        {
+          "code": "F60010018",
+          "sign": "+"
+        },
+        {
+          "code": "F60010019",
+          "sign": "+"
+        },
+        {
+          "code": "F60010020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010021",
+      "label": "Immobilisations Financieres (Brut)",
+      "formulaRaw": "\"F60010022\" + \"F60010023\" + \"F60010024\" + \"F60010025\" + \"F60010026\" + \"F60010027\" + \"F60010028\" + \"F60010029\" + \"F60010030\"",
+      "operands": [
+        {
+          "code": "F60010022",
+          "sign": "+"
+        },
+        {
+          "code": "F60010023",
+          "sign": "+"
+        },
+        {
+          "code": "F60010024",
+          "sign": "+"
+        },
+        {
+          "code": "F60010025",
+          "sign": "+"
+        },
+        {
+          "code": "F60010026",
+          "sign": "+"
+        },
+        {
+          "code": "F60010027",
+          "sign": "+"
+        },
+        {
+          "code": "F60010028",
+          "sign": "+"
+        },
+        {
+          "code": "F60010029",
+          "sign": "+"
+        },
+        {
+          "code": "F60010030",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010031",
+      "label": "Autres Actifs Non Courants (Brut)",
+      "formulaRaw": "\"F60010032\" + \"F60010033\" + \"F60010034\" + \"F60010035\"",
+      "operands": [
+        {
+          "code": "F60010032",
+          "sign": "+"
+        },
+        {
+          "code": "F60010033",
+          "sign": "+"
+        },
+        {
+          "code": "F60010034",
+          "sign": "+"
+        },
+        {
+          "code": "F60010035",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010036",
+      "label": "Actifs courants (Brut)",
+      "formulaRaw": "\"F60010037\" + \"F60010044\" + \"F60010050\" + \"F60010059\" + \"F60010064\" + \"F60010064\"",
+      "operands": [
+        {
+          "code": "F60010037",
+          "sign": "+"
+        },
+        {
+          "code": "F60010044",
+          "sign": "+"
+        },
+        {
+          "code": "F60010050",
+          "sign": "+"
+        },
+        {
+          "code": "F60010059",
+          "sign": "+"
+        },
+        {
+          "code": "F60010064",
+          "sign": "+"
+        },
+        {
+          "code": "F60010064",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010037",
+      "label": "Stocks (Brut)",
+      "formulaRaw": "\"F60010038\" + \"F60010039\" + \"F60010040\" + \"F60010041\" + \"F60010042\" + \"F60010043\"",
+      "operands": [
+        {
+          "code": "F60010038",
+          "sign": "+"
+        },
+        {
+          "code": "F60010039",
+          "sign": "+"
+        },
+        {
+          "code": "F60010040",
+          "sign": "+"
+        },
+        {
+          "code": "F60010041",
+          "sign": "+"
+        },
+        {
+          "code": "F60010042",
+          "sign": "+"
+        },
+        {
+          "code": "F60010043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010044",
+      "label": "Clients et Comptes Rattaches (Brut)",
+      "formulaRaw": "\"F60010045\" + \"F60010046\" + \"F60010047\" + \"F60010048\" + \"F60010049\"",
+      "operands": [
+        {
+          "code": "F60010045",
+          "sign": "+"
+        },
+        {
+          "code": "F60010046",
+          "sign": "+"
+        },
+        {
+          "code": "F60010047",
+          "sign": "+"
+        },
+        {
+          "code": "F60010048",
+          "sign": "+"
+        },
+        {
+          "code": "F60010049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010050",
+      "label": "Autres Actifs Courants (Brut)",
+      "formulaRaw": "\"F60010051\" + \"F60010052\" + \"F60010053\" + \"F60010054\" + \"F60010055\" + \"F60010056\" + \"F60010057\" + \"F60010058\"",
+      "operands": [
+        {
+          "code": "F60010051",
+          "sign": "+"
+        },
+        {
+          "code": "F60010052",
+          "sign": "+"
+        },
+        {
+          "code": "F60010053",
+          "sign": "+"
+        },
+        {
+          "code": "F60010054",
+          "sign": "+"
+        },
+        {
+          "code": "F60010055",
+          "sign": "+"
+        },
+        {
+          "code": "F60010056",
+          "sign": "+"
+        },
+        {
+          "code": "F60010057",
+          "sign": "+"
+        },
+        {
+          "code": "F60010058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010059",
+      "label": "Placements et Autres Actifs Financiers (Brut)",
+      "formulaRaw": "\"F60010060\" + \"F60010061\" + \"F60010062\" + \"F60010063\"",
+      "operands": [
+        {
+          "code": "F60010060",
+          "sign": "+"
+        },
+        {
+          "code": "F60010061",
+          "sign": "+"
+        },
+        {
+          "code": "F60010062",
+          "sign": "+"
+        },
+        {
+          "code": "F60010063",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010064",
+      "label": "Liquidites et equivalents de liquidites (Brut)",
+      "formulaRaw": "\"F60010065\" + \"F60010066\" + \"F60010067\"",
+      "operands": [
+        {
+          "code": "F60010065",
+          "sign": "+"
+        },
+        {
+          "code": "F60010066",
+          "sign": "+"
+        },
+        {
+          "code": "F60010067",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60010068",
+      "label": "Total des actifs (Brut)",
+      "formulaRaw": "\"F60010001\" + \"F60010036\" + \"F60010067\"",
+      "operands": [
+        {
+          "code": "F60010001",
+          "sign": "+"
+        },
+        {
+          "code": "F60010036",
+          "sign": "+"
+        },
+        {
+          "code": "F60010067",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011001",
+      "label": "Actifs non courants (Amortissement/Provision)",
+      "formulaRaw": "\"F60011002\" + \"F60011031\"",
+      "operands": [
+        {
+          "code": "F60011002",
+          "sign": "+"
+        },
+        {
+          "code": "F60011031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011002",
+      "label": "Actifs immobilises (Amortissement/Provision)",
+      "formulaRaw": "\"F60011003\" + \"F60011012\" + \"F60011021\"",
+      "operands": [
+        {
+          "code": "F60011003",
+          "sign": "+"
+        },
+        {
+          "code": "F60011012",
+          "sign": "+"
+        },
+        {
+          "code": "F60011021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011003",
+      "label": "Immobilisations Incorporelles (Amortissement/Provision)",
+      "formulaRaw": "\"F60011004\" + \"F60011005\" + \"F60011006\" + \"F60011007\" + \"F60011008\" + \"F60011009\" + \"F60011010\" + \"F60011011\"",
+      "operands": [
+        {
+          "code": "F60011004",
+          "sign": "+"
+        },
+        {
+          "code": "F60011005",
+          "sign": "+"
+        },
+        {
+          "code": "F60011006",
+          "sign": "+"
+        },
+        {
+          "code": "F60011007",
+          "sign": "+"
+        },
+        {
+          "code": "F60011008",
+          "sign": "+"
+        },
+        {
+          "code": "F60011009",
+          "sign": "+"
+        },
+        {
+          "code": "F60011010",
+          "sign": "+"
+        },
+        {
+          "code": "F60011011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011012",
+      "label": "Immobilisations corporelles (Amortissement/Provision)",
+      "formulaRaw": "\"F60011013\" + \"F60011014\" + \"F60011015\" + \"F60011016\" + \"F60011017\" + \"F60011018\" + \"F60011019\" + \"F60011020\"",
+      "operands": [
+        {
+          "code": "F60011013",
+          "sign": "+"
+        },
+        {
+          "code": "F60011014",
+          "sign": "+"
+        },
+        {
+          "code": "F60011015",
+          "sign": "+"
+        },
+        {
+          "code": "F60011016",
+          "sign": "+"
+        },
+        {
+          "code": "F60011017",
+          "sign": "+"
+        },
+        {
+          "code": "F60011018",
+          "sign": "+"
+        },
+        {
+          "code": "F60011019",
+          "sign": "+"
+        },
+        {
+          "code": "F60011020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011021",
+      "label": "Immobilisations Financieres (Amortissement/Provision)",
+      "formulaRaw": "\"F60011022\" + \"F60011023\" + \"F60011024\" + \"F60011025\" + \"F60011026\" + \"F60011027\" + \"F60011028\" + \"F60011029\" + \"F60011030\"",
+      "operands": [
+        {
+          "code": "F60011022",
+          "sign": "+"
+        },
+        {
+          "code": "F60011023",
+          "sign": "+"
+        },
+        {
+          "code": "F60011024",
+          "sign": "+"
+        },
+        {
+          "code": "F60011025",
+          "sign": "+"
+        },
+        {
+          "code": "F60011026",
+          "sign": "+"
+        },
+        {
+          "code": "F60011027",
+          "sign": "+"
+        },
+        {
+          "code": "F60011028",
+          "sign": "+"
+        },
+        {
+          "code": "F60011029",
+          "sign": "+"
+        },
+        {
+          "code": "F60011030",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011031",
+      "label": "Autres Actifs Non Courants (Amortissement/Provision)",
+      "formulaRaw": "\"F60011032\" + \"F60011033\" + \"F60011034\" + \"F60011035\"",
+      "operands": [
+        {
+          "code": "F60011032",
+          "sign": "+"
+        },
+        {
+          "code": "F60011033",
+          "sign": "+"
+        },
+        {
+          "code": "F60011034",
+          "sign": "+"
+        },
+        {
+          "code": "F60011035",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011036",
+      "label": "Actifs courants (Amortissement/Provision)",
+      "formulaRaw": "\"F60011037\" + \"F60011044\" + \"F60011050\" + \"F60011059\" + \"F60011064\"",
+      "operands": [
+        {
+          "code": "F60011037",
+          "sign": "+"
+        },
+        {
+          "code": "F60011044",
+          "sign": "+"
+        },
+        {
+          "code": "F60011050",
+          "sign": "+"
+        },
+        {
+          "code": "F60011059",
+          "sign": "+"
+        },
+        {
+          "code": "F60011064",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011037",
+      "label": "Stocks (Amortissement/Provision)",
+      "formulaRaw": "\"F60011038\" + \"F60011039\" + \"F60011040\" + \"F60011041\" + \"F60011042\" + \"F60011043\"",
+      "operands": [
+        {
+          "code": "F60011038",
+          "sign": "+"
+        },
+        {
+          "code": "F60011039",
+          "sign": "+"
+        },
+        {
+          "code": "F60011040",
+          "sign": "+"
+        },
+        {
+          "code": "F60011041",
+          "sign": "+"
+        },
+        {
+          "code": "F60011042",
+          "sign": "+"
+        },
+        {
+          "code": "F60011043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011044",
+      "label": "Clients et Comptes Rattaches (Amortissement/Provision)",
+      "formulaRaw": "\"F60011045\" + \"F60011046\" + \"F60011047\" + \"F60011048\" + \"F60011049\"",
+      "operands": [
+        {
+          "code": "F60011045",
+          "sign": "+"
+        },
+        {
+          "code": "F60011046",
+          "sign": "+"
+        },
+        {
+          "code": "F60011047",
+          "sign": "+"
+        },
+        {
+          "code": "F60011048",
+          "sign": "+"
+        },
+        {
+          "code": "F60011049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011050",
+      "label": "Autres Actifs Courants (Amortissement/Provision)",
+      "formulaRaw": "\"F60011051\" + \"F60011052\" + \"F60011053\" + \"F60011054\" + \"F60011055\" + \"F60011056\" + \"F60011057\" + \"F60011058\"",
+      "operands": [
+        {
+          "code": "F60011051",
+          "sign": "+"
+        },
+        {
+          "code": "F60011052",
+          "sign": "+"
+        },
+        {
+          "code": "F60011053",
+          "sign": "+"
+        },
+        {
+          "code": "F60011054",
+          "sign": "+"
+        },
+        {
+          "code": "F60011055",
+          "sign": "+"
+        },
+        {
+          "code": "F60011056",
+          "sign": "+"
+        },
+        {
+          "code": "F60011057",
+          "sign": "+"
+        },
+        {
+          "code": "F60011058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011059",
+      "label": "Placements et Autres Actifs Financiers (Amortissement/Provision)",
+      "formulaRaw": "\"F60011060\" + \"F60011061\" + \"F60011062\" + \"F60011063\"",
+      "operands": [
+        {
+          "code": "F60011060",
+          "sign": "+"
+        },
+        {
+          "code": "F60011061",
+          "sign": "+"
+        },
+        {
+          "code": "F60011062",
+          "sign": "+"
+        },
+        {
+          "code": "F60011063",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011064",
+      "label": "Liquidites et equivalents de liquidites (Amortissement/Provision)",
+      "formulaRaw": "\"F60011065\" + \"F60011066\"",
+      "operands": [
+        {
+          "code": "F60011065",
+          "sign": "+"
+        },
+        {
+          "code": "F60011066",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60011068",
+      "label": "Total des actifs (Amortissement/Provision)",
+      "formulaRaw": "\"F60011001\" + \"F60011036\" + \"F60011067\"",
+      "operands": [
+        {
+          "code": "F60011001",
+          "sign": "+"
+        },
+        {
+          "code": "F60011036",
+          "sign": "+"
+        },
+        {
+          "code": "F60011067",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012001",
+      "label": "Actifs non courants (Net)",
+      "formulaRaw": "\"F60012002\" + \"F60012031\"",
+      "operands": [
+        {
+          "code": "F60012002",
+          "sign": "+"
+        },
+        {
+          "code": "F60012031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012002",
+      "label": "Actifs immobilises (Net)",
+      "formulaRaw": "\"F60012003\" + \"F60012012\" + \"F60012021\"",
+      "operands": [
+        {
+          "code": "F60012003",
+          "sign": "+"
+        },
+        {
+          "code": "F60012012",
+          "sign": "+"
+        },
+        {
+          "code": "F60012021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012003",
+      "label": "Immobilisations Incorporelles (Net)",
+      "formulaRaw": "\"F60012004\" + \"F60012005\" + \"F60012006\" + \"F60012007\" + \"F60012008\" + \"F60012009\" + \"F60012010\" + \"F60012011\"",
+      "operands": [
+        {
+          "code": "F60012004",
+          "sign": "+"
+        },
+        {
+          "code": "F60012005",
+          "sign": "+"
+        },
+        {
+          "code": "F60012006",
+          "sign": "+"
+        },
+        {
+          "code": "F60012007",
+          "sign": "+"
+        },
+        {
+          "code": "F60012008",
+          "sign": "+"
+        },
+        {
+          "code": "F60012009",
+          "sign": "+"
+        },
+        {
+          "code": "F60012010",
+          "sign": "+"
+        },
+        {
+          "code": "F60012011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012012",
+      "label": "Immobilisations corporelles (Net)",
+      "formulaRaw": "\"F60012013\" + \"F60012014\" + \"F60012015\" + \"F60012016\" + \"F60012017\" + \"F60012018\" + \"F60012019\" + \"F60012020\"",
+      "operands": [
+        {
+          "code": "F60012013",
+          "sign": "+"
+        },
+        {
+          "code": "F60012014",
+          "sign": "+"
+        },
+        {
+          "code": "F60012015",
+          "sign": "+"
+        },
+        {
+          "code": "F60012016",
+          "sign": "+"
+        },
+        {
+          "code": "F60012017",
+          "sign": "+"
+        },
+        {
+          "code": "F60012018",
+          "sign": "+"
+        },
+        {
+          "code": "F60012019",
+          "sign": "+"
+        },
+        {
+          "code": "F60012020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012021",
+      "label": "Immobilisations Financieres (Net)",
+      "formulaRaw": "\"F60012022\" + \"F60012023\" + \"F60012024\" + \"F60012025\" + \"F60012026\" + \"F60012027\" + \"F60012028\" + \"F60012029\" + \"F60012030\"",
+      "operands": [
+        {
+          "code": "F60012022",
+          "sign": "+"
+        },
+        {
+          "code": "F60012023",
+          "sign": "+"
+        },
+        {
+          "code": "F60012024",
+          "sign": "+"
+        },
+        {
+          "code": "F60012025",
+          "sign": "+"
+        },
+        {
+          "code": "F60012026",
+          "sign": "+"
+        },
+        {
+          "code": "F60012027",
+          "sign": "+"
+        },
+        {
+          "code": "F60012028",
+          "sign": "+"
+        },
+        {
+          "code": "F60012029",
+          "sign": "+"
+        },
+        {
+          "code": "F60012030",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012031",
+      "label": "Autres Actifs Non Courants (Net)",
+      "formulaRaw": "\"F60012032\" + \"F60012033\" + \"F60012034\" + \"F60012035\"",
+      "operands": [
+        {
+          "code": "F60012032",
+          "sign": "+"
+        },
+        {
+          "code": "F60012033",
+          "sign": "+"
+        },
+        {
+          "code": "F60012034",
+          "sign": "+"
+        },
+        {
+          "code": "F60012035",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012036",
+      "label": "Actifs courants (Net)",
+      "formulaRaw": "\"F60012037\" + \"F60012044\" + \"F60012050\" + \"F60012059\" + \"F60012064\"",
+      "operands": [
+        {
+          "code": "F60012037",
+          "sign": "+"
+        },
+        {
+          "code": "F60012044",
+          "sign": "+"
+        },
+        {
+          "code": "F60012050",
+          "sign": "+"
+        },
+        {
+          "code": "F60012059",
+          "sign": "+"
+        },
+        {
+          "code": "F60012064",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012037",
+      "label": "Stocks (Net)",
+      "formulaRaw": "\"F60012038\" + \"F60012039\" + \"F60012040\" + \"F60012041\" + \"F60012042\" + \"F60012043\"",
+      "operands": [
+        {
+          "code": "F60012038",
+          "sign": "+"
+        },
+        {
+          "code": "F60012039",
+          "sign": "+"
+        },
+        {
+          "code": "F60012040",
+          "sign": "+"
+        },
+        {
+          "code": "F60012041",
+          "sign": "+"
+        },
+        {
+          "code": "F60012042",
+          "sign": "+"
+        },
+        {
+          "code": "F60012043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012044",
+      "label": "Clients et Comptes Rattaches (Net)",
+      "formulaRaw": "\"F60012045\" + \"F60012046\" + \"F60012047\" + \"F60012048\" + \"F60012049\"",
+      "operands": [
+        {
+          "code": "F60012045",
+          "sign": "+"
+        },
+        {
+          "code": "F60012046",
+          "sign": "+"
+        },
+        {
+          "code": "F60012047",
+          "sign": "+"
+        },
+        {
+          "code": "F60012048",
+          "sign": "+"
+        },
+        {
+          "code": "F60012049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012050",
+      "label": "Autres Actifs Courants (Net)",
+      "formulaRaw": "\"F60012051\" + \"F60012052\" + \"F60012053\" + \"F60012054\" + \"F60012055\" + \"F60012056\" + \"F60012057\" + \"F60012058\"",
+      "operands": [
+        {
+          "code": "F60012051",
+          "sign": "+"
+        },
+        {
+          "code": "F60012052",
+          "sign": "+"
+        },
+        {
+          "code": "F60012053",
+          "sign": "+"
+        },
+        {
+          "code": "F60012054",
+          "sign": "+"
+        },
+        {
+          "code": "F60012055",
+          "sign": "+"
+        },
+        {
+          "code": "F60012056",
+          "sign": "+"
+        },
+        {
+          "code": "F60012057",
+          "sign": "+"
+        },
+        {
+          "code": "F60012058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012059",
+      "label": "Placements et Autres Actifs Financiers (Net)",
+      "formulaRaw": "\"F60012060\" + \"F60012061\" + \"F60012062\" + \"F60012063\"",
+      "operands": [
+        {
+          "code": "F60012060",
+          "sign": "+"
+        },
+        {
+          "code": "F60012061",
+          "sign": "+"
+        },
+        {
+          "code": "F60012062",
+          "sign": "+"
+        },
+        {
+          "code": "F60012063",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012064",
+      "label": "Liquidites et equivalents de liquidites (Net)",
+      "formulaRaw": "\"F60012065\" + \"F60012066\"",
+      "operands": [
+        {
+          "code": "F60012065",
+          "sign": "+"
+        },
+        {
+          "code": "F60012066",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60012068",
+      "label": "Total des actifs (Net)",
+      "formulaRaw": "\"F60012001\" + \"F60012036\" + \"F60012067\"",
+      "operands": [
+        {
+          "code": "F60012001",
+          "sign": "+"
+        },
+        {
+          "code": "F60012036",
+          "sign": "+"
+        },
+        {
+          "code": "F60012067",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013001",
+      "label": "Actifs non courants (Net N-1). \"F60013002\" + \"F60013031\"",
+      "formulaRaw": "Actifs non courants (Net N-1). \"F60013002\" + \"F60013031\"",
+      "operands": [
+        {
+          "code": "F60013002",
+          "sign": "+"
+        },
+        {
+          "code": "F60013031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013002",
+      "label": "Actifs immobilises (Net N-1). \"F60013003\" + \"F60013012\" + \"F60013021\"",
+      "formulaRaw": "Actifs immobilises (Net N-1). \"F60013003\" + \"F60013012\" + \"F60013021\"",
+      "operands": [
+        {
+          "code": "F60013003",
+          "sign": "+"
+        },
+        {
+          "code": "F60013012",
+          "sign": "+"
+        },
+        {
+          "code": "F60013021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013003",
+      "label": "Immobilisations Incorporelles (Net N-1). \"F60013004\" + \"F60013005\" + \"F60013006\" + \"F60013007\" + \"F60013008\" + \"F60013009\" + \"F60013010\" + \"F60013011\"",
+      "formulaRaw": "Immobilisations Incorporelles (Net N-1). \"F60013004\" + \"F60013005\" + \"F60013006\" + \"F60013007\" + \"F60013008\" + \"F60013009\" + \"F60013010\" + \"F60013011\"",
+      "operands": [
+        {
+          "code": "F60013004",
+          "sign": "+"
+        },
+        {
+          "code": "F60013005",
+          "sign": "+"
+        },
+        {
+          "code": "F60013006",
+          "sign": "+"
+        },
+        {
+          "code": "F60013007",
+          "sign": "+"
+        },
+        {
+          "code": "F60013008",
+          "sign": "+"
+        },
+        {
+          "code": "F60013009",
+          "sign": "+"
+        },
+        {
+          "code": "F60013010",
+          "sign": "+"
+        },
+        {
+          "code": "F60013011",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013012",
+      "label": "Immobilisations corporelles (Net N-1). \"F60013013\" + \"F60013014\" + \"F60013015\" + \"F60013016\" + \"F60013017\" + \"F60013018\" + \"F60013019\" + \"F60013020\"",
+      "formulaRaw": "Immobilisations corporelles (Net N-1). \"F60013013\" + \"F60013014\" + \"F60013015\" + \"F60013016\" + \"F60013017\" + \"F60013018\" + \"F60013019\" + \"F60013020\"",
+      "operands": [
+        {
+          "code": "F60013013",
+          "sign": "+"
+        },
+        {
+          "code": "F60013014",
+          "sign": "+"
+        },
+        {
+          "code": "F60013015",
+          "sign": "+"
+        },
+        {
+          "code": "F60013016",
+          "sign": "+"
+        },
+        {
+          "code": "F60013017",
+          "sign": "+"
+        },
+        {
+          "code": "F60013018",
+          "sign": "+"
+        },
+        {
+          "code": "F60013019",
+          "sign": "+"
+        },
+        {
+          "code": "F60013020",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013021",
+      "label": "Immobilisations Financieres (Net N-1). \"F60013022\" + \"F60013023\" + \"F60013024\" + \"F60013025\" + \"F60013026\" + \"F60013027\" + \"F60013028\" + \"F60013029\" + \"F60013030\"",
+      "formulaRaw": "Immobilisations Financieres (Net N-1). \"F60013022\" + \"F60013023\" + \"F60013024\" + \"F60013025\" + \"F60013026\" + \"F60013027\" + \"F60013028\" + \"F60013029\" + \"F60013030\"",
+      "operands": [
+        {
+          "code": "F60013022",
+          "sign": "+"
+        },
+        {
+          "code": "F60013023",
+          "sign": "+"
+        },
+        {
+          "code": "F60013024",
+          "sign": "+"
+        },
+        {
+          "code": "F60013025",
+          "sign": "+"
+        },
+        {
+          "code": "F60013026",
+          "sign": "+"
+        },
+        {
+          "code": "F60013027",
+          "sign": "+"
+        },
+        {
+          "code": "F60013028",
+          "sign": "+"
+        },
+        {
+          "code": "F60013029",
+          "sign": "+"
+        },
+        {
+          "code": "F60013030",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013031",
+      "label": "Autres Actifs Non Courants (Net N-1). \"F60013032\" + \"F60013033\" + \"F60013034\" + \"F60013035\"",
+      "formulaRaw": "Autres Actifs Non Courants (Net N-1). \"F60013032\" + \"F60013033\" + \"F60013034\" + \"F60013035\"",
+      "operands": [
+        {
+          "code": "F60013032",
+          "sign": "+"
+        },
+        {
+          "code": "F60013033",
+          "sign": "+"
+        },
+        {
+          "code": "F60013034",
+          "sign": "+"
+        },
+        {
+          "code": "F60013035",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013036",
+      "label": "Actifs courants (Net N-1). \"F60013037\" + \"F60013044\" + \"F60013050\" + \"F60013059\" + \"F60013064\"",
+      "formulaRaw": "Actifs courants (Net N-1). \"F60013037\" + \"F60013044\" + \"F60013050\" + \"F60013059\" + \"F60013064\"",
+      "operands": [
+        {
+          "code": "F60013037",
+          "sign": "+"
+        },
+        {
+          "code": "F60013044",
+          "sign": "+"
+        },
+        {
+          "code": "F60013050",
+          "sign": "+"
+        },
+        {
+          "code": "F60013059",
+          "sign": "+"
+        },
+        {
+          "code": "F60013064",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013037",
+      "label": "Stocks (Net N-1). \"F60013038\" + \"F60013039\" + \"F60013040\" + \"F60013041\" + \"F60013042\" + \"F60013043\"",
+      "formulaRaw": "Stocks (Net N-1). \"F60013038\" + \"F60013039\" + \"F60013040\" + \"F60013041\" + \"F60013042\" + \"F60013043\"",
+      "operands": [
+        {
+          "code": "F60013038",
+          "sign": "+"
+        },
+        {
+          "code": "F60013039",
+          "sign": "+"
+        },
+        {
+          "code": "F60013040",
+          "sign": "+"
+        },
+        {
+          "code": "F60013041",
+          "sign": "+"
+        },
+        {
+          "code": "F60013042",
+          "sign": "+"
+        },
+        {
+          "code": "F60013043",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013044",
+      "label": "Clients et Comptes Rattaches (Net N-1). \"F60013045\" + \"F60013046\" + \"F60013047\" + \"F60013048\" + \"F60013049\"",
+      "formulaRaw": "Clients et Comptes Rattaches (Net N-1). \"F60013045\" + \"F60013046\" + \"F60013047\" + \"F60013048\" + \"F60013049\"",
+      "operands": [
+        {
+          "code": "F60013045",
+          "sign": "+"
+        },
+        {
+          "code": "F60013046",
+          "sign": "+"
+        },
+        {
+          "code": "F60013047",
+          "sign": "+"
+        },
+        {
+          "code": "F60013048",
+          "sign": "+"
+        },
+        {
+          "code": "F60013049",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013050",
+      "label": "Autres Actifs Courants (Net N-1). \"F60013051\" + \"F60013052\" + \"F60013053\" + \"F60013054\" + \"F60013055\" + \"F60013056\" + \"F60013057\" + \"F60013058\"",
+      "formulaRaw": "Autres Actifs Courants (Net N-1). \"F60013051\" + \"F60013052\" + \"F60013053\" + \"F60013054\" + \"F60013055\" + \"F60013056\" + \"F60013057\" + \"F60013058\"",
+      "operands": [
+        {
+          "code": "F60013051",
+          "sign": "+"
+        },
+        {
+          "code": "F60013052",
+          "sign": "+"
+        },
+        {
+          "code": "F60013053",
+          "sign": "+"
+        },
+        {
+          "code": "F60013054",
+          "sign": "+"
+        },
+        {
+          "code": "F60013055",
+          "sign": "+"
+        },
+        {
+          "code": "F60013056",
+          "sign": "+"
+        },
+        {
+          "code": "F60013057",
+          "sign": "+"
+        },
+        {
+          "code": "F60013058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013059",
+      "label": "Placements et Autres Actifs Financiers (Net N-1). \"F60013060\" + \"F60013061\" + \"F60013062\" + \"F60013063\"",
+      "formulaRaw": "Placements et Autres Actifs Financiers (Net N-1). \"F60013060\" + \"F60013061\" + \"F60013062\" + \"F60013063\"",
+      "operands": [
+        {
+          "code": "F60013060",
+          "sign": "+"
+        },
+        {
+          "code": "F60013061",
+          "sign": "+"
+        },
+        {
+          "code": "F60013062",
+          "sign": "+"
+        },
+        {
+          "code": "F60013063",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013064",
+      "label": "Liquidites et equivalents de liquidites (Net N-1). \"F60013065\" + \"F60013066\"",
+      "formulaRaw": "Liquidites et equivalents de liquidites (Net N-1). \"F60013065\" + \"F60013066\"",
+      "operands": [
+        {
+          "code": "F60013065",
+          "sign": "+"
+        },
+        {
+          "code": "F60013066",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60013068",
+      "label": "Total des actifs (Net N-1). \"F60013001\" + \"F60013036\" + \"F60013067\"",
+      "formulaRaw": "Total des actifs (Net N-1). \"F60013001\" + \"F60013036\" + \"F60013067\"",
+      "operands": [
+        {
+          "code": "F60013001",
+          "sign": "+"
+        },
+        {
+          "code": "F60013036",
+          "sign": "+"
+        },
+        {
+          "code": "F60013067",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

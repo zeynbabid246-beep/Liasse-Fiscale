@@ -1,0 +1,591 @@
+{
+  "formCode": "F6002",
+  "generatedAt": "2026-09-02T19:31:32.544Z",
+  "rulesCount": 23,
+  "rules": [
+    {
+      "target": "F60020001",
+      "label": "Capitaux propres (Net Exercice)",
+      "formulaRaw": "\"F60020006\" + \"F60020007\"",
+      "operands": [
+        {
+          "code": "F60020006",
+          "sign": "+"
+        },
+        {
+          "code": "F60020007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020008",
+      "label": "Total Passifs (Net Exercice)",
+      "formulaRaw": "\"F60020009\" + \"F60020031\"",
+      "operands": [
+        {
+          "code": "F60020009",
+          "sign": "+"
+        },
+        {
+          "code": "F60020031",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020009",
+      "label": "Passifs non courants (Net Exercice)",
+      "formulaRaw": "\"F60020010\" + \"F60020019\" + \"F60020022\"",
+      "operands": [
+        {
+          "code": "F60020010",
+          "sign": "+"
+        },
+        {
+          "code": "F60020019",
+          "sign": "+"
+        },
+        {
+          "code": "F60020022",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020010",
+      "label": "Emprunts (Net Exercice)",
+      "formulaRaw": "\"F60020011\" + \"F60020012\" + \"F60020013\" + \"F60020014\" + \"F60020015\" + \"F60020016\" + \"F60020017\" + \"F60020018\"",
+      "operands": [
+        {
+          "code": "F60020011",
+          "sign": "+"
+        },
+        {
+          "code": "F60020012",
+          "sign": "+"
+        },
+        {
+          "code": "F60020013",
+          "sign": "+"
+        },
+        {
+          "code": "F60020014",
+          "sign": "+"
+        },
+        {
+          "code": "F60020015",
+          "sign": "+"
+        },
+        {
+          "code": "F60020016",
+          "sign": "+"
+        },
+        {
+          "code": "F60020017",
+          "sign": "+"
+        },
+        {
+          "code": "F60020018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020019",
+      "label": "Autres Passifs Financiers (Net Exercice)",
+      "formulaRaw": "\"F60020020\" + \"F60020021\"",
+      "operands": [
+        {
+          "code": "F60020020",
+          "sign": "+"
+        },
+        {
+          "code": "F60020021",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020022",
+      "label": "Provisions (Net Exercice)",
+      "formulaRaw": "\"F60020023\" + \"F60020024\" + \"F60020025\" + \"F60020026\" + \"F60020027\" + \"F60020028\" + \"F60020029\" + \"F60020030\"",
+      "operands": [
+        {
+          "code": "F60020023",
+          "sign": "+"
+        },
+        {
+          "code": "F60020024",
+          "sign": "+"
+        },
+        {
+          "code": "F60020025",
+          "sign": "+"
+        },
+        {
+          "code": "F60020026",
+          "sign": "+"
+        },
+        {
+          "code": "F60020027",
+          "sign": "+"
+        },
+        {
+          "code": "F60020028",
+          "sign": "+"
+        },
+        {
+          "code": "F60020029",
+          "sign": "+"
+        },
+        {
+          "code": "F60020030",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020031",
+      "label": "Passifs courants (Net Exercice)",
+      "formulaRaw": "\"F60020032\" + \"F60020038\" + \"F60020047\"",
+      "operands": [
+        {
+          "code": "F60020032",
+          "sign": "+"
+        },
+        {
+          "code": "F60020038",
+          "sign": "+"
+        },
+        {
+          "code": "F60020047",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020032",
+      "label": "Fournisseurs et Comptes Rattachés (Net Exercice)",
+      "formulaRaw": "\"F60020033\" + \"F60020034\" + \"F60020035\" + \"F60020036\" + \"F60020037\"",
+      "operands": [
+        {
+          "code": "F60020033",
+          "sign": "+"
+        },
+        {
+          "code": "F60020034",
+          "sign": "+"
+        },
+        {
+          "code": "F60020035",
+          "sign": "+"
+        },
+        {
+          "code": "F60020036",
+          "sign": "+"
+        },
+        {
+          "code": "F60020037",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020038",
+      "label": "Autres passifs courants (Net Exercice)",
+      "formulaRaw": "\"F60020039\" + \"F60020040\" + \"F60020041\" + \"F60020042\" + \"F60020043\" + \"F60020044\" + \"F60020045\" + \"F60020046\"",
+      "operands": [
+        {
+          "code": "F60020039",
+          "sign": "+"
+        },
+        {
+          "code": "F60020040",
+          "sign": "+"
+        },
+        {
+          "code": "F60020041",
+          "sign": "+"
+        },
+        {
+          "code": "F60020042",
+          "sign": "+"
+        },
+        {
+          "code": "F60020043",
+          "sign": "+"
+        },
+        {
+          "code": "F60020044",
+          "sign": "+"
+        },
+        {
+          "code": "F60020045",
+          "sign": "+"
+        },
+        {
+          "code": "F60020046",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020047",
+      "label": "Concours Bancaires et Autres Passifs Financiers (Net Exercice)",
+      "formulaRaw": "\"F60020048\" + \"F60020049\" + \"F60020050\" + \"F60020051\"",
+      "operands": [
+        {
+          "code": "F60020048",
+          "sign": "+"
+        },
+        {
+          "code": "F60020049",
+          "sign": "+"
+        },
+        {
+          "code": "F60020050",
+          "sign": "+"
+        },
+        {
+          "code": "F60020051",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020053",
+      "label": "Total des capitaux propres et passifs (Net Exercice)",
+      "formulaRaw": "\"F60020001\" + \"F60020008\" + \"F60020052\"",
+      "operands": [
+        {
+          "code": "F60020001",
+          "sign": "+"
+        },
+        {
+          "code": "F60020008",
+          "sign": "+"
+        },
+        {
+          "code": "F60020052",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020054",
+      "label": "Capitaux propres (Net Exercice - 1).  \"F60020059\" + \"F60020060\"",
+      "formulaRaw": "Capitaux propres (Net Exercice - 1).  \"F60020059\" + \"F60020060\"",
+      "operands": [
+        {
+          "code": "F60020059",
+          "sign": "+"
+        },
+        {
+          "code": "F60020060",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020059",
+      "label": "Capitaux propres avant résultat de l'exercice (Net Exercice - 1) = lf:F60020059 = lf",
+      "formulaRaw": "F60020055 + lf:F60020056 + lf:F60020057 + lf:F60020058",
+      "operands": [
+        {
+          "code": "F60020055",
+          "sign": "+"
+        },
+        {
+          "code": "F60020056",
+          "sign": "+"
+        },
+        {
+          "code": "F60020057",
+          "sign": "+"
+        },
+        {
+          "code": "F60020058",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020061",
+      "label": "Total Passifs (Net Exercice - 1). \"F60020062\" + \"F60020084\"",
+      "formulaRaw": "Total Passifs (Net Exercice - 1). \"F60020062\" + \"F60020084\"",
+      "operands": [
+        {
+          "code": "F60020062",
+          "sign": "+"
+        },
+        {
+          "code": "F60020084",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020062",
+      "label": "Passifs non courants (Net Exercice - 1). \"F60020063\" + \"F60020072\" + \"F60020075\"",
+      "formulaRaw": "Passifs non courants (Net Exercice - 1). \"F60020063\" + \"F60020072\" + \"F60020075\"",
+      "operands": [
+        {
+          "code": "F60020063",
+          "sign": "+"
+        },
+        {
+          "code": "F60020072",
+          "sign": "+"
+        },
+        {
+          "code": "F60020075",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020063",
+      "label": "Emprunts (Net Exercice - 1). \"F60020064\" + \"F60020065\" + \"F60020066\" + \"F60020067\" + \"F60020068\" + \"F60020069\" + \"F60020070\" + \"F60020071\"",
+      "formulaRaw": "Emprunts (Net Exercice - 1). \"F60020064\" + \"F60020065\" + \"F60020066\" + \"F60020067\" + \"F60020068\" + \"F60020069\" + \"F60020070\" + \"F60020071\"",
+      "operands": [
+        {
+          "code": "F60020064",
+          "sign": "+"
+        },
+        {
+          "code": "F60020065",
+          "sign": "+"
+        },
+        {
+          "code": "F60020066",
+          "sign": "+"
+        },
+        {
+          "code": "F60020067",
+          "sign": "+"
+        },
+        {
+          "code": "F60020068",
+          "sign": "+"
+        },
+        {
+          "code": "F60020069",
+          "sign": "+"
+        },
+        {
+          "code": "F60020070",
+          "sign": "+"
+        },
+        {
+          "code": "F60020071",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020072",
+      "label": "Autres Passifs Financiers (Net Exercice - 1). \"F60020073\" + \"F60020074\"",
+      "formulaRaw": "Autres Passifs Financiers (Net Exercice - 1). \"F60020073\" + \"F60020074\"",
+      "operands": [
+        {
+          "code": "F60020073",
+          "sign": "+"
+        },
+        {
+          "code": "F60020074",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020075",
+      "label": "Provisions (Net Exercice - 1). \"F60020076\" + \"F60020077\" + \"F60020078\" + \"F60020079\" + \"F60020080\" + \"F60020081\" + \"F60020082\" + \"F60020083\"",
+      "formulaRaw": "Provisions (Net Exercice - 1). \"F60020076\" + \"F60020077\" + \"F60020078\" + \"F60020079\" + \"F60020080\" + \"F60020081\" + \"F60020082\" + \"F60020083\"",
+      "operands": [
+        {
+          "code": "F60020076",
+          "sign": "+"
+        },
+        {
+          "code": "F60020077",
+          "sign": "+"
+        },
+        {
+          "code": "F60020078",
+          "sign": "+"
+        },
+        {
+          "code": "F60020079",
+          "sign": "+"
+        },
+        {
+          "code": "F60020080",
+          "sign": "+"
+        },
+        {
+          "code": "F60020081",
+          "sign": "+"
+        },
+        {
+          "code": "F60020082",
+          "sign": "+"
+        },
+        {
+          "code": "F60020083",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020084",
+      "label": "Passifs courants (Net Exercice - 1). \"F60020085\" + \"F60020091\" + \"F60020100\"",
+      "formulaRaw": "Passifs courants (Net Exercice - 1). \"F60020085\" + \"F60020091\" + \"F60020100\"",
+      "operands": [
+        {
+          "code": "F60020085",
+          "sign": "+"
+        },
+        {
+          "code": "F60020091",
+          "sign": "+"
+        },
+        {
+          "code": "F60020100",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020085",
+      "label": "Fournisseurs et Comptes Rattachés (Net Exercice - 1)",
+      "formulaRaw": "\"F60020086\" + \"F60020087\" + \"F60020088\" + \"F60020089\" + \"F60020090\"",
+      "operands": [
+        {
+          "code": "F60020086",
+          "sign": "+"
+        },
+        {
+          "code": "F60020087",
+          "sign": "+"
+        },
+        {
+          "code": "F60020088",
+          "sign": "+"
+        },
+        {
+          "code": "F60020089",
+          "sign": "+"
+        },
+        {
+          "code": "F60020090",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020091",
+      "label": "Autres passifs courants (Net Exercice - 1). \"F60020092\" + \"F60020093\" + \"F60020094\" + \"F60020095\" + \"F60020096\" + \"F60020097\" + \"F60020098\" + \"F60020099\"",
+      "formulaRaw": "Autres passifs courants (Net Exercice - 1). \"F60020092\" + \"F60020093\" + \"F60020094\" + \"F60020095\" + \"F60020096\" + \"F60020097\" + \"F60020098\" + \"F60020099\"",
+      "operands": [
+        {
+          "code": "F60020092",
+          "sign": "+"
+        },
+        {
+          "code": "F60020093",
+          "sign": "+"
+        },
+        {
+          "code": "F60020094",
+          "sign": "+"
+        },
+        {
+          "code": "F60020095",
+          "sign": "+"
+        },
+        {
+          "code": "F60020096",
+          "sign": "+"
+        },
+        {
+          "code": "F60020097",
+          "sign": "+"
+        },
+        {
+          "code": "F60020098",
+          "sign": "+"
+        },
+        {
+          "code": "F60020099",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020100",
+      "label": "Concours Bancaires et Autres Passifs Financiers (Net Exercice - 1). \"F60020101\" + \"F60020102\" + \"F60020103\" + \"F60020104\"",
+      "formulaRaw": "Concours Bancaires et Autres Passifs Financiers (Net Exercice - 1). \"F60020101\" + \"F60020102\" + \"F60020103\" + \"F60020104\"",
+      "operands": [
+        {
+          "code": "F60020101",
+          "sign": "+"
+        },
+        {
+          "code": "F60020102",
+          "sign": "+"
+        },
+        {
+          "code": "F60020103",
+          "sign": "+"
+        },
+        {
+          "code": "F60020104",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F60020106",
+      "label": "Total des capitaux propres et passifs (Net Exercice - 1). \"F60020054\" + \"F60020061\" + \"F60020105\"",
+      "formulaRaw": "Total des capitaux propres et passifs (Net Exercice - 1). \"F60020054\" + \"F60020061\" + \"F60020105\"",
+      "operands": [
+        {
+          "code": "F60020054",
+          "sign": "+"
+        },
+        {
+          "code": "F60020061",
+          "sign": "+"
+        },
+        {
+          "code": "F60020105",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "formCode": "F6301",
+  "generatedAt": "2026-09-02T19:31:32.851Z",
+  "rulesCount": 14,
+  "rules": [
+    {
+      "target": "F63010001",
+      "label": "AC 1 - Portefeuille titres (Net Exercice). \"F63010002\" + \"F63010003\" + \"F63010004\"",
+      "formulaRaw": "AC 1 - Portefeuille titres (Net Exercice). \"F63010002\" + \"F63010003\" + \"F63010004\"",
+      "operands": [
+        {
+          "code": "F63010002",
+          "sign": "+"
+        },
+        {
+          "code": "F63010003",
+          "sign": "+"
+        },
+        {
+          "code": "F63010004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010005",
+      "label": "AC 2 - Placements monétaires et disponibilités  (Net Exercice). \"F63010006\" + \"F63010007\"",
+      "formulaRaw": "AC 2 - Placements monétaires et disponibilités  (Net Exercice). \"F63010006\" + \"F63010007\"",
+      "operands": [
+        {
+          "code": "F63010006",
+          "sign": "+"
+        },
+        {
+          "code": "F63010007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010010",
+      "label": "Total actif (Net Exercice)",
+      "formulaRaw": "\"F63010001\" + \"F63010005\" + \"F63010008\" + \"F63010009\"",
+      "operands": [
+        {
+          "code": "F63010001",
+          "sign": "+"
+        },
+        {
+          "code": "F63010005",
+          "sign": "+"
+        },
+        {
+          "code": "F63010008",
+          "sign": "+"
+        },
+        {
+          "code": "F63010009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010013",
+      "label": "Total passif (Net Exercice)",
+      "formulaRaw": "\"F63010011\" + \"F63010012\"",
+      "operands": [
+        {
+          "code": "F63010011",
+          "sign": "+"
+        },
+        {
+          "code": "F63010012",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010015",
+      "label": "CP 2 - Sommes distribuables  (Net Exercice). \"F63010016\" + \"F63010017\"",
+      "formulaRaw": "CP 2 - Sommes distribuables  (Net Exercice). \"F63010016\" + \"F63010017\"",
+      "operands": [
+        {
+          "code": "F63010016",
+          "sign": "+"
+        },
+        {
+          "code": "F63010017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010018",
+      "label": "Total actif net (Net Exercice)",
+      "formulaRaw": "\"F63010014\" + \"F63010015\"",
+      "operands": [
+        {
+          "code": "F63010014",
+          "sign": "+"
+        },
+        {
+          "code": "F63010015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63010019",
+      "label": "Total passif et actif net (Net Exercice)",
+      "formulaRaw": "\"F63010013\" + \"F63010018\"",
+      "operands": [
+        {
+          "code": "F63010013",
+          "sign": "+"
+        },
+        {
+          "code": "F63010018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011001",
+      "label": "AC 1 - Portefeuille titres (Net Exercice - 1). \"F63011002\" + \"F63011003\" + \"F63011004\"",
+      "formulaRaw": "AC 1 - Portefeuille titres (Net Exercice - 1). \"F63011002\" + \"F63011003\" + \"F63011004\"",
+      "operands": [
+        {
+          "code": "F63011002",
+          "sign": "+"
+        },
+        {
+          "code": "F63011003",
+          "sign": "+"
+        },
+        {
+          "code": "F63011004",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011005",
+      "label": "AC 2 - Placements monétaires et disponibilités  (Net Exercice - 1). \"F63011006\" + \"F63011007\"",
+      "formulaRaw": "AC 2 - Placements monétaires et disponibilités  (Net Exercice - 1). \"F63011006\" + \"F63011007\"",
+      "operands": [
+        {
+          "code": "F63011006",
+          "sign": "+"
+        },
+        {
+          "code": "F63011007",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011010",
+      "label": "Total actif (Net Exercice - 1). \"F63011001\" + \"F63011005\" + \"F63011008\" + \"F63011009\"",
+      "formulaRaw": "Total actif (Net Exercice - 1). \"F63011001\" + \"F63011005\" + \"F63011008\" + \"F63011009\"",
+      "operands": [
+        {
+          "code": "F63011001",
+          "sign": "+"
+        },
+        {
+          "code": "F63011005",
+          "sign": "+"
+        },
+        {
+          "code": "F63011008",
+          "sign": "+"
+        },
+        {
+          "code": "F63011009",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011013",
+      "label": "Total passif (Net Exercice - 1). \"F63011011\" + \"F63011012\"",
+      "formulaRaw": "Total passif (Net Exercice - 1). \"F63011011\" + \"F63011012\"",
+      "operands": [
+        {
+          "code": "F63011011",
+          "sign": "+"
+        },
+        {
+          "code": "F63011012",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011015",
+      "label": "CP 2 - Sommes distribuables  (Net Exercice - 1). \"F63011016\" + \"F63011017\"",
+      "formulaRaw": "CP 2 - Sommes distribuables  (Net Exercice - 1). \"F63011016\" + \"F63011017\"",
+      "operands": [
+        {
+          "code": "F63011016",
+          "sign": "+"
+        },
+        {
+          "code": "F63011017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011018",
+      "label": "Total actif net (Net Exercice - 1). \"F63011014\" + \"F63011015\"",
+      "formulaRaw": "Total actif net (Net Exercice - 1). \"F63011014\" + \"F63011015\"",
+      "operands": [
+        {
+          "code": "F63011014",
+          "sign": "+"
+        },
+        {
+          "code": "F63011015",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F63011019",
+      "label": "Total passif et actif net (Net Exercice - 1). \"F63011013\" + \"F63011018\"",
+      "formulaRaw": "Total passif et actif net (Net Exercice - 1). \"F63011013\" + \"F63011018\"",
+      "operands": [
+        {
+          "code": "F63011013",
+          "sign": "+"
+        },
+        {
+          "code": "F63011018",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}

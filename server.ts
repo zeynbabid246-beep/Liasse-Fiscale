@@ -554,15 +554,32 @@ let depositsDb: Deposit[] = [
 ];
 
 // -------------------------------------------------------------
-// Validation XML Conforme XSD Officiels (Dossier /original)
+// Validation XML Conforme XSD Officiels
 // -------------------------------------------------------------
-const ORIGINAL_XSD_DIR = path.join(__dirname, 'SchemaAssets', 'original');
+const XSD_SEARCH_DIRS = [
+  path.join(__dirname, 'SchemaAssets', 'XSD- Liasse fiscale'),
+  path.join(__dirname, 'SchemaAssets', 'XSD - Liasse fiscale'),
+  path.join(__dirname, 'SchemaAssets', 'original'),
+  path.join(__dirname, 'SchemaAssets')
+];
+
+function findXsdFile(filename: string): string | null {
+  const clean = path.basename(filename);
+  for (const dir of XSD_SEARCH_DIRS) {
+    const target = path.join(dir, clean);
+    if (fs.existsSync(target)) {
+      return target;
+    }
+  }
+  return null;
+}
+
 const xsdCache = new Map<string, SchemaModel>();
 
 const xsdLoader = (location: string): string => {
   const clean = path.basename(location);
-  const target = path.join(ORIGINAL_XSD_DIR, clean);
-  if (fs.existsSync(target)) {
+  const target = findXsdFile(clean);
+  if (target && fs.existsSync(target)) {
     return fs.readFileSync(target, 'utf8');
   }
   throw new Error(`Fichier XSD inclus introuvable : ${clean}`);
@@ -575,15 +592,16 @@ function getOfficialXsdSchema(codeDocument: string): SchemaModel | null {
   }
 
   const candidates = [
-    path.join(ORIGINAL_XSD_DIR, `${normalizedCode}.xsd`),
-    path.join(ORIGINAL_XSD_DIR, `${codeDocument}.xsd`),
-    path.join(ORIGINAL_XSD_DIR, `${normalizedCode === 'F6004-MODELE-AUT' ? 'F6004-MODELE-AUT' : normalizedCode}.xsd`)
+    `${normalizedCode}.xsd`,
+    `${codeDocument}.xsd`,
+    `${normalizedCode === 'F6004-MODELE-AUT' ? 'F6004-MODELE-AUT' : normalizedCode}.xsd`
   ];
 
   for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
+    const target = findXsdFile(candidate);
+    if (target && fs.existsSync(target)) {
       try {
-        const schema = parseXsd(fs.readFileSync(candidate, 'utf8'), xsdLoader);
+        const schema = parseXsd(fs.readFileSync(target, 'utf8'), xsdLoader);
         xsdCache.set(normalizedCode, schema);
         return schema;
       } catch (err: any) {
@@ -792,8 +810,9 @@ function validerXmlComplet(
 
   // Niveau 5 : Règles de calcul arithmétique métier
   const rulesJson = getBusinessRules(normalizedDocCode);
-  if (rulesJson && Array.isArray(rulesJson.simpleSumRules)) {
-    for (const rule of rulesJson.simpleSumRules) {
+  if (rulesJson) {
+    const rulesList = Array.isArray(rulesJson.rules) ? rulesJson.rules : (Array.isArray(rulesJson.simpleSumRules) ? rulesJson.simpleSumRules : []);
+    for (const rule of rulesList) {
       const target = rule.target;
       const targetVal = detailsFlat[target] !== undefined ? detailsFlat[target] : 0;
 
@@ -802,8 +821,10 @@ function validerXmlComplet(
 
       if (Array.isArray(rule.operands)) {
         for (const op of rule.operands) {
-          if (detailsFlat[op] !== undefined) {
-            computedSum += detailsFlat[op];
+          const code = typeof op === 'string' ? op : (op.code || '');
+          const sign = typeof op === 'object' && op.sign === '-' ? -1 : 1;
+          if (detailsFlat[code] !== undefined) {
+            computedSum += sign * detailsFlat[code];
             atLeastOneOperandFound = true;
           }
         }
@@ -812,11 +833,13 @@ function validerXmlComplet(
       if (detailsFlat[target] !== undefined || atLeastOneOperandFound) {
         const diff = Math.abs(targetVal - computedSum);
         if (diff > 0.01) {
+          const labelPart = rule.label ? ` (${rule.label})` : '';
+          const formulaDesc = rule.formulaRaw || (Array.isArray(rule.operands) ? rule.operands.map((o: any) => typeof o === 'string' ? o : `${o.sign === '-' ? '- ' : '+ '}${o.code}`).join(' ') : '');
           erreurs.push({
             source: 'RegleMetier',
             champ: target,
             ligne: null,
-            message: `Échec de la règle arithmétique ${target} = somme(${rule.operands.join(', ')}) : valeur déclarée = ${targetVal.toLocaleString('fr-FR')}, somme calculée = ${computedSum.toLocaleString('fr-FR')} (Écart = ${diff.toFixed(3)} DT)`
+            message: `Échec de la règle de calcul ${target}${labelPart} [Formule: ${formulaDesc}] : valeur déclarée = ${targetVal.toLocaleString('fr-FR')}, résultat calculé = ${computedSum.toLocaleString('fr-FR')} (Écart = ${diff.toFixed(3)} DT)`
           });
         }
       }

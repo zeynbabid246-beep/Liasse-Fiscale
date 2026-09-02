@@ -1,0 +1,407 @@
+{
+  "formCode": "F6205",
+  "generatedAt": "2026-09-02T19:31:32.835Z",
+  "rulesCount": 16,
+  "rules": [
+    {
+      "target": "F62050001",
+      "label": "PRNV1 Primes acquises (Opérations brutes)",
+      "formulaRaw": "\"F62050002\" + \"F62050003\"",
+      "operands": [
+        {
+          "code": "F62050002",
+          "sign": "+"
+        },
+        {
+          "code": "F62050003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62050006",
+      "label": "CHNV1 Charge de sinistres (Opérations brutes)",
+      "formulaRaw": "\"F62050007\" + \"F62050008\"",
+      "operands": [
+        {
+          "code": "F62050007",
+          "sign": "+"
+        },
+        {
+          "code": "F62050008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62050011",
+      "label": "CHNV4 Frais d'exploitation (Opérations brutes)",
+      "formulaRaw": "\"F62050012\" + \"F62050013\" + \"F62050014\" - \"F62050015\"",
+      "operands": [
+        {
+          "code": "F62050012",
+          "sign": "+"
+        },
+        {
+          "code": "F62050013",
+          "sign": "+"
+        },
+        {
+          "code": "F62050014",
+          "sign": "+"
+        },
+        {
+          "code": "F62050015",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62050018",
+      "label": "RTNV Sous total (résultat technique de l'assurance et/ou de la réassurance non vie) (Opérations brutes)",
+      "formulaRaw": "\"F62050001\" + \"F62050004\" + \"F62050005\" - \"F62050006\" + \"F62050009\" - \"F62050010\" - \"F62050011\" - \"F62050016\" + \"F62050017\"",
+      "operands": [
+        {
+          "code": "F62050001",
+          "sign": "+"
+        },
+        {
+          "code": "F62050004",
+          "sign": "+"
+        },
+        {
+          "code": "F62050005",
+          "sign": "+"
+        },
+        {
+          "code": "F62050006",
+          "sign": "-"
+        },
+        {
+          "code": "F62050009",
+          "sign": "+"
+        },
+        {
+          "code": "F62050010",
+          "sign": "-"
+        },
+        {
+          "code": "F62050011",
+          "sign": "-"
+        },
+        {
+          "code": "F62050016",
+          "sign": "-"
+        },
+        {
+          "code": "F62050017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62051001",
+      "label": "PRNV1 Primes acquises (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62051002\" + \"F62051003\"",
+      "operands": [
+        {
+          "code": "F62051002",
+          "sign": "+"
+        },
+        {
+          "code": "F62051003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62051006",
+      "label": "CHNV1 Charge de sinistres (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62051007\" + \"F62051008\"",
+      "operands": [
+        {
+          "code": "F62051007",
+          "sign": "+"
+        },
+        {
+          "code": "F62051008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62051011",
+      "label": "CHNV4 Frais d'exploitation (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62051012\" + \"F62051013\" + \"F62051014\" - \"F62051015\"",
+      "operands": [
+        {
+          "code": "F62051012",
+          "sign": "+"
+        },
+        {
+          "code": "F62051013",
+          "sign": "+"
+        },
+        {
+          "code": "F62051014",
+          "sign": "+"
+        },
+        {
+          "code": "F62051015",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62051018",
+      "label": "RTNV Sous total (résultat technique de l'assurance et/ou de la réassurance non vie) (Cessions et/ou Rétrocessions)",
+      "formulaRaw": "\"F62051001\" + \"F62051004\" + \"F62051005\" - \"F62051006\" + \"F62051009\" - \"F62051010\" - \"F62051011\" - \"F62051016\" + \"F62051017\"",
+      "operands": [
+        {
+          "code": "F62051001",
+          "sign": "+"
+        },
+        {
+          "code": "F62051004",
+          "sign": "+"
+        },
+        {
+          "code": "F62051005",
+          "sign": "+"
+        },
+        {
+          "code": "F62051006",
+          "sign": "-"
+        },
+        {
+          "code": "F62051009",
+          "sign": "+"
+        },
+        {
+          "code": "F62051010",
+          "sign": "-"
+        },
+        {
+          "code": "F62051011",
+          "sign": "-"
+        },
+        {
+          "code": "F62051016",
+          "sign": "-"
+        },
+        {
+          "code": "F62051017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62052001",
+      "label": "PRNV1 Primes acquises (Net Exercice)",
+      "formulaRaw": "\"F62052002\" + \"F62052003\"",
+      "operands": [
+        {
+          "code": "F62052002",
+          "sign": "+"
+        },
+        {
+          "code": "F62052003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62052006",
+      "label": "CHNV1 Charge de sinistres (Net Exercice)",
+      "formulaRaw": "\"F62052007\" + \"F62052008\"",
+      "operands": [
+        {
+          "code": "F62052007",
+          "sign": "+"
+        },
+        {
+          "code": "F62052008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62052011",
+      "label": "CHNV4 Frais d'exploitation (Net Exercice)",
+      "formulaRaw": "\"F62052012\" + \"F62052013\" + \"F62052014\" - \"F62052015\"",
+      "operands": [
+        {
+          "code": "F62052012",
+          "sign": "+"
+        },
+        {
+          "code": "F62052013",
+          "sign": "+"
+        },
+        {
+          "code": "F62052014",
+          "sign": "+"
+        },
+        {
+          "code": "F62052015",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62052018",
+      "label": "RTNV Sous total (résultat technique de l'assurance et/ou de la réassurance non vie) (Net Exercice)",
+      "formulaRaw": "\"F62052001\" + \"F62052004\" + \"F62052005\" - \"F62052006\" + \"F62052009\" - \"F62052010\" - \"F62052011\" - \"F62052016\" + \"F62052017\"",
+      "operands": [
+        {
+          "code": "F62052001",
+          "sign": "+"
+        },
+        {
+          "code": "F62052004",
+          "sign": "+"
+        },
+        {
+          "code": "F62052005",
+          "sign": "+"
+        },
+        {
+          "code": "F62052006",
+          "sign": "-"
+        },
+        {
+          "code": "F62052009",
+          "sign": "+"
+        },
+        {
+          "code": "F62052010",
+          "sign": "-"
+        },
+        {
+          "code": "F62052011",
+          "sign": "-"
+        },
+        {
+          "code": "F62052016",
+          "sign": "-"
+        },
+        {
+          "code": "F62052017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62053001",
+      "label": "PRNV1 Primes acquises (Net Exercice - 1). \"F62053002\" + \"F62053003\"",
+      "formulaRaw": "PRNV1 Primes acquises (Net Exercice - 1). \"F62053002\" + \"F62053003\"",
+      "operands": [
+        {
+          "code": "F62053002",
+          "sign": "+"
+        },
+        {
+          "code": "F62053003",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62053006",
+      "label": "CHNV1 Charge de sinistres (Net Exercice - 1). \"F62053007\" + \"F62053008\"",
+      "formulaRaw": "CHNV1 Charge de sinistres (Net Exercice - 1). \"F62053007\" + \"F62053008\"",
+      "operands": [
+        {
+          "code": "F62053007",
+          "sign": "+"
+        },
+        {
+          "code": "F62053008",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62053011",
+      "label": "CHNV4 Frais d'exploitation (Net Exercice - 1). \"F62053012\" + \"F62053013\" + \"F62053014\" - \"F62053015\"",
+      "formulaRaw": "CHNV4 Frais d'exploitation (Net Exercice - 1). \"F62053012\" + \"F62053013\" + \"F62053014\" - \"F62053015\"",
+      "operands": [
+        {
+          "code": "F62053012",
+          "sign": "+"
+        },
+        {
+          "code": "F62053013",
+          "sign": "+"
+        },
+        {
+          "code": "F62053014",
+          "sign": "+"
+        },
+        {
+          "code": "F62053015",
+          "sign": "-"
+        }
+      ],
+      "type": "arithmetic"
+    },
+    {
+      "target": "F62053018",
+      "label": "RTNV Sous total (résultat technique de l'assurance et/ou de la réassurance non vie) (Net Exercice - 1)",
+      "formulaRaw": "\"F62053001\" + \"F62053004\" + \"F62053005\" - \"F62053006\" + \"F62053009\" - \"F62053010\" - \"F62053011\" - \"F62053016\" + \"F62053017\"",
+      "operands": [
+        {
+          "code": "F62053001",
+          "sign": "+"
+        },
+        {
+          "code": "F62053004",
+          "sign": "+"
+        },
+        {
+          "code": "F62053005",
+          "sign": "+"
+        },
+        {
+          "code": "F62053006",
+          "sign": "-"
+        },
+        {
+          "code": "F62053009",
+          "sign": "+"
+        },
+        {
+          "code": "F62053010",
+          "sign": "-"
+        },
+        {
+          "code": "F62053011",
+          "sign": "-"
+        },
+        {
+          "code": "F62053016",
+          "sign": "-"
+        },
+        {
+          "code": "F62053017",
+          "sign": "+"
+        }
+      ],
+      "type": "arithmetic"
+    }
+  ]
+}
