@@ -7,6 +7,13 @@ import multer from 'multer';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
 import { XmlParser, parseXsd, ValidationEngine, SchemaModel } from 'xml-xsd-engine';
+import {
+  initPostgresDatabase,
+  saveDepositDb,
+  saveDepositFileDb,
+  saveDeclarationDetailsDb,
+  logAuditDb
+} from './src/db/postgres.js';
 
 // Patch SchemaModel pour la résolution robuste des préfixes QName (ex: lf:T_NombrePositif15)
 const origResolveSimple = (SchemaModel.prototype as any).resolveSimpleType;
@@ -895,6 +902,8 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
     { expiresIn: '24h' }
   );
 
+  logAuditDb(contribuable.matriculeFiscal, 'LOGIN', `Connexion réussie - Rôle : ${role}`);
+
   return res.json({
     token,
     user: {
@@ -1384,6 +1393,34 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.any(), (req: Request
   doc.erreurs = result.erreurs;
   doc.statut = result.erreurs.length === 0 ? 'Valide' : 'Invalide';
 
+  // Persistance PostgreSQL (Non-bloquante avec fallback)
+  try {
+    const fileStats = fs.existsSync(filePath) ? fs.statSync(filePath) : null;
+    saveDepositFileDb({
+      depositId: `LIASSE-${liasse.id}`,
+      codeDocument,
+      nomFichierOriginal: fileName,
+      filePath,
+      fileSizeBytes: fileStats ? fileStats.size : 0,
+      mimeType: 'text/xml',
+      statutValidation: doc.statut,
+      rapportValidation: result.erreurs
+    });
+
+    if (result.detailsExtraits && Object.keys(result.detailsExtraits).length > 0) {
+      saveDeclarationDetailsDb(`LIASSE-${liasse.id}`, codeDocument, result.detailsExtraits);
+    }
+
+    logAuditDb(
+      liasse.matriculeFiscal,
+      doc.statut === 'Valide' ? 'VALIDATION_XML_SUCCES' : 'VALIDATION_XML_ERREUR',
+      `Document ${codeDocument} : ${result.erreurs.length} anomalie(s)`,
+      `LIASSE-${liasse.id}`
+    );
+  } catch (err: any) {
+    // Ignorer les erreurs d'audit en direct
+  }
+
   return res.json({
     statut: doc.statut,
     codeDocument,
@@ -1567,6 +1604,32 @@ function executerDepot(liasse: Liasse, observation?: string, signature?: string)
     d.statut = 'Soumis';
   });
 
+  // Persistance PostgreSQL du dépôt soumis
+  try {
+    const contrib = contribuablesDb.find(c => c.id === liasse.contribuableId);
+    saveDepositDb({
+      id: deposit.reference,
+      matriculeFiscal: deposit.matriculeFiscal,
+      raisonSociale: contrib ? contrib.nomOuRaisonSociale : deposit.matriculeFiscal,
+      anneeExercice: deposit.exercice,
+      codeSysteme: 'SYSTEME_NORMAL',
+      modele: 'MODELE_NORMAL',
+      statut: deposit.statut,
+      quittanceNumero: deposit.receipt?.numeroAccuse,
+      quittancePath: deposit.receipt?.qrCode,
+      erreursCount: 0
+    });
+
+    logAuditDb(
+      deposit.matriculeFiscal,
+      'DEPOT_SOUMIS',
+      `Liasse fiscale déposée sous la référence ${deposit.reference}`,
+      deposit.reference
+    );
+  } catch (err: any) {
+    // Non-bloquant
+  }
+
   return deposit;
 }
 
@@ -1676,6 +1739,22 @@ app.post('/api/admin/deposits/:reference/validate', optionalToken, (req: AuthReq
     qrCode: `https://impots.finances.gov.tn/verify/${deposit.reference}`,
     empreinteNumerique: deposit.hashGlobal
   };
+
+  // Mise à jour PostgreSQL
+  saveDepositDb({
+    id: deposit.reference,
+    matriculeFiscal: deposit.matriculeFiscal,
+    raisonSociale: deposit.matriculeFiscal,
+    anneeExercice: deposit.exercice,
+    codeSysteme: 'SYSTEME_NORMAL',
+    modele: 'MODELE_NORMAL',
+    statut: 'Validée',
+    quittanceNumero: numeroAccuse,
+    quittancePath: deposit.receipt.qrCode,
+    erreursCount: 0
+  });
+
+  logAuditDb(deposit.matriculeFiscal, 'DEPOT_VALIDE_ADMIN', `Dépôt validé par ${adminName}`, deposit.reference);
 
   if (deposit.documents) {
     deposit.documents.forEach(d => {
@@ -2027,4 +2106,13 @@ app.get('*', (_req: Request, res: Response) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Portail Liasse Fiscale démarré avec succès sur http://0.0.0.0:${PORT}`);
   console.log(`Moteur de validation XML (XSD 1.0 + Assertions métier) actif.`);
+  
+  // Initialisation de la base PostgreSQL si configurée dans l'environnement
+  initPostgresDatabase().then(ready => {
+    if (ready) {
+      console.log('📦 Module de persistance PostgreSQL actif et synchronisé.');
+    }
+  }).catch(err => {
+    console.warn('⚠️ Connexion PostgreSQL en arrière-plan non disponible:', err.message);
+  });
 });
