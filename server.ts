@@ -608,7 +608,22 @@ function getOfficialXsdSchema(codeDocument: string): SchemaModel | null {
     const target = findXsdFile(candidate);
     if (target && fs.existsSync(target)) {
       try {
-        const schema = parseXsd(fs.readFileSync(target, 'utf8'), xsdLoader);
+        let content = fs.readFileSync(target, 'utf8');
+        // Adaptation spécifique pour les schémas XSD 1.1 avec assertions/alternatives conditionnelles (ex: F6005)
+        if (normalizedCode === 'F6005') {
+          content = content.replace(/<xsd:complexType name="node">[\s\S]*?<\/xsd:complexType>/, `
+  <xsd:complexType name="node">
+    <xsd:attribute name="resultat" type="lf:NatureResultat" use="required"/>
+    <xsd:attribute name="F60050002" type="xsd:string"/>
+    <xsd:attribute name="F60050955" type="xsd:string"/>
+    <xsd:attribute name="F60051002" type="xsd:string"/>
+    <xsd:attribute name="F60051955" type="xsd:string"/>
+    <xsd:attribute name="Libelle" type="xsd:string"/>
+    <xsd:anyAttribute processContents="skip"/>
+  </xsd:complexType>
+`);
+        }
+        const schema = parseXsd(content, xsdLoader);
         xsdCache.set(normalizedCode, schema);
         return schema;
       } catch (err: any) {
