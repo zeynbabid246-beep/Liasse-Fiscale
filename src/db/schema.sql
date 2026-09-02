@@ -73,10 +73,47 @@ CREATE INDEX IF NOT EXISTS idx_deposits_exercice ON deposits(annee_exercice);
 CREATE INDEX IF NOT EXISTS idx_files_deposit ON deposit_files(deposit_id);
 CREATE INDEX IF NOT EXISTS idx_audit_matricule ON audit_logs(matricule_fiscal);
 
--- Données initiales
+-- Données initiales d'exemples
 INSERT INTO users (matricule_fiscal, raison_sociale, role, annee_exercice, code_systeme, modele)
 VALUES 
 ('0000121J', 'SOCIETE EXEMPLE INDUSTRIE SARL', 'DECLARANT', 2026, 'SYSTEME_NORMAL', 'MODELE_NORMAL'),
 ('1234567A', 'COMMERCE INTERNATIONAL TUNISIE', 'DECLARANT', 2024, 'SYSTEME_NORMAL', 'MODELE_NORMAL'),
 ('ADMIN001', 'DIRECTION GÉNÉRALE DES IMPÔTS', 'ADMIN', 2026, 'SYSTEME_NORMAL', 'MODELE_NORMAL')
 ON CONFLICT (matricule_fiscal) DO NOTHING;
+
+-- Exemple de dépôt de liasse fiscale
+INSERT INTO deposits (id, matricule_fiscal, raison_sociale, annee_exercice, code_systeme, modele, statut, quittance_numero, quittance_path, erreurs_count)
+VALUES 
+('DEP-2026-0000121J', '0000121J', 'SOCIETE EXEMPLE INDUSTRIE SARL', 2026, 'SYSTEME_NORMAL', 'MODELE_NORMAL', 'Validée', 'QUIT-2026-0000121J-9921', '/uploads/quittances/QUIT-2026-0000121J.pdf', 0),
+('DEP-2024-1234567A', '1234567A', 'COMMERCE INTERNATIONAL TUNISIE', 2024, 'SYSTEME_NORMAL', 'MODELE_NORMAL', 'Soumis', 'QUIT-2024-1234567A-1402', '/uploads/quittances/QUIT-2024-1234567A.pdf', 0)
+ON CONFLICT (id) DO NOTHING;
+
+-- Exemple de fichiers attachés (XML et PDF)
+INSERT INTO deposit_files (deposit_id, code_document, nom_fichier_original, file_path, file_size_bytes, mime_type, statut_validation, rapport_validation)
+VALUES 
+('DEP-2026-0000121J', 'F6001', 'F6001-0000121J-2026.xml', '/uploads/xml/F6001-0000121J-2026.xml', 14250, 'text/xml', 'Valide', '[]'::jsonb),
+('DEP-2026-0000121J', 'F6002', 'F6002-0000121J-2026.xml', '/uploads/xml/F6002-0000121J-2026.xml', 8720, 'text/xml', 'Valide', '[]'::jsonb),
+('DEP-2026-0000121J', 'F6003', 'F6003-0000121J-2026.xml', '/uploads/xml/F6003-0000121J-2026.xml', 11340, 'text/xml', 'Valide', '[]'::jsonb),
+('DEP-2026-0000121J', 'F6019', 'Rapport-Commissaire-2026.pdf', '/uploads/pdf/Rapport-Commissaire-2026.pdf', 458900, 'application/pdf', 'Valide', '[]'::jsonb)
+ON CONFLICT DO NOTHING;
+
+-- Exemple de rubriques comptables déclarées
+INSERT INTO declaration_details (deposit_id, code_document, code_rubrique, valeur_declaree)
+VALUES 
+('DEP-2026-0000121J', 'F6001', 'F60010001', 545000.000),
+('DEP-2026-0000121J', 'F6001', 'F60010002', 320000.000),
+('DEP-2026-0000121J', 'F6001', 'F60010031', 225000.000),
+('DEP-2026-0000121J', 'F6002', 'F60020001', 545000.000),
+('DEP-2026-0000121J', 'F6002', 'F60020002', 280000.000),
+('DEP-2026-0000121J', 'F6003', 'F60030001', 1250000.000),
+('DEP-2026-0000121J', 'F6003', 'F60030040', 145000.000)
+ON CONFLICT (deposit_id, code_document, code_rubrique) DO NOTHING;
+
+-- Exemple de logs d'audit
+INSERT INTO audit_logs (deposit_id, matricule_fiscal, action, details, ip_address)
+VALUES 
+('DEP-2026-0000121J', '0000121J', 'LOGIN', 'Connexion réussie au portail', '127.0.0.1'),
+('DEP-2026-0000121J', '0000121J', 'VALIDATION_XML_SUCCES', 'Validation réussie de F6001 (Actif)', '127.0.0.1'),
+('DEP-2026-0000121J', '0000121J', 'VALIDATION_XML_SUCCES', 'Validation réussie de F6002 (Passif)', '127.0.0.1'),
+('DEP-2026-0000121J', '0000121J', 'DEPOT_SOUMIS', 'Liasse fiscale 2026 transmise avec succès', '127.0.0.1'),
+('DEP-2026-0000121J', 'ADMIN001', 'DEPOT_VALIDE_ADMIN', 'Validation finale et délivrance de la quittance', '192.168.1.10');
