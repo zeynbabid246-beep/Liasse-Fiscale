@@ -52,9 +52,26 @@ const app = express();
 const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'LiasseFiscaleSecretKey2026_DGI_SuperSecureKey_MinFinances';
 
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  res.removeHeader('X-Powered-By');
+  next();
+});
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Dossier de stockage des fichiers téléversés
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
@@ -72,7 +89,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50 Mo
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 Mo (reduced for security)
+  fileFilter: (_req, file, cb) => {
+    const allowedTypes = ['.xml', '.pdf'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedTypes.includes(ext)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Type de fichier non autorisé. Seuls les fichiers XML et PDF sont acceptés.'));
+    }
+  }
 });
 
 // Middleware d'authentification
@@ -105,6 +131,31 @@ function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) 
   });
 }
 
+// Rate limiting middleware (simple implementation)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX_REQUESTS = 100;
+
+function rateLimit(req: Request, res: Response, next: NextFunction) {
+  const ip = req.ip || req.connection.remoteAddress || 'unknown';
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return next();
+  }
+
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return res.status(429).json({ 
+      message: "Trop de requêtes. Veuillez réessayer dans quelques minutes." 
+    });
+  }
+
+  record.count++;
+  next();
+}
+
 function optionalToken(req: AuthRequest, _res: Response, next: NextFunction) {
   const authHeader = req.headers['authorization'];
   const token = (authHeader && authHeader.split(' ')[1]) || (req.query.token as string);
@@ -134,7 +185,7 @@ interface DocumentLiasse {
   libelle: string;
   format: 'Xml' | 'Pdf';
   estObligatoire: boolean;
-  statut: 'NonSoumis' | 'Valide' | 'Invalide' | 'Soumis';
+  statut: 'NonSoumis' | 'Valide' | 'Invalide' | 'Soumis' | 'EnErreur';
   nomFichier: string | null;
   cheminStockage: string | null;
   dateUpload: string | null;
@@ -152,7 +203,7 @@ interface Liasse {
   categorie: string;
   nature: string;
   typeDepot: string;
-  statut: 'EnSaisie' | 'Validee' | 'Deposee' | 'Supprimee';
+  statut: 'Brouillon' | 'EnSaisie' | 'EnErreur' | 'Validee' | 'Deposee' | 'Supprimee';
   dateCreation: string;
   documents: DocumentLiasse[];
 }
@@ -167,7 +218,7 @@ interface Deposit {
   nature: string;
   typeDepot: string;
   dateDepot: string;
-  statut: 'En cours de validation' | 'Validée' | 'Rejetée' | 'Supprimée';
+  statut: 'En cours de validation' | 'Validée' | 'Rejetée' | 'Supprimée' | 'EnErreur';
   hashGlobal: string;
   observation?: string;
   dateValidationAdmin?: string;
@@ -391,8 +442,9 @@ function getEtatsRequis(categorie: string, modeleF6004?: string): { codeDocument
 
   if (cat === 'MicroCredits') {
     return [
-      { codeDocument: 'F6401', libelle: 'Bilan Actif-Passif (Micro-finances)', format: 'Xml', estObligatoire: true },
-      { codeDocument: 'F6402', libelle: 'État de résultat (Micro-finances)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6401', libelle: 'Bilan Actif (Micro-finances)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6403', libelle: 'État de résultat (Micro-finances)', format: 'Xml', estObligatoire: true },
+      { codeDocument: 'F6404', libelle: 'État de flux de trésorerie (Micro-finances)', format: 'Xml', estObligatoire: true },
       { codeDocument: 'F6005', libelle: 'Tableau de détermination du résultat fiscal', format: 'Xml', estObligatoire: true },
       { codeDocument: 'F6007', libelle: "Faits marquants de l'exercice", format: 'Xml', estObligatoire: false },
       { codeDocument: 'F6019', libelle: 'Notes aux états financiers (PDF)', format: 'Pdf', estObligatoire: false }
@@ -732,7 +784,8 @@ function validerXmlComplet(
   // Niveau 2 : Correspondance du formulaire (ex: F6001, F6004, F6004-MODELE-AUT)
   const isMatch = normalizedRootName === normalizedDocCode ||
     (normalizedDocCode === 'F6004-MODELE-AUT' && normalizedRootName === 'F6004') ||
-    (normalizedDocCode === 'F6004' && normalizedRootName === 'F6004');
+    (normalizedDocCode === 'F6004' && normalizedRootName === 'F6004') ||
+    (normalizedDocCode === 'F6004-MODELE-AUT' && normalizedRootName === 'F6004-MODELE-AUT');
 
   if (!isMatch) {
     erreurs.push({
@@ -793,11 +846,16 @@ function validerXmlComplet(
     const matriculeDeclarant = enteteEl.childElements?.find((c: any) => c.localName === 'MatriculeFiscalDeclarant')?.textContent?.trim() || '';
     const exerciceStr = enteteEl.childElements?.find((c: any) => c.localName === 'Exercice')?.textContent?.trim() || '';
     const exerciceXml = parseInt(exerciceStr, 10);
+    const acteDeDepot = enteteEl.childElements?.find((c: any) => c.localName === 'ActeDeDepot')?.textContent?.trim() || '';
+    const natureDepot = enteteEl.childElements?.find((c: any) => c.localName === 'NatureDepot')?.textContent?.trim() || '';
 
     if (matriculeAttendu && matriculeDeclarant) {
       const cleanExpected = matriculeAttendu.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       const cleanFound = matriculeDeclarant.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-      if (!cleanFound.startsWith(cleanExpected) && !cleanExpected.startsWith(cleanFound)) {
+      // Accept both short format (0000121J) and full format (0000121JAM000)
+      const shortExpected = cleanExpected.substring(0, 8); // 7 digits + 1 letter
+      const shortFound = cleanFound.substring(0, 8);
+      if (shortFound !== shortExpected && !cleanFound.startsWith(cleanExpected) && !cleanExpected.startsWith(cleanFound)) {
         erreurs.push({
           source: 'Structurelle',
           champ: 'MatriculeFiscalDeclarant',
@@ -813,6 +871,26 @@ function validerXmlComplet(
         champ: 'Exercice',
         ligne: enteteEl.childElements?.find((c: any) => c.localName === 'Exercice')?.sourceLine || null,
         message: `L'exercice comptable dans l'entête XML (${exerciceXml}) ne correspond pas à l'exercice de la liasse (${exerciceAttendu}).`
+      });
+    }
+
+    // Validate ActeDeDepot values (0, 1, 2)
+    if (acteDeDepot && !['0', '1', '2'].includes(acteDeDepot)) {
+      erreurs.push({
+        source: 'Structurelle',
+        champ: 'ActeDeDepot',
+        ligne: enteteEl.childElements?.find((c: any) => c.localName === 'ActeDeDepot')?.sourceLine || null,
+        message: `Valeur invalide pour ActeDeDepot (${acteDeDepot}). Valeurs autorisées : 0 (Spontané), 1 (Rectification), 2 (Régularisation).`
+      });
+    }
+
+    // Validate NatureDepot values (D, P)
+    if (natureDepot && !['D', 'P'].includes(natureDepot.toUpperCase())) {
+      erreurs.push({
+        source: 'Structurelle',
+        champ: 'NatureDepot',
+        ligne: enteteEl.childElements?.find((c: any) => c.localName === 'NatureDepot')?.sourceLine || null,
+        message: `Valeur invalide pour NatureDepot (${natureDepot}). Valeurs autorisées : D (Définitif), P (Provisoire).`
       });
     }
   }
@@ -880,7 +958,7 @@ function validerXmlComplet(
 // -------------------------------------------------------------
 
 // 1. Authentification
-app.post('/api/auth/login', (req: Request, res: Response) => {
+app.post('/api/auth/login', rateLimit, (req: Request, res: Response) => {
   const { email, matriculeFiscal, identifiant, password } = req.body;
   const loginInput = String(identifiant || email || matriculeFiscal || '').trim();
 
@@ -1199,6 +1277,39 @@ app.post('/api/liasses', (req: Request, res: Response) => {
     contrib = contribuablesDb[0];
   }
 
+  // Business Rule: Prevent Provisional after Definitive for same (Contribuable, Exercice, ActeDeDepot)
+  if (dtype === 'Provisoire') {
+    const existingDefinitive = liassesDb.find(l =>
+      (l.contribuableId === contrib.id || l.matriculeFiscal === contrib.matriculeFiscal) &&
+      l.exercice === ex &&
+      l.nature === nat &&
+      l.typeDepot === 'Definitif' &&
+      l.statut === 'Validee'
+    );
+    
+    if (existingDefinitive) {
+      return res.status(400).json({
+        message: "Une liasse définitive existe déjà pour cet exercice et acte. Un dépôt provisoire ne peut pas être créé après une liasse définitive validée."
+      });
+    }
+  }
+
+  // Business Rule: Rectification requires prior Spontane
+  if (nat === 'Rectification' || nat === 'Rectificative') {
+    const hasSpontane = liassesDb.find(l =>
+      (l.contribuableId === contrib.id || l.matriculeFiscal === contrib.matriculeFiscal) &&
+      l.exercice === ex &&
+      (l.nature === 'Initiale' || l.nature === 'Spontané') &&
+      l.statut !== 'Supprimee'
+    );
+    
+    if (!hasSpontane) {
+      return res.status(400).json({
+        message: "Une rectification nécessite une liasse spontanée préalable pour le même exercice."
+      });
+    }
+  }
+
   // Chercher si une liasse en cours de saisie existe déjà pour ce contribuable et exercice
   let existing = liassesDb.find(l =>
     (l.contribuableId === contrib!.id || l.matriculeFiscal === contrib!.matriculeFiscal) &&
@@ -1321,6 +1432,15 @@ app.delete('/api/liasses/:id', (req: Request, res: Response) => {
   const liasse = liassesDb.find(l => l.id === id);
 
   if (!liasse) return res.status(404).json({ message: "Liasse introuvable." });
+  
+  // Business Rule: Only allow deletion from non-valid states
+  const deletableStates = ['EnSaisie', 'EnErreur', 'Brouillon'];
+  if (!deletableStates.includes(liasse.statut)) {
+    return res.status(400).json({ 
+      message: `Impossible de supprimer cette liasse. Seules les liasses en cours de saisie ou en erreur peuvent être supprimées. Statut actuel: ${liasse.statut}` 
+    });
+  }
+  
   liasse.statut = 'Supprimee';
   return res.json({ message: "Liasse supprimée avec succès." });
 });
@@ -1407,6 +1527,17 @@ app.post('/api/liasses/:id/documents/:codeDocument', upload.any(), (req: Request
   doc.dateUpload = new Date().toISOString();
   doc.erreurs = result.erreurs;
   doc.statut = result.erreurs.length === 0 ? 'Valide' : 'Invalide';
+  
+  // Update liasse status based on document validation
+  if (result.erreurs.length > 0) {
+    liasse.statut = 'EnErreur';
+  } else {
+    // Check if all documents are now valid
+    const hasInvalidDocs = liasse.documents.some(d => d.statut === 'Invalide');
+    if (!hasInvalidDocs && liasse.statut === 'EnErreur') {
+      liasse.statut = 'EnSaisie';
+    }
+  }
 
   // Persistance PostgreSQL (Non-bloquante avec fallback)
   try {

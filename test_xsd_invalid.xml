@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<F6002 xmlns="http://www.impots.finances.gov.tn/liasse">
+    <VersionDocument>1.0</VersionDocument>
+    <Entete>
+        <MatriculeFiscalDeclarant>0000121JAM000</MatriculeFiscalDeclarant>
+        <NometPrenomouRaisonSociale>SOCIETE EXEMPLE SARL</NometPrenomouRaisonSociale>
+        <Activite>Prestations de services et negoce</Activite>
+        <Adresse>Avenue Habib Bourguiba, Tunis</Adresse>
+        <Exercice>2026</Exercice>
+        <DateDebutExercice>01/01/2026</DateDebutExercice>
+        <DateClotureExercice>31/12/2026</DateClotureExercice>
+        <ActeDeDepot>0</ActeDeDepot>
+        <NatureDepot>D</NatureDepot>
+    </Entete>
+    <Details>
+        <F60020001>INVALID_TEXT</F60020001>
+    </Details>
+</F6002>

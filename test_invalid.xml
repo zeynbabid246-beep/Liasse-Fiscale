@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<F6001 xmlns="http://www.impots.finances.gov.tn/liasse">
+    <VersionDocument>1.0</VersionDocument>
+    <Entete>
+        <MatriculeFiscalDeclarant>INVALID</MatriculeFiscalDeclarant>
+        <Exercice>2026</Exercice>
+    </Entete>
+    <Details>
+        <F60010001>ABC</F60010001>
+    </Details>
+</F6001>
