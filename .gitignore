@@ -6,3 +6,5 @@ appsettings.Development.json
 Storage/documents/
 Storage/receipts/
 *.db
+.env
+.env.example

@@ -1,3 +1,4 @@
+import './src/utils/env.js';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import path from 'path';
