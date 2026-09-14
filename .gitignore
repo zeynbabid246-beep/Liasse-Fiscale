@@ -7,4 +7,4 @@ Storage/documents/
 Storage/receipts/
 *.db
 .env
-.env.example
+.env.local
