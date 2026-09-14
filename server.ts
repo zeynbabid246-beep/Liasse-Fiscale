@@ -2251,7 +2251,8 @@ app.get('*', (_req: Request, res: Response) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Portail Liasse Fiscale démarré avec succès sur http://0.0.0.0:${PORT}`);
+  console.log(`🚀 Portail Liasse Fiscale démarré avec succès sur http://localhost:${PORT}`);
+  console.log(`   Accès local : http://127.0.0.1:${PORT}`);
   console.log(`Moteur de validation XML (XSD 1.0 + Assertions métier) actif.`);
   
   // Initialisation de la base PostgreSQL si configurée dans l'environnement
